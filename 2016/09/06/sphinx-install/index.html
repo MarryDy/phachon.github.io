@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Sphinx 在 Linux 下的安装与基本配置 | phachon&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="下载Sphinx 官网：http://sphinxsearch.com/wget http://sphinxsearch.com/files/sphinx-2.2.10-release.tar.gz 安装解压压缩包12tar zxvf sphinx-2.2.10-release.tar.gzcd sphinx-2.2.10-release 找到 mysql 的安装目录，我的是在 /usr/bin">
+<meta name="keywords" content="Linux,Mysql,Sphinx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sphinx 在 Linux 下的安装与基本配置">
+<meta property="og:url" content="http://phachon.github.io/2016/09/06/sphinx-install/index.html">
+<meta property="og:site_name" content="phachon&#39;s blog">
+<meta property="og:description" content="下载Sphinx 官网：http://sphinxsearch.com/wget http://sphinxsearch.com/files/sphinx-2.2.10-release.tar.gz 安装解压压缩包12tar zxvf sphinx-2.2.10-release.tar.gzcd sphinx-2.2.10-release 找到 mysql 的安装目录，我的是在 /usr/bin">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-02T07:34:46.100Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sphinx 在 Linux 下的安装与基本配置">
+<meta name="twitter:description" content="下载Sphinx 官网：http://sphinxsearch.com/wget http://sphinxsearch.com/files/sphinx-2.2.10-release.tar.gz 安装解压压缩包12tar zxvf sphinx-2.2.10-release.tar.gzcd sphinx-2.2.10-release 找到 mysql 的安装目录，我的是在 /usr/bin">
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-brands.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-solid.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?37fc388c17633765d5d2b950f4682d91";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">phachon&#39;s blog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/opensource">开源项目</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/logo.jpg" />
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fas fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/opensource">开源项目</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile" class="profile-fixed">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/logo.jpg" />
+            <h2 id="name">phachon</h2>
+            <h3 id="title"></h3>
+            <span id="location"><i class="fas fa-map-marker-alt" style="padding-right: 5px"></i>Beijing, China</span>
+            <a id="follow" target="_blank" href="https://github.com/phachon">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                25
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                38
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="http://github.com/phachon" target="_blank" title="github" class=tooltip>
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://weibo.com/phachon" target="_blank" title="weibo" class=tooltip>
+                            <i class="fab fa-weibo"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-sphinx-install" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Sphinx 在 Linux 下的安装与基本配置
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/2016/09/06/sphinx-install/">
+            <time datetime="2016-09-05T16:00:00.000Z" itemprop="datePublished">2016-09-06</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Linux/">Linux</a>, <a class="tag-link" href="/tags/Mysql/">Mysql</a>, <a class="tag-link" href="/tags/Sphinx/">Sphinx</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>Sphinx 官网：<a href="http://sphinxsearch.com/" target="_blank" rel="noopener">http://sphinxsearch.com/</a><br>wget <a href="http://sphinxsearch.com/files/sphinx-2.2.10-release.tar.gz" target="_blank" rel="noopener">http://sphinxsearch.com/files/sphinx-2.2.10-release.tar.gz</a></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="解压压缩包"><a href="#解压压缩包" class="headerlink" title="解压压缩包"></a>解压压缩包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar zxvf sphinx-2.2.10-release.tar.gz</span><br><span class="line">cd sphinx-2.2.10-release</span><br></pre></td></tr></table></figure>
+<p>找到 mysql 的安装目录，我的是在 /usr/bin/mysql 执行 /usr/lcoal/sphinx 为 sphinx 的安装目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo ./configure --prefix=/usr/local/sphinx --with-mysql=/usr/local/mysql</span><br><span class="line">make </span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<p>不出问题的话应该已经安装成功了</p>
+<a id="more"></a>
+<p>其他参数的配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--with-mysql-includes=/usr/local/mysql/include/mysql/</span><br><span class="line">--with-mysql-libs=/usr/local/mysql/lib/mysql/</span><br><span class="line">--with-mmseg=/usr/local/mmseg/</span><br><span class="line">--with-mmseg-includes=/usr/local/mmseg/include/mmseg/</span><br><span class="line">--with-mmseg-libs=/usr/local/mmseg/lib/</span><br></pre></td></tr></table></figure>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>找到 sphinx 的安装目录 /usr/local/sphinx/etc .复制一份 sphinx.conf.dist 为 test.conf<br>打开文件对照注释编写配置文件。由于都是英文，这里将经常用到的一些配置做解释如下：</p>
+<p>数据源配置解析：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">source </span><br><span class="line">&#123;</span><br><span class="line"> # 数据源类型 mysql，pgsql，mssql，xmlpipe，xmlpipe2，odbc</span><br><span class="line"> type			= mysql</span><br><span class="line"> # -------------------------连接sql数据源的一些配置---------------------------</span><br><span class="line"> sql_host        = localhost</span><br><span class="line"> sql_user        = root</span><br><span class="line"> sql_pass       = 123456</span><br><span class="line"> sql_db           = test</span><br><span class="line"> sql_port         = 3306</span><br><span class="line"> #  使用 unix sock连接可以使用这个</span><br><span class="line"> #sql_sock      = /tmp/mysql.sock</span><br><span class="line"></span><br><span class="line"> # --------------------------mysql 相关配置----------------------------------------</span><br><span class="line"></span><br><span class="line"> # mysql 与 sphinx 之间的交互，0/32/2048/32768  无/使用压缩协议/握手后切换到ssl/Mysql 4.1版本身份认证。</span><br><span class="line"> mysql_connect_flags   = 32</span><br><span class="line"> ## 当mysql_connect_flags设置为2048（ssl）的时候，下面几个就代表ssl连接所需要使用的几个参数。</span><br><span class="line"> # mysql_ssl_cert        = /etc/ssl/client-cert.pem</span><br><span class="line"> # mysql_ssl_key     = /etc/ssl/client-key.pem</span><br><span class="line"> # mysql_ssl_ca      = /etc/ssl/cacert.pem</span><br><span class="line"></span><br><span class="line"> #---------------------------mssql 相关配置----------------------------------------</span><br><span class="line"> # 是否使用 windows 登陆</span><br><span class="line"> # mssql_winauth     = 1</span><br><span class="line"> # 使用unicode还是单字节数据</span><br><span class="line"> # mssql_unicode     = 1</span><br><span class="line"> </span><br><span class="line"> #----------------------------odbc 相关配置-------------------------------------------</span><br><span class="line"> odbc_dsn      = DBQ=C:\data;DefaultDir=C:\data;Driver=&#123;Microsoft Text Driver (*.txt; *.csv)&#125;;</span><br><span class="line"></span><br><span class="line"> #-----------------------------sql 相关配置--------------------------------------------</span><br><span class="line"> # sql某一列的缓冲大小，一般是针对字符串来说的</span><br><span class="line"> # sql_column_buffers    = content=12M, comments=1M</span><br><span class="line"> # 索引的 sql 执行前需要执行的操作，比如设置字符串为 utf8</span><br><span class="line"> sql_query_pre     = SET NAMES utf8</span><br><span class="line"> # 索引的 sql 执行语句</span><br><span class="line"> sql_query       =  SELECT id, name, age FROM test</span><br><span class="line"> # 联合查询</span><br><span class="line"> # sql_joined_field是增加一个字段，这个字段是从其他表查询中查询出来的。</span><br><span class="line"> # 如果是query，则返回id和查询字段，如果是payload-query，则返回id，查询字段和权重</span><br><span class="line"> # 查询需要按照id进行升序排列</span><br><span class="line"> # sql_joined_field  = tags from query; SELECT docid, CONCAT(&apos;tag&apos;,tagid) FROM tags ORDER BY docid ASC</span><br><span class="line"> # sql_joined_field  = wtags from payload-query; SELECT docid, tag, tagweight FROM tags ORDER BY docid ASC</span><br><span class="line"></span><br><span class="line"> #----------------------------字段属性的配置（用于过滤和排序）----------------------------------------</span><br><span class="line"> # uint无符号整型属性</span><br><span class="line"> sql_attr_uint       = id</span><br><span class="line"> # 布尔值属性</span><br><span class="line"> # sql_attr_bool     = is_deleted</span><br><span class="line"> # 长整型属性(有负数用 bigint)</span><br><span class="line"> # sql_attr_bigint       = my_bigint_id</span><br><span class="line"> # 时间戳属性，经常被用于做排序</span><br><span class="line"> sql_attr_timestamp  = date_added</span><br><span class="line"> # 字符串排序属性。一般我们按照字符串排序的话，我们会将这个字符串存下来进入到索引中，然后在查询的时候比较索引中得字符大小进行排序。</span><br><span class="line"> # 但是这个时候索引就会很大，于是我们就想到了一个方法，我们在建立索引的时候，先将字符串值从数据库中取出，暂存，排序。</span><br><span class="line"> # 然后给排序后的数组分配一个序号，然后在建立索引的时候，就将这个序号存入到索引中去。这样在查询的时候也就能完成字符串排序的操作。</span><br><span class="line"> # 这，就是这个字段的意义。</span><br><span class="line"> # sql_attr_str2ordinal  = author_name</span><br><span class="line"> # 浮点数属性</span><br><span class="line"> # sql_attr_float        = lat_radians</span><br><span class="line"> # sql_attr_float        = long_radians</span><br><span class="line"> # 字符串属性</span><br><span class="line"> # sql_attr_string       = stitle</span><br><span class="line"> # 文档词汇数记录属性。比如下面就是在索引建立的时候增加一个词汇数的字段</span><br><span class="line"> # sql_attr_str2wordcount    = stitle</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> # sphinx 的 source 有继承属性，也就是说共有的部分可以写在父级数据源中，比如数据库连接配置信息</span><br><span class="line"> source main_0: main</span><br><span class="line">&#123;</span><br><span class="line">   sql_ranged_throttle = 100</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>索引配置解析：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">index test1</span><br><span class="line">&#123;</span><br><span class="line">   # 索引类型，包括有plain，distributed和rt。分别是普通索引/分布式索引/增量索引。默认是plain。</span><br><span class="line">   # type          = plain</span><br><span class="line">   # 索引数据源</span><br><span class="line">   source          = src1</span><br><span class="line">   # 索引文件存放路径</span><br><span class="line">   path            =/usr/local/sphinx/var/data/src1</span><br><span class="line">   # 字符集编码类型，可以为sbcs,utf-8</span><br><span class="line">   charset_type        =  utf-8</span><br><span class="line">   # 字符表和大小写转换规则</span><br><span class="line">   # &apos;sbcs&apos; default value is</span><br><span class="line">   # charset_table     = 0..9, A..Z-&gt;a..z, _, a..z, U+A8-&gt;U+B8, U+B8, U+C0..U+DF-&gt;U+E0..U+FF, U+E0..U+FF</span><br><span class="line">   # &apos;utf-8&apos; default value is</span><br><span class="line">   # charset_table     = 0..9, A..Z-&gt;a..z, _, a..z, U+410..U+42F-&gt;U+430..U+44F, U+430..U+44F</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>搜索服务searchd 配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">searchd</span><br><span class="line">&#123;</span><br><span class="line">   # 监听端口</span><br><span class="line">   listen          = 9312</span><br><span class="line">   listen          = 9307:mysql4</span><br><span class="line">   # 监听日志路径</span><br><span class="line">   log             = /usr/local/sphinx/var/log/searchd.log</span><br><span class="line">   # 查询日志路径</span><br><span class="line">   query_log       = /usr/local/sphinx/var/log/query.log</span><br><span class="line">   # 客户端读超时时间</span><br><span class="line">   read_timeout    = 5</span><br><span class="line">   # 客户端持久时间</span><br><span class="line">   client_timeout  = 300</span><br><span class="line">   #并行执行搜索数量</span><br><span class="line">   max_children    = 0</span><br><span class="line">   #进程 pid 文件</span><br><span class="line">   pid_file        = /usr/local/sphinx/var/log/searchd.pid</span><br><span class="line">   #当进行索引轮换的时候，可能需要消耗大量的时间在轮换索引上。</span><br><span class="line">   # 启动了无缝轮转，就以消耗内存为代价减少轮转的时间</span><br><span class="line">   seamless_rotate = 1</span><br><span class="line">   # 索引预开启，强制重新打开所有索引文件</span><br><span class="line">   preopen_indexes = 1</span><br><span class="line">   # 索引轮换成功之后，是否删除以.old为扩展名的索引拷贝</span><br><span class="line">   unlink_old      = 1</span><br><span class="line">   # 多值属性MVA更新的存储空间的内存共享池大小</span><br><span class="line">   mva_updates_pool = 1M</span><br><span class="line">   #网络通讯时允许的最大的包的大小</span><br><span class="line">   max_packet_size = 8M</span><br><span class="line">   # 每次查询允许设置的过滤器的最大个数</span><br><span class="line">   max_filters     = 256</span><br><span class="line">   # 单个过滤器允许的值的最大个数</span><br><span class="line">   max_filter_values = 4096</span><br><span class="line">   # 每次批量查询的查询数限制</span><br><span class="line">   max_batch_queries = 32</span><br><span class="line">   # 多处理模式（MPM）。 可选项；可用值为none、fork、prefork，以及threads。 默认在Unix类系统为form，Windows系统为threads。</span><br><span class="line">   workers         = form</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="开启sphinx"><a href="#开启sphinx" class="headerlink" title="开启sphinx"></a>开启sphinx</h2><h3 id="生成索引"><a href="#生成索引" class="headerlink" title="生成索引"></a>生成索引</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/sphinx/bin/indexer --config /usr/local/sphinx/etc/test.conf --all</span><br></pre></td></tr></table></figure>
+<h3 id="打开-sphinx-进程"><a href="#打开-sphinx-进程" class="headerlink" title="打开 sphinx 进程"></a>打开 sphinx 进程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/sphinx/bin/searchd --config /usr/local/sphinx/etc/sphinx.conf</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="http://www.cnblogs.com/yjf512/p/3598332.html" target="_blank" rel="noopener">http://www.cnblogs.com/yjf512/p/3598332.html</a></li>
+</ol>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2016/09/06/sphinx-web/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    Sphinx 在网站应用中的服务架构设计
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2016/09/05/io/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">IO 模型简介</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/09/03/go_concurrent/" class="thumbnail">
+    
+    
+        <span style="background-image:url(https://pic3.zhimg.com/v2-00f6d0115877a7c5ca44b32bb77406cc_1200x500.jpg)" alt="go 语言的并发机制" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
+                            <p class="item-title"><a href="/2018/09/03/go_concurrent/" class="title">go 语言的并发机制</a></p>
+                            <p class="item-date"><time datetime="2018-09-02T16:00:00.000Z" itemprop="datePublished">2018-09-03</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/02/05/go-mysql-create-table/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
+                            <p class="item-title"><a href="/2018/02/05/go-mysql-create-table/" class="title">Go 语言操作 mysql 建表问题的解决办法</a></p>
+                            <p class="item-date"><time datetime="2018-02-04T16:00:00.000Z" itemprop="datePublished">2018-02-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/10/20/PHPUnit-Lean1/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
+                            <p class="item-title"><a href="/2017/10/20/PHPUnit-Lean1/" class="title">PHPUnit 学习实例代码</a></p>
+                            <p class="item-date"><time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/10/20/PHPUnit-install-windows/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
+                            <p class="item-title"><a href="/2017/10/20/PHPUnit-install-windows/" class="title">PHPUnit windows 下的安装</a></p>
+                            <p class="item-date"><time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/10/10/go-fileinfo/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
+                            <p class="item-title"><a href="/2017/10/10/go-fileinfo/" class="title">Go 获取文件信息方法</a></p>
+                            <p class="item-date"><time datetime="2017-10-09T16:00:00.000Z" itemprop="datePublished">2017-10-10</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Coding/">Coding</a><span class="category-list-count">25</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Apache/" style="font-size: 15px;">Apache</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/CLI/" style="font-size: 10px;">CLI</a> <a href="/tags/CentOS/" style="font-size: 15px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.67px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.67px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 18.33px;">Mysql</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.67px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.67px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 13.33px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/go/" style="font-size: 10px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://php.net/manual/zh/">PHP 手册</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://www.oschina.net/">开源中国</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://studygolang.com/">Go语言中文网</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fas fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 phachon<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
