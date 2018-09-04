@@ -261,7 +261,7 @@ var _hmt = _hmt || [];
 <p>在操作系统的搭建的内核线程之上，go 语言搭建了一个特有的两极线程模型。首先来了解一下线程实现模型，然后再详细了解 go 语言实现的</p>
 <h2 id="线程实现模型"><a href="#线程实现模型" class="headerlink" title="线程实现模型"></a>线程实现模型</h2><p>线程的实现模型主要有三种：用户级线程模型、内核级线程模型、两极线程模型。它们之间的区别主要是线程与内核调度对象之间的的对应关系。内核调度象也就是内核线程。</p>
 <h3 id="用户级线程模型"><a href="#用户级线程模型" class="headerlink" title="用户级线程模型"></a>用户级线程模型</h3><p>用户级线程模型是由用户级别的线程库来全权管理的。也就是说，用户级线程模型下的线程是往往是通过应用程序的线程库来创建、切换、销毁的。与操作系统内核的线程没有关系。操作系统内核的线程调度器也无法<br>调度用户级线程模型创建的线程。内核线程调度器只能调度创建此线程的的应用程序的进程。一个进程对应多个用户级线程，所以这种线程模型又称为多对一（M:1）的线程模型, 如下图所示：</p>
-<p><img src="../images/usp.png" alt="usp"></p>
+<p><img src="/images/usp.png" alt="usp"></p>
 <h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><ol>
 <li>对线程的各种管理调度与内核无关。应用程序对线程的创建、终止、切换等操作不需要让CPU从用户态切换到内核态。速度方面比较有优势</li>
 <li>由于不依赖内核，所以程序的一致性比较强</li>
@@ -272,7 +272,7 @@ var _hmt = _hmt || [];
 </ol>
 <p>综上所述，由于缺陷明显，所以现在的操作系统一般不使用此种模型来实现线程</p>
 <h3 id="内核级线程模型"><a href="#内核级线程模型" class="headerlink" title="内核级线程模型"></a>内核级线程模型</h3><p>和用户级线程相反，内核级线程是由内核来管理的，属于内核的一部分。应用程序对线程的创建、终止、切换等操作必须通过内核提供的系统调用来完成。进程中的每一个线程都与内核线程一一对应<br>由此，也称为一对一（1：1）的线程模型。如下图所示：</p>
-<p><img src="../images/ssp.png" alt="ssp"></p>
+<p><img src="/images/ssp.png" alt="ssp"></p>
 <h3 id="优势-1"><a href="#优势-1" class="headerlink" title="优势"></a>优势</h3><ol>
 <li>一对一的线程模型消除了多对一的线程模型的不能真正并发的弊端，线程的管理由内核管理和调度，内核可以在不同的时间片内让CPU运行不同的线程。</li>
 <li>即使某一个线程收到阻塞，其他线程不受影响</li>
@@ -285,7 +285,7 @@ var _hmt = _hmt || [];
 <p>尽管内核级线程也有劣势，但是相比用户级线程的优势还是比较明显的。很多的现代的操作系统都是以内核级线程模型来实现线程的。包括 Linux 操作系统。<br>需要注意的是，在使用内核级线程模型时，必须了解每个进程允许的线程的最大数目是多少。防止线程数过大造成操作系统性能下降甚至崩溃。</p>
 <h3 id="两极线程模型"><a href="#两极线程模型" class="headerlink" title="两极线程模型"></a>两极线程模型</h3><p>两极线程模型是根据用户级线程模型和内核级线程模型综合演变而来。可以说是取前两种模型之精华，去前两种模型之糟粕。在此模型下，一个进程可以与多个内核线程相关联。这与内核级线程相似。但与内核线程模型<br>不同的是，进程中的线程并不与内核线程一一对应，这些应用程序线程可以映射到同一个已关联的内核线程上。  </p>
 <p>首先实现了两极线程模型的线程库会通过操作系统调用创建多个内核线程。然后，它会通过这些内核线程对应用程序线程进行调度。大多数的此类线程库都可以将这些应用程序线程动态的与内核线程相关联。在这种实现中，进程有着自己的内核线程池。可运行的用户线程由运行时库分派并标记为准备好执行的可用线程。<br>操作系统选择用户线程并将它映射到线程池中的可用内核线程。多个用户线程可以分配给相同的内核线程。<br>如下图所示：</p>
-<p><img src="../images/csp.png" alt="ssp"></p>
+<p><img src="/images/csp.png" alt="ssp"></p>
 <h4 id="优势-2"><a href="#优势-2" class="headerlink" title="优势"></a>优势</h4><ol>
 <li>内核资源的消耗大大减少</li>
 <li>线程管理操作的效率提高</li>
@@ -301,7 +301,7 @@ var _hmt = _hmt || [];
 <li>G （goroutine）一个 G 代表一个 Go 代码片段。</li>
 </ul>
 <p>简单来说，一个 G 的执行，需要 P 和 M 的支持。一个 M 在一个 P 关联之后就形成了一个有效的 G 的运行环境（内核线程 + 上下文环境）。</p>
-<p><img src="../images/go_sp.png" alt="go并发模型"></p>
+<p><img src="/images/go_sp.png" alt="go并发模型"></p>
 <p>对应关系：  </p>
 <ul>
 <li>M 与操作系统内核线程是一对一的关系。即一个 M 只能代表一个内核级线程。并且他们之间的关系一旦关联一般不可改变。</li>
@@ -340,7 +340,7 @@ var _hmt = _hmt || [];
 <li>调度器的自由 G 列表：存放自由的 G 的单向链表</li>
 </ul>
 <p>调度器有自己的数据结构，形成此结构的主要目的是更加方便的管理和调度各个核心元素的实例。</p>
-<h4 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h4><h2 id="Go-语言并发原理"><a href="#Go-语言并发原理" class="headerlink" title="Go 语言并发原理"></a>Go 语言并发原理</h2><p>在操作系统的内核线程之上，Go 搭建了一个特有的两极线程模型。在 Go 语言中，每一个这种特殊的线程称为 goroutine 。goroutine 并发的核心理念是：</p>
+<h4 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h4><h2 id="goroutine"><a href="#goroutine" class="headerlink" title="goroutine"></a>goroutine</h2><p>goroutine 的核心理念是：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不要以共享内存的方式来通信。应该以通信作为手段来共享内存</span><br></pre></td></tr></table></figure>
 
         
@@ -499,115 +499,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-PHPUnit-Lean1" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2017/10/20/PHPUnit-Lean1/">PHPUnit 学习实例代码</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/2017/10/20/PHPUnit-Lean1/">
-            <time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHPUnit/">PHPUnit</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><hr>
-<blockquote>
-<p>PHPUnit 基本用法+实例详解<br>上一篇文章介绍了 PHPUnit 在 windows  的安装和配置。今天我们来介绍一下 PHPUnit 如何编写一些基本的测试用例。我也是在最近才开始慢慢使用的 PHPUnit , 用不足之处，欢迎指正。</p>
-</blockquote>
-<h1 id="编写规范"><a href="#编写规范" class="headerlink" title="编写规范"></a>编写规范</h1><ol>
-<li>测试类一般以***Test 命名；</li>
-<li>该类必须继承 PHPUnit_Framework_TestCase 类；</li>
-<li>类里的测试用例方法一般以test开头，当然也可以通过@test注释来定义一个名字不为test开头的方法为测试方法；</li>
-<li>测试方法中需要使用断言方法来断言实际传入的参数与期望的参数是否一致来达到测试的目的；</li>
-</ol></p>
-            <p class="article-more-link">
-                <a href="/2017/10/20/PHPUnit-Lean1/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
-<script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
-</div>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
     <article id="post-PHPUnit-install-windows" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -663,6 +554,115 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 </ul></p>
             <p class="article-more-link">
                 <a href="/2017/10/20/PHPUnit-install-windows/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-PHPUnit-Lean1" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2017/10/20/PHPUnit-Lean1/">PHPUnit 学习实例代码</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/2017/10/20/PHPUnit-Lean1/">
+            <time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHPUnit/">PHPUnit</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><hr>
+<blockquote>
+<p>PHPUnit 基本用法+实例详解<br>上一篇文章介绍了 PHPUnit 在 windows  的安装和配置。今天我们来介绍一下 PHPUnit 如何编写一些基本的测试用例。我也是在最近才开始慢慢使用的 PHPUnit , 用不足之处，欢迎指正。</p>
+</blockquote>
+<h1 id="编写规范"><a href="#编写规范" class="headerlink" title="编写规范"></a>编写规范</h1><ol>
+<li>测试类一般以***Test 命名；</li>
+<li>该类必须继承 PHPUnit_Framework_TestCase 类；</li>
+<li>类里的测试用例方法一般以test开头，当然也可以通过@test注释来定义一个名字不为test开头的方法为测试方法；</li>
+<li>测试方法中需要使用断言方法来断言实际传入的参数与期望的参数是否一致来达到测试的目的；</li>
+</ol></p>
+            <p class="article-more-link">
+                <a href="/2017/10/20/PHPUnit-Lean1/#more">查看更多</a>
             </p>
         
         </div>
@@ -1400,25 +1400,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/10/20/PHPUnit-Lean1/" class="thumbnail">
-    
-    
-        <span class="thumbnail-image thumbnail-none"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
-                            <p class="item-title"><a href="/2017/10/20/PHPUnit-Lean1/" class="title">PHPUnit 学习实例代码</a></p>
-                            <p class="item-date"><time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
                             <a href="/2017/10/20/PHPUnit-install-windows/" class="thumbnail">
     
     
@@ -1431,6 +1412,25 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
                             <p class="item-title"><a href="/2017/10/20/PHPUnit-install-windows/" class="title">PHPUnit windows 下的安装</a></p>
+                            <p class="item-date"><time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/10/20/PHPUnit-Lean1/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
+                            <p class="item-title"><a href="/2017/10/20/PHPUnit-Lean1/" class="title">PHPUnit 学习实例代码</a></p>
                             <p class="item-date"><time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20</time></p>
                         </div>
                     </li>
