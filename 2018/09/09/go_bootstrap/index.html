@@ -3,20 +3,22 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Web 网站的基本工作原理 | phachon&#39;s blog</title>
+    <title>Go 启动过程 | phachon&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="静态页访问 示例：http://www.test.com/index.html 请求步骤：  (1) 用户输入需要访问的地址或者具体的网页文件(2) 开始域名解析,会先找到本地的 hosts 文件，然后再找网络上的 DNS 服务器,最终解析到 ip 地址(3) ip 地址所在机器的 Web 服务器接收这个请求，获取请求文件 index.html(4) web 服务器将这个文件的信息返回给用户所用">
-<meta name="keywords" content="PHP,Apache">
+    <meta name="description" content="通过查阅资料，了解 Go 语言的启动过程。 启动总体顺序 命令行参数解析 操作系统相关初始化 调度器初始化 创建 main.goroutine 运行 main 函数  命令行参数初始化主要是解析命令行参数并保存 操作系统相关初始化主要是确定操作系统的 CPU 核数，CPU 核数决定默认的了 P 的数量">
+<meta name="keywords" content="go">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Web 网站的基本工作原理">
-<meta property="og:url" content="http://phachon.github.io/2016/07/26/web-work/index.html">
+<meta property="og:title" content="Go 启动过程">
+<meta property="og:url" content="http://phachon.github.io/2018/09/09/go_bootstrap/index.html">
 <meta property="og:site_name" content="phachon&#39;s blog">
-<meta property="og:description" content="静态页访问 示例：http://www.test.com/index.html 请求步骤：  (1) 用户输入需要访问的地址或者具体的网页文件(2) 开始域名解析,会先找到本地的 hosts 文件，然后再找网络上的 DNS 服务器,最终解析到 ip 地址(3) ip 地址所在机器的 Web 服务器接收这个请求，获取请求文件 index.html(4) web 服务器将这个文件的信息返回给用户所用">
+<meta property="og:description" content="通过查阅资料，了解 Go 语言的启动过程。 启动总体顺序 命令行参数解析 操作系统相关初始化 调度器初始化 创建 main.goroutine 运行 main 函数  命令行参数初始化主要是解析命令行参数并保存 操作系统相关初始化主要是确定操作系统的 CPU 核数，CPU 核数决定默认的了 P 的数量">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-03T02:45:47.081Z">
+<meta property="og:image" content="http://phachon.github.io/images/go_logo.jpg">
+<meta property="og:updated_time" content="2018-09-10T03:59:36.282Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Web 网站的基本工作原理">
-<meta name="twitter:description" content="静态页访问 示例：http://www.test.com/index.html 请求步骤：  (1) 用户输入需要访问的地址或者具体的网页文件(2) 开始域名解析,会先找到本地的 hosts 文件，然后再找网络上的 DNS 服务器,最终解析到 ip 地址(3) ip 地址所在机器的 Web 服务器接收这个请求，获取请求文件 index.html(4) web 服务器将这个文件的信息返回给用户所用">
+<meta name="twitter:title" content="Go 启动过程">
+<meta name="twitter:description" content="通过查阅资料，了解 Go 语言的启动过程。 启动总体顺序 命令行参数解析 操作系统相关初始化 调度器初始化 创建 main.goroutine 运行 main 函数  命令行参数初始化主要是解析命令行参数并保存 操作系统相关初始化主要是确定操作系统的 CPU 核数，CPU 核数决定默认的了 P 的数量">
+<meta name="twitter:image" content="http://phachon.github.io/images/go_logo.jpg">
     
 
     
@@ -204,15 +206,23 @@ var _hmt = _hmt || [];
 </aside>
 
             
-            <section id="main"><article id="post-web-work" class="article article-type-post" itemscope itemprop="blogPost">
+            <section id="main"><article id="post-go_bootstrap" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
+        
+            
+	
+		<img src="/images/go_logo.jpg" class="article-banner" />
+	
+
+
+
         
         
             <header class="article-header">
                 
     
         <h1 class="article-title" itemprop="name">
-            Web 网站的基本工作原理
+            Go 启动过程
         </h1>
     
 
@@ -221,8 +231,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/07/26/web-work/">
-            <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26</time>
+        <a href="/2018/09/09/go_bootstrap/">
+            <time datetime="2018-09-08T16:00:00.000Z" itemprop="datePublished">2018-09-09</time>
         </a>
     </div>
 
@@ -236,7 +246,7 @@ var _hmt = _hmt || [];
                         
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/Apache/">Apache</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>
+        <a class="tag-link" href="/tags/go/">go</a>
     </div>
 
                     </div>
@@ -248,19 +258,36 @@ var _hmt = _hmt || [];
         
             
             <hr>
-<h2 id="静态页访问"><a href="#静态页访问" class="headerlink" title="静态页访问"></a>静态页访问</h2><ul>
-<li>示例：<a href="http://www.test.com/index.html" target="_blank" rel="noopener">http://www.test.com/index.html</a></li>
-<li>请求步骤：</li>
-</ul>
-<p>(1) 用户输入需要访问的地址或者具体的网页文件<br>(2) 开始域名解析,会先找到本地的 hosts 文件，然后再找网络上的 DNS 服务器,最终解析到 ip 地址<br>(3) ip 地址所在机器的 Web 服务器接收这个请求，获取请求文件 index.html<br>(4) web 服务器将这个文件的信息返回给用户所用的浏览器<br>(5) 浏览器解析 html 代码，显示出数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Title: 静态网页资源的访问流程图</span><br><span class="line">用户-&gt;浏览器:输入资源地址</span><br><span class="line">浏览器-&gt;域名解析(DNS):解析 ip</span><br><span class="line">域名解析(DNS)-&gt;web 服务器:根据 ip 找到服务器资源</span><br><span class="line">web 服务器-&gt;浏览器:返回资源给浏览器</span><br><span class="line">浏览器-&gt;用户:解析html显示</span><br></pre></td></tr></table></figure>
+<p>通过查阅资料，了解 Go 语言的启动过程。</p>
+<h2 id="启动总体顺序"><a href="#启动总体顺序" class="headerlink" title="启动总体顺序"></a>启动总体顺序</h2><ol>
+<li>命令行参数解析</li>
+<li>操作系统相关初始化</li>
+<li>调度器初始化</li>
+<li>创建 main.goroutine</li>
+<li>运行 main 函数</li>
+</ol>
+<h3 id="命令行参数初始化"><a href="#命令行参数初始化" class="headerlink" title="命令行参数初始化"></a>命令行参数初始化</h3><p>主要是解析命令行参数并保存</p>
+<h3 id="操作系统相关初始化"><a href="#操作系统相关初始化" class="headerlink" title="操作系统相关初始化"></a>操作系统相关初始化</h3><p>主要是确定操作系统的 CPU 核数，CPU 核数决定默认的了 P 的数量</p>
 <a id="more"></a>
-<h2 id="动态页访问"><a href="#动态页访问" class="headerlink" title="动态页访问"></a>动态页访问</h2><p>示例：<a href="http://www.test.com/test.php" target="_blank" rel="noopener">http://www.test.com/test.php</a></p>
-<p>请求步骤：</p>
-<p>(1) 用户浏览器输入网址以及请求的动态文件的脚本<br>(2) 域名解析，先找本地 hosts ,再找 DNS<br>(3) web 服务器接收请求,获取请求文件 test.php<br>(4) web 服务器将 test.php 交给 php 引擎处理<br>(5) php 引擎解析 php 代码,如果连接了数据库，就调用 mysql 扩展，去操作数据库，最终将解析成 html 文件<br>(6) 将解析的 html 文件返回给 web 服务器(Apache)<br>(7) web服务器返回 test.php 得到的最终 html 文件给浏览器<br>(8) 浏览器解析html代码，显示数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">title:动态网页的访问流程图</span><br><span class="line">用户-&gt;浏览器:输入动态脚本地址</span><br><span class="line">浏览器-&gt;域名解析(DNS):解析域名</span><br><span class="line">域名解析(DNS)-&gt;Web服务器(Apache):ip定位到机器</span><br><span class="line">Web服务器(Apache)-&gt;php引擎:发送test.php</span><br><span class="line">php引擎-&gt;Web服务器(Apache):将解析成html文件返回</span><br><span class="line">Web服务器(Apache)-&gt;浏览器:将html返回</span><br><span class="line">浏览器-&gt;用户:解析html显示</span><br></pre></td></tr></table></figure>
-<h2 id="apache-的工作原理"><a href="#apache-的工作原理" class="headerlink" title="apache 的工作原理"></a>apache 的工作原理</h2><p>Apache的诸多功能都是通过模块进行加载的，自己本身并不具备那么多能力（功能）,下图以 php 为例</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">title:Apache 的工作示意图</span><br><span class="line">浏览器-&gt;Apache:http://test.com/test.php</span><br><span class="line">Apache-&gt;php引擎:test.php</span><br><span class="line">php引擎-&gt;php扩展:mysql扩展</span><br><span class="line">php扩展-&gt;mysql数据库:连接mysql</span><br><span class="line">mysql数据库-&gt;php引擎:返回数据给php引擎</span><br><span class="line">php引擎-&gt;Apache:解析成html返回</span><br><span class="line">Apache-&gt;浏览器:返回html给浏览器</span><br></pre></td></tr></table></figure>
+<h3 id="调度器初始化"><a href="#调度器初始化" class="headerlink" title="调度器初始化"></a>调度器初始化</h3><p>调度器的初始化时启动程序的核心</p>
+<ol>
+<li>设置 M 的最大数量（10000）</li>
+<li>内存相关初始化</li>
+<li>M 的初始化</li>
+<li>存储命令行参数和环境变量</li>
+<li>解析 Debug 调试参数</li>
+<li>初始化垃圾回收器</li>
+<li>初始化 poll 时间</li>
+<li>社会最大的 P 的数量，默认是 CPU 核数</li>
+</ol>
+<h3 id="main-goroutine-初始化"><a href="#main-goroutine-初始化" class="headerlink" title="main.goroutine 初始化"></a>main.goroutine 初始化</h3><ol>
+<li>设置栈的最大值</li>
+<li>启动后台监控</li>
+<li>初始化 runtime.init 及 runtime 包</li>
+<li>启动垃圾回收器</li>
+<li>初始化 main.init 及用户或第三方引入的包</li>
+</ol>
+<h3 id="执行-main-main-函数"><a href="#执行-main-main-函数" class="headerlink" title="执行 main.main 函数"></a>执行 main.main 函数</h3><p>执行入口函数，开始运行</p>
 
         
         </div>
@@ -315,19 +342,10 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
 <nav id="article-nav">
     
-        <a href="/2016/07/28/linux-command/" id="article-nav-newer" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">上一篇</strong>
-            <div class="article-nav-title">
-                
-                    Linux 常用命令总结
-                
-            </div>
-        </a>
     
-    
-        <a href="/2016/07/26/wamp-install/" id="article-nav-older" class="article-nav-link-wrap">
+        <a href="/2018/09/03/go_concurrent/" id="article-nav-older" class="article-nav-link-wrap">
             <strong class="article-nav-caption">下一篇</strong>
-            <div class="article-nav-title">Wamp 环境的搭建</div>
+            <div class="article-nav-title">go 语言的并发机制</div>
         </a>
     
 </nav>
