@@ -512,6 +512,111 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
+    <article id="post-sphinx-install" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2016/09/06/sphinx-install/">Sphinx 在 Linux 下的安装与基本配置</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/2016/09/06/sphinx-install/">
+            <time datetime="2016-09-05T16:00:00.000Z" itemprop="datePublished">2016-09-06</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Linux/">Linux</a>, <a class="tag-link" href="/tags/Mysql/">Mysql</a>, <a class="tag-link" href="/tags/Sphinx/">Sphinx</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><hr>
+<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>Sphinx 官网：<a href="http://sphinxsearch.com/" target="_blank" rel="noopener">http://sphinxsearch.com/</a><br>wget <a href="http://sphinxsearch.com/files/sphinx-2.2.10-release.tar.gz" target="_blank" rel="noopener">http://sphinxsearch.com/files/sphinx-2.2.10-release.tar.gz</a></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="解压压缩包"><a href="#解压压缩包" class="headerlink" title="解压压缩包"></a>解压压缩包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar zxvf sphinx-2.2.10-release.tar.gz</span><br><span class="line">cd sphinx-2.2.10-release</span><br></pre></td></tr></table></figure>
+<p>找到 mysql 的安装目录，我的是在 /usr/bin/mysql 执行 /usr/lcoal/sphinx 为 sphinx 的安装目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo ./configure --prefix=/usr/local/sphinx --with-mysql=/usr/local/mysql</span><br><span class="line">make </span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<p>不出问题的话应该已经安装成功了</p></p>
+            <p class="article-more-link">
+                <a href="/2016/09/06/sphinx-install/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
     <article id="post-sphinx-web" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -575,111 +680,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <p>Sphinx 就可以帮我们解决上面所说的问题。当然，Sphinx 可以应用的场景很多，上面只是其中的一种。</p></p>
             <p class="article-more-link">
                 <a href="/2016/09/06/sphinx-web/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
-<script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
-</div>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-sphinx-install" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2016/09/06/sphinx-install/">Sphinx 在 Linux 下的安装与基本配置</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/09/06/sphinx-install/">
-            <time datetime="2016-09-05T16:00:00.000Z" itemprop="datePublished">2016-09-06</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/Linux/">Linux</a>, <a class="tag-link" href="/tags/Mysql/">Mysql</a>, <a class="tag-link" href="/tags/Sphinx/">Sphinx</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><hr>
-<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>Sphinx 官网：<a href="http://sphinxsearch.com/" target="_blank" rel="noopener">http://sphinxsearch.com/</a><br>wget <a href="http://sphinxsearch.com/files/sphinx-2.2.10-release.tar.gz" target="_blank" rel="noopener">http://sphinxsearch.com/files/sphinx-2.2.10-release.tar.gz</a></p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="解压压缩包"><a href="#解压压缩包" class="headerlink" title="解压压缩包"></a>解压压缩包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar zxvf sphinx-2.2.10-release.tar.gz</span><br><span class="line">cd sphinx-2.2.10-release</span><br></pre></td></tr></table></figure>
-<p>找到 mysql 的安装目录，我的是在 /usr/bin/mysql 执行 /usr/lcoal/sphinx 为 sphinx 的安装目录。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo ./configure --prefix=/usr/local/sphinx --with-mysql=/usr/local/mysql</span><br><span class="line">make </span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
-<p>不出问题的话应该已经安装成功了</p></p>
-            <p class="article-more-link">
-                <a href="/2016/09/06/sphinx-install/#more">查看更多</a>
             </p>
         
         </div>
@@ -938,112 +938,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-lump-install" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2016/07/29/lump-install/">CentOS6.3+Apache2.2+php5.3.8+Mysql5.5.4源码搭建Lump环境</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/07/29/lump-install/">
-            <time datetime="2016-07-28T16:00:00.000Z" itemprop="datePublished">2016-07-29</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/Apache/">Apache</a>, <a class="tag-link" href="/tags/CentOS/">CentOS</a>, <a class="tag-link" href="/tags/Mysql/">Mysql</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><hr>
-<h2 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h2><ul>
-<li>虚拟机VMware 下CentOS 6.3最小化安装。</li>
-<li>PHP版本：php-5.3.8.tar.gz</li>
-<li>Apache版本：httpd-2.2.31.tar.gz</li>
-<li>MySql版本：MySql-5.5.45.tar.gz</li>
-</ul></p>
-            <p class="article-more-link">
-                <a href="/2016/07/29/lump-install/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
-<script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
-</div>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
     <article id="post-php-run-type" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -1150,7 +1044,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-php-call-callStatic" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-lump-install" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -1158,7 +1052,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/07/28/php-call-callStatic/">PHP 魔术方法之 __call 与 __callStatic</a>
+            <a class="article-title" href="/2016/07/29/lump-install/">CentOS6.3+Apache2.2+php5.3.8+Mysql5.5.4源码搭建Lump环境</a>
         </h1>
     
 
@@ -1167,7 +1061,113 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/07/28/php-call-callStatic/">
+        <a href="/2016/07/29/lump-install/">
+            <time datetime="2016-07-28T16:00:00.000Z" itemprop="datePublished">2016-07-29</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Apache/">Apache</a>, <a class="tag-link" href="/tags/CentOS/">CentOS</a>, <a class="tag-link" href="/tags/Mysql/">Mysql</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><hr>
+<h2 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h2><ul>
+<li>虚拟机VMware 下CentOS 6.3最小化安装。</li>
+<li>PHP版本：php-5.3.8.tar.gz</li>
+<li>Apache版本：httpd-2.2.31.tar.gz</li>
+<li>MySql版本：MySql-5.5.45.tar.gz</li>
+</ul></p>
+            <p class="article-more-link">
+                <a href="/2016/07/29/lump-install/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-linux-command" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2016/07/28/linux-command/">Linux 常用命令总结</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/2016/07/28/linux-command/">
             <time datetime="2016-07-27T16:00:00.000Z" itemprop="datePublished">2016-07-28</time>
         </a>
     </div>
@@ -1182,7 +1182,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/PHP/">PHP</a>
+        <a class="tag-link" href="/tags/Linux/">Linux</a>
     </div>
 
                     </div>
@@ -1193,9 +1193,29 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <div class="article-entry" itemprop="articleBody">
         
             <p><hr>
-<h2 id="call-方法的使用"><a href="#call-方法的使用" class="headerlink" title="__call 方法的使用"></a>__call 方法的使用</h2><p>定义：在对象中调用一个不可访问方法时，__call() 会被调用。</p></p>
+<h2 id="系统相关"><a href="#系统相关" class="headerlink" title="系统相关"></a>系统相关</h2><ul>
+<li>who 显示在线登录用户</li>
+<li>whoami 显示当前操作的用户</li>
+<li>hostname 主机名</li>
+<li>top 显示当前耗费最多的进程以及内存消耗</li>
+<li>ps -aux 显示所有的进程信息</li>
+<li>df 查看磁盘所占大小</li>
+<li>-h 带单位</li>
+<li>ifconfig 网络信息</li>
+<li>ping 测试网络连接</li>
+<li>netstat 网络状态信息</li>
+<li>kill 杀死进程</li>
+<li>clear 清屏</li>
+<li>shutdown<ul>
+<li>-r 关机重启</li>
+<li>-h 关机不重启</li>
+<li>now  立刻关机</li>
+</ul>
+</li>
+<li>reboot   重启</li>
+</ul></p>
             <p class="article-more-link">
-                <a href="/2016/07/28/php-call-callStatic/#more">查看更多</a>
+                <a href="/2016/07/28/linux-command/#more">查看更多</a>
             </p>
         
         </div>
