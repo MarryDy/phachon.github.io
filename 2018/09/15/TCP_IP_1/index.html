@@ -3,19 +3,22 @@
 <head>
     <meta charset="utf-8">
     
-    <title>归档: 2018 | phachon&#39;s blog</title>
+    <title>TCP/IP 协议栈系列（一）：协议概述 | phachon&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="好像什么都没有">
-<meta name="keywords" content="blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="phachon&#39;s blog">
-<meta property="og:url" content="http://phachon.github.io/archives/2018/index.html">
+    <meta name="description" content="本系列将由浅入深通俗的讲解 TCP/IP 协议栈的基本知识，希望能对读者有用。 OSI 七层模型TCP/IP 协议栈是在借鉴了 OSI 七层模型的基础上提出来的模型，所以我们有必要先来了解一下 OSI 七层模型。   OSI 模型是计算机网路体系结构发展的产物。它的基本内容是开放系统通信功能的分层结构。通俗来讲，就是为了计算机系统的通信功能设计的一套标准的框架，大家都遵循这套标准来进行网络通信的">
+<meta name="keywords" content="tcp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP&#x2F;IP 协议栈系列（一）：协议概述">
+<meta property="og:url" content="http://phachon.github.io/2018/09/15/TCP_IP_1/index.html">
 <meta property="og:site_name" content="phachon&#39;s blog">
-<meta property="og:description" content="好像什么都没有">
+<meta property="og:description" content="本系列将由浅入深通俗的讲解 TCP/IP 协议栈的基本知识，希望能对读者有用。 OSI 七层模型TCP/IP 协议栈是在借鉴了 OSI 七层模型的基础上提出来的模型，所以我们有必要先来了解一下 OSI 七层模型。   OSI 模型是计算机网路体系结构发展的产物。它的基本内容是开放系统通信功能的分层结构。通俗来讲，就是为了计算机系统的通信功能设计的一套标准的框架，大家都遵循这套标准来进行网络通信的">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://phachon.github.io/images/tcp_ip.png">
+<meta property="og:updated_time" content="2018-09-21T08:43:36.892Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="phachon&#39;s blog">
-<meta name="twitter:description" content="好像什么都没有">
+<meta name="twitter:title" content="TCP&#x2F;IP 协议栈系列（一）：协议概述">
+<meta name="twitter:description" content="本系列将由浅入深通俗的讲解 TCP/IP 协议栈的基本知识，希望能对读者有用。 OSI 七层模型TCP/IP 协议栈是在借鉴了 OSI 七层模型的基础上提出来的模型，所以我们有必要先来了解一下 OSI 七层模型。   OSI 模型是计算机网路体系结构发展的产物。它的基本内容是开放系统通信功能的分层结构。通俗来讲，就是为了计算机系统的通信功能设计的一套标准的框架，大家都遵循这套标准来进行网络通信的">
+<meta name="twitter:image" content="http://phachon.github.io/images/tcp_ip.png">
     
 
     
@@ -203,25 +206,21 @@ var _hmt = _hmt || [];
 </aside>
 
             
-            <section id="main"><div class="timeline timeline-wrap">
-    
-            <div class="timeline-row timeline-row-major">
-                <span class="node"><i class="fas fa-calendar-alt"></i></span>
-                <h1 class="title">2018</h1>
-            </div>
+            <section id="main"><article id="post-TCP_IP_1" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
         
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
+        
+            <header class="article-header">
                 
     
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2018/09/15/TCP_IP_1/">TCP/IP 协议栈系列（一）：协议概述</a>
+        <h1 class="article-title" itemprop="name">
+            TCP/IP 协议栈系列（一）：协议概述
         </h1>
     
 
-                <div class="article-meta">
-                    
+                
+                    <div class="article-meta">
+                        
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
         <a href="/2018/09/15/TCP_IP_1/">
@@ -230,131 +229,130 @@ var _hmt = _hmt || [];
     </div>
 
 
-                    
+                        
     <div class="article-category">
     	<i class="fas fa-folder"></i>
         <a class="article-category-link" href="/categories/Coding/">Coding</a>
     </div>
 
-                    
+                        
     <div class="article-tag">
         <i class="fas fa-tag"></i>
         <a class="tag-link" href="/tags/tcp/">tcp</a>
     </div>
 
-                </div>
-            </div>
-        </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
+                    </div>
                 
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2018/09/09/go_bootstrap/">Go 启动过程</a>
-        </h1>
-    
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p>本系列将由浅入深通俗的讲解 TCP/IP 协议栈的基本知识，希望能对读者有用。</p>
+<h2 id="OSI-七层模型"><a href="#OSI-七层模型" class="headerlink" title="OSI 七层模型"></a>OSI 七层模型</h2><p>TCP/IP 协议栈是在借鉴了 OSI 七层模型的基础上提出来的模型，所以我们有必要先来了解一下 OSI 七层模型。  </p>
+<p>OSI 模型是计算机网路体系结构发展的产物。它的基本内容是开放系统通信功能的分层结构。通俗来讲，就是为了计算机系统的通信功能设计的一套标准的框架，大家都遵循这套标准来进行网络通信的开发，<br>OSI 七层模型如下：</p>
+<ul>
+<li>应用称</li>
+<li>表示层</li>
+<li>会话层</li>
+<li>传输层</li>
+<li>网络层</li>
+<li>数据链路层</li>
+<li>物理层</li>
+</ul>
+<p>具体每一层的作用，这里不再详细说明；</p>
+<h2 id="TCP-IP-四层模型"><a href="#TCP-IP-四层模型" class="headerlink" title="TCP/IP 四层模型"></a>TCP/IP 四层模型</h2><p>TCP/IP 协议栈基于 OSI 七层模型提出来 TCP/IP 四层模型，也就是简化了的 OSI 模型：</p>
+<ul>
+<li>应用层</li>
+<li>传输称</li>
+<li>网络层</li>
+<li>链路层</li>
+</ul>
+<p>OSI 七层模型和 TCP/IP 4 层模型之间的关系如下：  </p>
+<p><img src="/images/tcp_ip.png" alt="TCP/IP四层模型与OSI气层模型对应关系"></p>
+<h2 id="对比总结"><a href="#对比总结" class="headerlink" title="对比总结"></a>对比总结</h2><h3 id="OSI-七层模型-1"><a href="#OSI-七层模型-1" class="headerlink" title="OSI 七层模型"></a>OSI 七层模型</h3><ul>
+<li>主要概念：服务，接口，协议</li>
+<li>协议有很好的隐蔽性</li>
+<li>产生在协发明之前</li>
+<li>7层</li>
+</ul>
+<h3 id="TCP-IP-模型"><a href="#TCP-IP-模型" class="headerlink" title="TCP/IP 模型"></a>TCP/IP 模型</h3><ul>
+<li>没有明确的区分服务，接口，协议</li>
+<li>产生在协议发明之后</li>
+<li>4层</li>
+</ul>
 
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/2018/09/09/go_bootstrap/">
-            <time datetime="2018-09-08T16:00:00.000Z" itemprop="datePublished">2018-09-09</time>
-        </a>
-    </div>
-
-
-                    
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
-    </div>
-
-                    
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/go/">go</a>
-    </div>
-
-                </div>
-            </div>
+        
         </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
-                
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2018/09/03/go_concurrent/">go 语言的并发机制</a>
-        </h1>
-    
-
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/2018/09/03/go_concurrent/">
-            <time datetime="2018-09-02T16:00:00.000Z" itemprop="datePublished">2018-09-03</time>
-        </a>
-    </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
 
-                    
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
-    </div>
-
-                    
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/go/">go</a>
-    </div>
-
-                </div>
-            </div>
-        </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
-                
-    
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2018/02/05/go-mysql-create-table/">Go 语言操作 mysql 建表问题的解决办法</a>
-        </h1>
-    
-
-                <div class="article-meta">
-                    
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/2018/02/05/go-mysql-create-table/">
-            <time datetime="2018-02-04T16:00:00.000Z" itemprop="datePublished">2018-02-05</time>
-        </a>
-    </div>
-
-
-                    
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
-    </div>
-
-                    
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/Go/">Go</a>, <a class="tag-link" href="/tags/Mysql/">Mysql</a>
-    </div>
-
-                </div>
-            </div>
-        </div>
-    
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
 </div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2018/09/09/go_bootstrap/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Go 启动过程</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
 </section>
             
                 

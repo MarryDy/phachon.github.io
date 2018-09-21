@@ -169,11 +169,11 @@ var _hmt = _hmt || [];
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                27
+                28
                 <span>文章</span>
             </div>
             <div class="article-info-block">
-                38
+                39
                 <span>标签</span>
             </div>
         </div>
@@ -204,6 +204,138 @@ var _hmt = _hmt || [];
 
             
             <section id="main">
+    <article id="post-TCP_IP_1" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2018/09/15/TCP_IP_1/">TCP/IP 协议栈系列（一）：协议概述</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/2018/09/15/TCP_IP_1/">
+            <time datetime="2018-09-14T16:00:00.000Z" itemprop="datePublished">2018-09-15</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/tcp/">tcp</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p>本系列将由浅入深通俗的讲解 TCP/IP 协议栈的基本知识，希望能对读者有用。</p>
+<h2 id="OSI-七层模型"><a href="#OSI-七层模型" class="headerlink" title="OSI 七层模型"></a>OSI 七层模型</h2><p>TCP/IP 协议栈是在借鉴了 OSI 七层模型的基础上提出来的模型，所以我们有必要先来了解一下 OSI 七层模型。  </p>
+<p>OSI 模型是计算机网路体系结构发展的产物。它的基本内容是开放系统通信功能的分层结构。通俗来讲，就是为了计算机系统的通信功能设计的一套标准的框架，大家都遵循这套标准来进行网络通信的开发，<br>OSI 七层模型如下：</p>
+<ul>
+<li>应用称</li>
+<li>表示层</li>
+<li>会话层</li>
+<li>传输层</li>
+<li>网络层</li>
+<li>数据链路层</li>
+<li>物理层</li>
+</ul>
+<p>具体每一层的作用，这里不再详细说明；</p>
+<h2 id="TCP-IP-四层模型"><a href="#TCP-IP-四层模型" class="headerlink" title="TCP/IP 四层模型"></a>TCP/IP 四层模型</h2><p>TCP/IP 协议栈基于 OSI 七层模型提出来 TCP/IP 四层模型，也就是简化了的 OSI 模型：</p>
+<ul>
+<li>应用层</li>
+<li>传输称</li>
+<li>网络层</li>
+<li>链路层</li>
+</ul>
+<p>OSI 七层模型和 TCP/IP 4 层模型之间的关系如下：  </p>
+<p><img src="/images/tcp_ip.png" alt="TCP/IP四层模型与OSI气层模型对应关系"></p>
+<h2 id="对比总结"><a href="#对比总结" class="headerlink" title="对比总结"></a>对比总结</h2><h3 id="OSI-七层模型-1"><a href="#OSI-七层模型-1" class="headerlink" title="OSI 七层模型"></a>OSI 七层模型</h3><ul>
+<li>主要概念：服务，接口，协议</li>
+<li>协议有很好的隐蔽性</li>
+<li>产生在协发明之前</li>
+<li>7层</li>
+</ul>
+<h3 id="TCP-IP-模型"><a href="#TCP-IP-模型" class="headerlink" title="TCP/IP 模型"></a>TCP/IP 模型</h3><ul>
+<li>没有明确的区分服务，接口，协议</li>
+<li>产生在协议发明之后</li>
+<li>4层</li>
+</ul>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
     <article id="post-go_bootstrap" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -539,7 +671,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-PHPUnit-install-windows" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-PHPUnit-Lean1" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -547,7 +679,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/10/20/PHPUnit-install-windows/">PHPUnit windows 下的安装</a>
+            <a class="article-title" href="/2017/10/20/PHPUnit-Lean1/">PHPUnit 学习实例代码</a>
         </h1>
     
 
@@ -556,7 +688,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2017/10/20/PHPUnit-install-windows/">
+        <a href="/2017/10/20/PHPUnit-Lean1/">
             <time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20</time>
         </a>
     </div>
@@ -571,7 +703,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHPUnit/">PHPUnit</a>, <a class="tag-link" href="/tags/Windows/">Windows</a>
+        <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHPUnit/">PHPUnit</a>
     </div>
 
                     </div>
@@ -583,17 +715,16 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
             <p><hr>
 <blockquote>
-<p>本篇文章介绍一下 PHPUnit 在 windows 下的安装和配置</p>
+<p>PHPUnit 基本用法+实例详解<br>上一篇文章介绍了 PHPUnit 在 windows  的安装和配置。今天我们来介绍一下 PHPUnit 如何编写一些基本的测试用例。我也是在最近才开始慢慢使用的 PHPUnit , 用不足之处，欢迎指正。</p>
 </blockquote>
-<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ul>
-<li>php 版本 php5.4.45</li>
-<li>phpunit 版本 phpunit4.8.24</li>
-<li>操作系统：windows 7 (32)</li>
-<li>php 安装（这里不再详细讲解）</li>
-<li>phpunit 下载地址：<a href="https://phpunit.de/" target="_blank" rel="noopener">https://phpunit.de/</a> 下载到文件 phpunit-4.8.24.phar</li>
-</ul></p>
+<h1 id="编写规范"><a href="#编写规范" class="headerlink" title="编写规范"></a>编写规范</h1><ol>
+<li>测试类一般以***Test 命名；</li>
+<li>该类必须继承 PHPUnit_Framework_TestCase 类；</li>
+<li>类里的测试用例方法一般以test开头，当然也可以通过@test注释来定义一个名字不为test开头的方法为测试方法；</li>
+<li>测试方法中需要使用断言方法来断言实际传入的参数与期望的参数是否一致来达到测试的目的；</li>
+</ol></p>
             <p class="article-more-link">
-                <a href="/2017/10/20/PHPUnit-install-windows/#more">查看更多</a>
+                <a href="/2017/10/20/PHPUnit-Lean1/#more">查看更多</a>
             </p>
         
         </div>
@@ -649,7 +780,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-PHPUnit-Lean1" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-PHPUnit-install-windows" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -657,7 +788,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/10/20/PHPUnit-Lean1/">PHPUnit 学习实例代码</a>
+            <a class="article-title" href="/2017/10/20/PHPUnit-install-windows/">PHPUnit windows 下的安装</a>
         </h1>
     
 
@@ -666,7 +797,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2017/10/20/PHPUnit-Lean1/">
+        <a href="/2017/10/20/PHPUnit-install-windows/">
             <time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20</time>
         </a>
     </div>
@@ -681,7 +812,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHPUnit/">PHPUnit</a>
+        <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHPUnit/">PHPUnit</a>, <a class="tag-link" href="/tags/Windows/">Windows</a>
     </div>
 
                     </div>
@@ -693,16 +824,17 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
             <p><hr>
 <blockquote>
-<p>PHPUnit 基本用法+实例详解<br>上一篇文章介绍了 PHPUnit 在 windows  的安装和配置。今天我们来介绍一下 PHPUnit 如何编写一些基本的测试用例。我也是在最近才开始慢慢使用的 PHPUnit , 用不足之处，欢迎指正。</p>
+<p>本篇文章介绍一下 PHPUnit 在 windows 下的安装和配置</p>
 </blockquote>
-<h1 id="编写规范"><a href="#编写规范" class="headerlink" title="编写规范"></a>编写规范</h1><ol>
-<li>测试类一般以***Test 命名；</li>
-<li>该类必须继承 PHPUnit_Framework_TestCase 类；</li>
-<li>类里的测试用例方法一般以test开头，当然也可以通过@test注释来定义一个名字不为test开头的方法为测试方法；</li>
-<li>测试方法中需要使用断言方法来断言实际传入的参数与期望的参数是否一致来达到测试的目的；</li>
-</ol></p>
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ul>
+<li>php 版本 php5.4.45</li>
+<li>phpunit 版本 phpunit4.8.24</li>
+<li>操作系统：windows 7 (32)</li>
+<li>php 安装（这里不再详细讲解）</li>
+<li>phpunit 下载地址：<a href="https://phpunit.de/" target="_blank" rel="noopener">https://phpunit.de/</a> 下载到文件 phpunit-4.8.24.phar</li>
+</ul></p>
             <p class="article-more-link">
-                <a href="/2017/10/20/PHPUnit-Lean1/#more">查看更多</a>
+                <a href="/2017/10/20/PHPUnit-install-windows/#more">查看更多</a>
             </p>
         
         </div>
@@ -1091,6 +1223,10 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h3><ul>
 <li><a href="https://www.cnblogs.com/onepixel/p/7092302.html" target="_blank" rel="noopener">TCP 协议</a></li>
 <li><a href="https://blog.csdn.net/whuslei/article/details/6667471/" target="_blank" rel="noopener">TCP 三次握手</a></li>
+<li><a href="https://www.cnblogs.com/qingergege/p/6603488.html" target="_blank" rel="noopener">TCP中11种状态</a></li>
+<li><a href="http://blog.chinaunix.net/uid-26833883-id-3627644.html" target="_blank" rel="noopener">TCP/IP/UDP协议详解</a></li>
+<li><a href="http://www.cnblogs.com/xuanku/p/tcpip.html" target="_blank" rel="noopener">TCP/IP网络协议栈</a></li>
+<li><a href="https://www.cnblogs.com/luoquan/p/4886345.html" target="_blank" rel="noopener">TCP滑动窗口详解</a></li>
 <li><a href="https://blog.csdn.net/slforeverlove/article/details/47018015" target="_blank" rel="noopener">TCP 知识点总结</a></li>
 <li><a href="https://www.cnblogs.com/obama/p/3292335.html" target="_blank" rel="noopener">TCP面试题集</a></li>
 </ul>
@@ -1103,9 +1239,8 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <h3 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h3><ul>
 <li><a href="https://www.cnblogs.com/wangning528/p/6388464.html" target="_blank" rel="noopener">Http 协议详细讲解</a></li>
 <li><a href="https://www.cnblogs.com/gofighting/p/5421890.html" target="_blank" rel="noopener">Http1.0 和 Http1.1区别</a></li>
-<li><a href="https://blog.csdn.net/zhuyiquan/article/details/69257126" target="_blank" rel="noopener">Http2.0 设计</a></li>
-<li><a href="https://blog.csdn.net/u012657197/article/details/77877840" target="_blank" rel="noopener">Http2.0 二进制帧</a></li>
 <li><a href="https://blog.csdn.net/zhuyiquan/article/details/69257126" target="_blank" rel="noopener">Http2.0 原理详细分析</a></li>
+<li><a href="https://blog.csdn.net/u012657197/article/details/77877840" target="_blank" rel="noopener">Http2.0 二进制帧</a></li>
 <li><a href="https://www.cnblogs.com/endlessdream/p/4699273.html" target="_blank" rel="noopener">Session 和 Cookie</a></li>
 <li><a href="http://www.cnblogs.com/andy-zhou/p/5360107.html" target="_blank" rel="noopener">理解 Session 和 Cookie机制</a></li>
 <li><a href="https://segmentfault.com/a/1190000007078606" target="_blank" rel="noopener">跨域问题</a></li>
@@ -1390,109 +1525,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-phaChat" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2016/10/11/phaChat/">一个基于 node.js 搭建的web聊天系统</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/10/11/phaChat/">
-            <time datetime="2016-10-10T16:00:00.000Z" itemprop="datePublished">2016-10-11</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/Express/">Express</a>, <a class="tag-link" href="/tags/Mysql/">Mysql</a>, <a class="tag-link" href="/tags/Node/">Node</a>, <a class="tag-link" href="/tags/WebSocket/">WebSocket</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><hr>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
-<p>一个简单的 web 聊天室, 采用 node.js 编写，基于 express + mysql + socket 实现的在线多人web 聊天系统，包括用户的登陆注册，用户的个人信息修改,目的是为了更加深入学习了解 node.js 和 websocket 技术，给初学者一个练习的小项目。有兴趣的同学可以继续完善（用户的头像上传，创建聊天群，消息保存等）</p>
-</blockquote></p>
-            <p class="article-more-link">
-                <a href="/2016/10/11/phaChat/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
-<script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
-</div>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
     <nav id="page-nav">
         <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
     </nav>
@@ -1506,6 +1538,25 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <h3 class="widget-title">最新文章</h3>
         <div class="widget">
             <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/09/15/TCP_IP_1/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
+                            <p class="item-title"><a href="/2018/09/15/TCP_IP_1/" class="title">TCP/IP 协议栈系列（一）：协议概述</a></p>
+                            <p class="item-date"><time datetime="2018-09-14T16:00:00.000Z" itemprop="datePublished">2018-09-15</time></p>
+                        </div>
+                    </li>
                 
                     <li>
                         
@@ -1567,25 +1618,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/10/20/PHPUnit-install-windows/" class="thumbnail">
-    
-    
-        <span class="thumbnail-image thumbnail-none"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
-                            <p class="item-title"><a href="/2017/10/20/PHPUnit-install-windows/" class="title">PHPUnit windows 下的安装</a></p>
-                            <p class="item-date"><time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
                             <a href="/2017/10/20/PHPUnit-Lean1/" class="thumbnail">
     
     
@@ -1611,7 +1643,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Coding/">Coding</a><span class="category-list-count">27</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Coding/">Coding</a><span class="category-list-count">28</span></li></ul>
         </div>
     </div>
 
@@ -1620,7 +1652,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li></ul>
         </div>
     </div>
 
@@ -1629,7 +1661,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">标签云</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Apache/" style="font-size: 15px;">Apache</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/CLI/" style="font-size: 10px;">CLI</a> <a href="/tags/CentOS/" style="font-size: 15px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.67px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.67px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 18.33px;">Mysql</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.67px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.67px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 13.33px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/go/" style="font-size: 13.33px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a>
+            <a href="/tags/Apache/" style="font-size: 15px;">Apache</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/CLI/" style="font-size: 10px;">CLI</a> <a href="/tags/CentOS/" style="font-size: 15px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.67px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.67px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 16.67px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 18.33px;">Mysql</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 20px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.67px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.67px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 13.33px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/go/" style="font-size: 13.33px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a>
         </div>
     </div>
 
