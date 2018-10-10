@@ -891,126 +891,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-go_bootstrap" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-            
-	
-		<a href="/2018/09/09/go_bootstrap/" itemprop="url">
-            <img src="/images/go_logo.jpg" class="article-banner" />
-        </a>
-	
-
-
-
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2018/09/09/go_bootstrap/">Go 启动过程</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/2018/09/09/go_bootstrap/">
-            <time datetime="2018-09-08T16:00:00.000Z" itemprop="datePublished">2018-09-09 00:00:00</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/go/">go</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><hr>
-<p>通过查阅资料，了解 Go 语言的启动过程。</p>
-<h2 id="启动总体顺序"><a href="#启动总体顺序" class="headerlink" title="启动总体顺序"></a>启动总体顺序</h2><ol>
-<li>命令行参数解析</li>
-<li>操作系统相关初始化</li>
-<li>调度器初始化</li>
-<li>创建 main.goroutine</li>
-<li>运行 main 函数</li>
-</ol>
-<h3 id="命令行参数初始化"><a href="#命令行参数初始化" class="headerlink" title="命令行参数初始化"></a>命令行参数初始化</h3><p>主要是解析命令行参数并保存</p>
-<h3 id="操作系统相关初始化"><a href="#操作系统相关初始化" class="headerlink" title="操作系统相关初始化"></a>操作系统相关初始化</h3><p>主要是确定操作系统的 CPU 核数，CPU 核数决定默认的了 P 的数量</p></p>
-            <p class="article-more-link">
-                <a href="/2018/09/09/go_bootstrap/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
-<script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
-</div>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
     <article id="post-concurrrent_server" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -1168,6 +1048,126 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <li>epoll_wait 的工作实际上就是在这个就绪的链表中查看有没有就绪的 fd。</li>
 </ul>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-go_bootstrap" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            
+	
+		<a href="/2018/09/09/go_bootstrap/" itemprop="url">
+            <img src="/images/go_logo.jpg" class="article-banner" />
+        </a>
+	
+
+
+
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2018/09/09/go_bootstrap/">Go 启动过程</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/2018/09/09/go_bootstrap/">
+            <time datetime="2018-09-08T16:00:00.000Z" itemprop="datePublished">2018-09-09 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/go/">go</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><hr>
+<p>通过查阅资料，了解 Go 语言的启动过程。</p>
+<h2 id="启动总体顺序"><a href="#启动总体顺序" class="headerlink" title="启动总体顺序"></a>启动总体顺序</h2><ol>
+<li>命令行参数解析</li>
+<li>操作系统相关初始化</li>
+<li>调度器初始化</li>
+<li>创建 main.goroutine</li>
+<li>运行 main 函数</li>
+</ol>
+<h3 id="命令行参数初始化"><a href="#命令行参数初始化" class="headerlink" title="命令行参数初始化"></a>命令行参数初始化</h3><p>主要是解析命令行参数并保存</p>
+<h3 id="操作系统相关初始化"><a href="#操作系统相关初始化" class="headerlink" title="操作系统相关初始化"></a>操作系统相关初始化</h3><p>主要是确定操作系统的 CPU 核数，CPU 核数决定默认的了 P 的数量</p></p>
+            <p class="article-more-link">
+                <a href="/2018/09/09/go_bootstrap/#more">查看更多</a>
+            </p>
         
         </div>
         <footer class="article-footer">
@@ -1485,7 +1485,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
                             <p class="item-title"><a href="/2018/09/24/Redis_2/" class="title">Redis系列（二）：Redis 哨兵集群模式</a></p>
-                            <p class="item-date"><time datetime="2018-09-24T04:00:00.000Z" itemprop="datePublished">2018-09-24 12:00:00</time></p>
+                            <p class="item-date"><time datetime="2018-09-24T04:09:10.000Z" itemprop="datePublished">2018-09-24 12:09:10</time></p>
                         </div>
                     </li>
                 
@@ -1504,7 +1504,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
                             <p class="item-title"><a href="/2018/09/23/Redis_1/" class="title">Redis系列（一）：Redis 主从同步集群模式</a></p>
-                            <p class="item-date"><time datetime="2018-09-22T16:00:00.000Z" itemprop="datePublished">2018-09-23 00:00:00</time></p>
+                            <p class="item-date"><time datetime="2018-09-23T00:10:19.000Z" itemprop="datePublished">2018-09-23 08:10:19</time></p>
                         </div>
                     </li>
                 
