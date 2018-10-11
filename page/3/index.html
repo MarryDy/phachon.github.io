@@ -204,7 +204,7 @@ var _hmt = _hmt || [];
 
             
             <section id="main">
-    <article id="post-PHPUnit-install-windows" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-PHPUnit-Lean1" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -212,7 +212,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/10/20/PHPUnit-install-windows/">PHPUnit windows 下的安装</a>
+            <a class="article-title" href="/2017/10/20/PHPUnit-Lean1/">PHPUnit 学习实例代码</a>
         </h1>
     
 
@@ -221,7 +221,7 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2017/10/20/PHPUnit-install-windows/">
+        <a href="/2017/10/20/PHPUnit-Lean1/">
             <time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20 00:00:00</time>
         </a>
     </div>
@@ -236,7 +236,7 @@ var _hmt = _hmt || [];
                         
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHPUnit/">PHPUnit</a>, <a class="tag-link" href="/tags/Windows/">Windows</a>
+        <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHPUnit/">PHPUnit</a>
     </div>
 
                     </div>
@@ -248,17 +248,16 @@ var _hmt = _hmt || [];
         
             <p><hr>
 <blockquote>
-<p>本篇文章介绍一下 PHPUnit 在 windows 下的安装和配置</p>
+<p>PHPUnit 基本用法+实例详解<br>上一篇文章介绍了 PHPUnit 在 windows  的安装和配置。今天我们来介绍一下 PHPUnit 如何编写一些基本的测试用例。我也是在最近才开始慢慢使用的 PHPUnit , 用不足之处，欢迎指正。</p>
 </blockquote>
-<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ul>
-<li>php 版本 php5.4.45</li>
-<li>phpunit 版本 phpunit4.8.24</li>
-<li>操作系统：windows 7 (32)</li>
-<li>php 安装（这里不再详细讲解）</li>
-<li>phpunit 下载地址：<a href="https://phpunit.de/" target="_blank" rel="noopener">https://phpunit.de/</a> 下载到文件 phpunit-4.8.24.phar</li>
-</ul></p>
+<h1 id="编写规范"><a href="#编写规范" class="headerlink" title="编写规范"></a>编写规范</h1><ol>
+<li>测试类一般以***Test 命名；</li>
+<li>该类必须继承 PHPUnit_Framework_TestCase 类；</li>
+<li>类里的测试用例方法一般以test开头，当然也可以通过@test注释来定义一个名字不为test开头的方法为测试方法；</li>
+<li>测试方法中需要使用断言方法来断言实际传入的参数与期望的参数是否一致来达到测试的目的；</li>
+</ol></p>
             <p class="article-more-link">
-                <a href="/2017/10/20/PHPUnit-install-windows/#more">查看更多</a>
+                <a href="/2017/10/20/PHPUnit-Lean1/#more">查看更多</a>
             </p>
         
         </div>
@@ -314,7 +313,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-PHPUnit-Lean1" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-PHPUnit-install-windows" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -322,7 +321,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/10/20/PHPUnit-Lean1/">PHPUnit 学习实例代码</a>
+            <a class="article-title" href="/2017/10/20/PHPUnit-install-windows/">PHPUnit windows 下的安装</a>
         </h1>
     
 
@@ -331,7 +330,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2017/10/20/PHPUnit-Lean1/">
+        <a href="/2017/10/20/PHPUnit-install-windows/">
             <time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20 00:00:00</time>
         </a>
     </div>
@@ -346,7 +345,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHPUnit/">PHPUnit</a>
+        <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHPUnit/">PHPUnit</a>, <a class="tag-link" href="/tags/Windows/">Windows</a>
     </div>
 
                     </div>
@@ -358,16 +357,17 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
             <p><hr>
 <blockquote>
-<p>PHPUnit 基本用法+实例详解<br>上一篇文章介绍了 PHPUnit 在 windows  的安装和配置。今天我们来介绍一下 PHPUnit 如何编写一些基本的测试用例。我也是在最近才开始慢慢使用的 PHPUnit , 用不足之处，欢迎指正。</p>
+<p>本篇文章介绍一下 PHPUnit 在 windows 下的安装和配置</p>
 </blockquote>
-<h1 id="编写规范"><a href="#编写规范" class="headerlink" title="编写规范"></a>编写规范</h1><ol>
-<li>测试类一般以***Test 命名；</li>
-<li>该类必须继承 PHPUnit_Framework_TestCase 类；</li>
-<li>类里的测试用例方法一般以test开头，当然也可以通过@test注释来定义一个名字不为test开头的方法为测试方法；</li>
-<li>测试方法中需要使用断言方法来断言实际传入的参数与期望的参数是否一致来达到测试的目的；</li>
-</ol></p>
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ul>
+<li>php 版本 php5.4.45</li>
+<li>phpunit 版本 phpunit4.8.24</li>
+<li>操作系统：windows 7 (32)</li>
+<li>php 安装（这里不再详细讲解）</li>
+<li>phpunit 下载地址：<a href="https://phpunit.de/" target="_blank" rel="noopener">https://phpunit.de/</a> 下载到文件 phpunit-4.8.24.phar</li>
+</ul></p>
             <p class="article-more-link">
-                <a href="/2017/10/20/PHPUnit-Lean1/#more">查看更多</a>
+                <a href="/2017/10/20/PHPUnit-install-windows/#more">查看更多</a>
             </p>
         
         </div>
