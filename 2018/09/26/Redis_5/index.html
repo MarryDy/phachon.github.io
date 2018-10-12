@@ -3,22 +3,22 @@
 <head>
     <meta charset="utf-8">
     
-    <title>点直播流媒体传输协议之 —— HLS（HTTP Live Streaming） | phachon&#39;s blog</title>
+    <title>Redis系列（五）：Redis 缓存机制与淘汰策略 | phachon&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="简介在最近一年的工作中接触比较多的是视频点播和直播，也了解到了一些点直播的后端技术，这段时间希望将了解到的一些技术总结下来，这篇文章主要介绍流媒体协议 HLS">
-<meta name="keywords" content="HLS,TS,M3U8">
+    <meta name="description" content="Redis 是基于内存的 Key Value 的 NoSql 数据库，由于其高性能，高可用，支持分布式集群的优点被广泛应用于缓存的业务场景。本篇文章就来详细了解下 Redis 缓存机制及内存淘汰策略。">
+<meta name="keywords" content="redis">
 <meta property="og:type" content="article">
-<meta property="og:title" content="点直播流媒体传输协议之 —— HLS（HTTP Live Streaming）">
-<meta property="og:url" content="http://phachon.github.io/2016/09/13/hls/index.html">
+<meta property="og:title" content="Redis系列（五）：Redis 缓存机制与淘汰策略">
+<meta property="og:url" content="http://phachon.github.io/2018/09/26/Redis_5/index.html">
 <meta property="og:site_name" content="phachon&#39;s blog">
-<meta property="og:description" content="简介在最近一年的工作中接触比较多的是视频点播和直播，也了解到了一些点直播的后端技术，这段时间希望将了解到的一些技术总结下来，这篇文章主要介绍流媒体协议 HLS">
+<meta property="og:description" content="Redis 是基于内存的 Key Value 的 NoSql 数据库，由于其高性能，高可用，支持分布式集群的优点被广泛应用于缓存的业务场景。本篇文章就来详细了解下 Redis 缓存机制及内存淘汰策略。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://img.blog.csdn.net/20160913114717400">
-<meta property="og:updated_time" content="2018-04-02T06:16:15.551Z">
+<meta property="og:image" content="http://phachon.github.io/images/redis_logo.png">
+<meta property="og:updated_time" content="2018-10-12T10:46:04.691Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="点直播流媒体传输协议之 —— HLS（HTTP Live Streaming）">
-<meta name="twitter:description" content="简介在最近一年的工作中接触比较多的是视频点播和直播，也了解到了一些点直播的后端技术，这段时间希望将了解到的一些技术总结下来，这篇文章主要介绍流媒体协议 HLS">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20160913114717400">
+<meta name="twitter:title" content="Redis系列（五）：Redis 缓存机制与淘汰策略">
+<meta name="twitter:description" content="Redis 是基于内存的 Key Value 的 NoSql 数据库，由于其高性能，高可用，支持分布式集群的优点被广泛应用于缓存的业务场景。本篇文章就来详细了解下 Redis 缓存机制及内存淘汰策略。">
+<meta name="twitter:image" content="http://phachon.github.io/images/redis_logo.png">
     
 
     
@@ -206,15 +206,23 @@ var _hmt = _hmt || [];
 </aside>
 
             
-            <section id="main"><article id="post-hls" class="article article-type-post" itemscope itemprop="blogPost">
+            <section id="main"><article id="post-Redis_5" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
+        
+            
+	
+		<img src="/images/redis_logo.png" class="article-banner" />
+	
+
+
+
         
         
             <header class="article-header">
                 
     
         <h1 class="article-title" itemprop="name">
-            点直播流媒体传输协议之 —— HLS（HTTP Live Streaming）
+            Redis系列（五）：Redis 缓存机制与淘汰策略
         </h1>
     
 
@@ -223,8 +231,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/09/13/hls/">
-            <time datetime="2016-09-12T16:00:00.000Z" itemprop="datePublished">2016-09-13 00:00:00</time>
+        <a href="/2018/09/26/Redis_5/">
+            <time datetime="2018-09-26T09:41:47.000Z" itemprop="datePublished">2018-09-26 17:41:47</time>
         </a>
     </div>
 
@@ -232,13 +240,13 @@ var _hmt = _hmt || [];
                         
     <div class="article-category">
     	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+        <a class="article-category-link" href="/categories/Redis/">Redis</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/HLS/">HLS</a>, <a class="tag-link" href="/tags/M3U8/">M3U8</a>, <a class="tag-link" href="/tags/TS/">TS</a>
+        <a class="tag-link" href="/tags/redis/">redis</a>
     </div>
 
                     </div>
@@ -250,34 +258,85 @@ var _hmt = _hmt || [];
         
             
             <hr>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在最近一年的工作中接触比较多的是视频点播和直播，也了解到了一些点直播的后端技术，这段时间希望将了解到的一些技术总结下来，这篇文章主要介绍流媒体协议 HLS</p>
+<p>Redis 是基于内存的 Key Value 的 NoSql 数据库，由于其高性能，高可用，支持分布式集群的优点被广泛应用于缓存的业务场景。本篇文章就来详细了解下 Redis 缓存机制及内存淘汰策略。</p>
 <a id="more"></a>
-<h2 id="流媒体协议"><a href="#流媒体协议" class="headerlink" title="流媒体协议"></a>流媒体协议</h2><p>常用的流媒体协议主要有 HTTP 渐进下载和基于 RTSP/RTP 的实时流媒体协议，这两种协议是完全不同的实现方式。主要区别如下：</p>
+<h2 id="如何使用缓存？"><a href="#如何使用缓存？" class="headerlink" title="如何使用缓存？"></a>如何使用缓存？</h2><p>我们先来插入一个最简单的 key</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set name phachon</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+<p>OK, 插入成功。我们再来设置一下 key 的过期时间, redis 有 4 个命令来设置过期时间：</p>
+<ul>
+<li>EXPIRE <key> <ttl>：key 的生存时间设置为 ttl 秒</ttl></key></li>
+<li>PEXPIRE <key> <ttl>：key 的生存时间设置为 ttl 毫秒 </ttl></key></li>
+<li>EXPIREAT <key> <timestamp>：将 key 的过期时间设置为 timestamp 指定的秒数时间戳</timestamp></key></li>
+<li>PEXPIREAT <key> <timestamp>：将 key 的过期时间设置为 timestamp 指定的毫秒数时间戳</timestamp></key></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; EXPIRE name 1000</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; PEXPIRE name 30000</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; EXPIREAT name 1539331476</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; PEXPIREAT name 1539337307000</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
+<p>OK, 该 key 在 1000s 之后将过期。过期之前我们可以通过命令查看剩余的时间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ttl name</span><br><span class="line">(integer) 936</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+<p>可以看到，剩余 936s 该 key 才会过期，<code>ttl</code> 返回的是秒，如果想要看剩余多少毫秒，可以使用 <code>pttl</code> 命令</p>
+<p>有的时候，我们可以将 set 和 expire 命令合并一个命令使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; setex name 1000 phachon</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+<p>注意：setex 命令只能对字符串类型的数据进行 <code>set</code> 和 <code>expire</code> 操作。</p>
+<p>看来使用缓存的方法是非常的简单。这里只演示了字符串类型的数据，其他的数据类型也是用的 <code>expire</code> 命令来设置过期时间。</p>
+<h2 id="如何判断过期？"><a href="#如何判断过期？" class="headerlink" title="如何判断过期？"></a>如何判断过期？</h2><p>RedisDb 结构的 expires 字典保存了所有 key 的过期时间。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">那么 Redis 是使用什么方法来判断时间是否过期并删除呢？</span><br></pre></td></tr></table></figure></p>
+<p>在了解 Redis 的删除过期键的策略之前我们来看看有哪些方式可以实现：</p>
+<ul>
+<li><p>定时删除<br>定时删除恐怕是我们最容易想到的方法了，原理就是在一个 key 被设置了过期时间之后，启动一个定时器，当定时器到了过期时间，则删除掉这个 key。<br>该种方法肯定能保证键的过期删除，并且不会有遗漏的键，但是要为每一个key实现一个定时器，会耗费较多的资源，无疑会对 CPU 和当前任务造成影响。</p>
+</li>
+<li><p>定期删除<br>定期删除策略的原理就是规定一定时间内定期的扫描一遍 expires 字典，将已过期的键删除掉。这种方法解决了定时删除的耗费资源的问题，但是该种方法不能保证所有的 key 过期删除。<br>例如：key1 生存时间是 3s, 而定期删除的时间间隔是 5s, 那这个 key 在 3 秒后还存在内存中，并没有被删除。</p>
+</li>
+<li><p>惰性删除<br>惰性删除的原理是，在获取每一个 key 的时候，判断一下该 key 是否已经过了过期时间，如果已经失效，则删除掉这个 key。惰性删除的缺点也很明显，如果一个 key 一直不使用，则即使到了过<br>期时间也会一直占有内存，大量的不使用的 key 会使得内存暴增。</p>
+</li>
+</ul>
+<p>综合三种过期键删除的策略我们发现似乎都不能很好的完成过期键的精确删除。Redis 采用了两种删除策略来协同工作： <code>定期删除</code> + <code>惰性删除</code></p>
 <ol>
-<li>一种是分段渐近下载，一种是基于实时流来实现播放</li>
-<li>协议不同，HTTP 协议的渐近下载意味着你可以在一台普通的 HTTP 的应用服务器上就可以直接提供点播和直播服务</li>
-<li>延迟有差异，HTTP 渐近下载的方式的延迟理论上会略高于实时流媒体协议的播放</li>
-<li>渐近下载会生成索引文件，所以需要考虑存储，对 I/O 要求较高</li>
+<li>使用定期删除策略：Redis 会每隔一段时间（默认是 100 ms）会从所有的 key 中<code>随机获取一些 key</code> ，判断时间是否过期，是，则删除。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">为什么不直接获取整个数据，而只随机找到一些 key 来判断，这样不是还有可能会造成某些 key 一直未被判断？</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<h2 id="HLS简介"><a href="#HLS简介" class="headerlink" title="HLS简介"></a>HLS简介</h2><p>HLS （HTTP Live Streaming）是苹果公司实现的基于 HTTP 的流媒体协议，可以实现流媒体的点播和直播播放。当然，起初是只支持苹果的设备，目前大多数的移动设备也都实现了该功能。HTML5 直接支持该协议。</p>
-<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>HLS 点播是常见的分段 HTTP 点播，就是将视频流分成不同的片段，客户端不断的去下载该片段，由于片段之间的分段间隔时间非常短，所以看起来是一条完整的播放流，实现的重点是对于媒体文件的分割。同时，HLS 还支持多码率的切换，客户端可以选择从许多不同的备用源中以不同的速率下载同样的资源，允许流媒体会话适应不同的数据速率。多清晰度就是这样实现的。<br>为了播放媒体流，客户端首先需要获得播放列表文件，也就是根据 HLS 生成的片段列表，该列表中包含每个流媒体的文件，客户端以类似轮询的方式不断重复加载播放列表文件并将片段追加实现流媒体的播放。<br>播放列表文件就是通常我们所说的 m3u8 文件，是以后缀 .m3u8 Content-Type是”application/vnd.apple.mpegurl” 的文件。</p>
-<h2 id="m3u8-介绍与分析"><a href="#m3u8-介绍与分析" class="headerlink" title="m3u8 介绍与分析"></a>m3u8 介绍与分析</h2><p>m3u8 文件本质说其实是采用了编码是 UTF-8 的 m3u 文件。<br>它只是一个纯索引文件，一个文件片段的列表，客户单打开它并不是播放它，而是根据它里面的文件片段找到视频文件的网路地址进行播放</p>
-<p>这里抓包抓了一个 m3u8 文件打开看一下究竟是什么：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#EXTM3U</span><br><span class="line">#EXT-X-VIDEO-INF:VIDEO=559ac1317682fa1fcdc67ed2774e4e1a980e0c264cefceb5c.....</span><br><span class="line">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=245760</span><br><span class="line">https://*******.com/video/cif/hNAQ0_jbip4j-0o_BhcdqMwyQxwtwbo1k3vVZhtjbcQ.m3u8</span><br><span class="line">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=491520</span><br><span class="line">https://******.com/video/sd/hNAQ0_jbip4j-0o_BhcdqMwyQxwtwbo1k3vVZhtjbcQ.m3u8</span><br></pre></td></tr></table></figure>
-<p>分析该 m3u8 文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#EXTM3U：扩展标记 ，意思是我是 m3u 文件</span><br><span class="line">#EXT-X-VIDEO-INF:VIDEO ：这个应该是自己定义的一个标签，指名是视频文件，后面可能跟的是视频标题之类的</span><br><span class="line">#EXT-X-STREAM-INF</span><br><span class="line">指定一个包含多媒体信息的 media URI 作为PlayList，一般做M3U8的嵌套使用，它只对紧跟后面的URI有效，#EXT-X-STREAM-INF:有以下属性：</span><br><span class="line">BANDWIDTH：带宽，491520</span><br><span class="line">PROGRAM-ID：该值是一个十进制整数，惟一地标识一个在PlayList文件范围内的特定的描述。一个PlayList 文件中可能包含多个有相同ID的此tag。</span><br><span class="line">CODECS：不是必须的。</span><br><span class="line">RESOLUTION：分辨率。</span><br><span class="line">AUDIO：这个值必须和AUDIO类别的“EXT-X-MEDIA”标签中“GROUP-ID”属性值相匹配。</span><br></pre></td></tr></table></figure></p>
-<p>这里 PlayList 的地址我们发现还是个 m3u8 文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://*******.com/video/cif/hNAQ0_jbip4j-0o_BhcdqMwyQxwtwbo1k3vVZhtjbcQ.m3u8</span><br><span class="line">https://******.com/video/sd/hNAQ0_jbip4j-0o_BhcdqMwyQxwtwbo1k3vVZhtjbcQ.m3u8</span><br></pre></td></tr></table></figure>
-<p>可以观察发现，这其实是 cif 和 sd 两种不同清晰度的 m3u8 文件，客户端根据网络或者选项去选择不同的清晰度的 m3u8 文件。<br>上面的 m3u8 文件为一级 m3u8 文件，这两个 m3u8 就称为二级 m3u8 文件，那么我们就顺着二级 m3u8 文件继续查看，将其中一个下载到本地打开分析：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#EXTM3U</span><br><span class="line">#EXT-X-VERSION:3</span><br><span class="line">#EXT-X-TARGETDURATION:11</span><br><span class="line">#EXTINF:12.400,</span><br><span class="line">http://*************/**/M00/00/BB/Cn1GQlfWRFaACQaQAAvsEEMIWI42131.ts</span><br><span class="line">#EXTINF:10.000,</span><br><span class="line">http://*************/**/M00/00/BB/Cn1GQlfWRFaAJO1mAAaTMDz8P4E9292.ts</span><br><span class="line">#EXTINF:10.000,</span><br><span class="line">http://*************/**/M00/00/BB/Cn1GQlfWRFaAZ2fyAAVQEM22iWA2544.ts</span><br><span class="line">#EXTINF:11.120,</span><br><span class="line">http://*************/**/M00/00/BB/Cn1GQlfWRFaAIfwHAAirSMgfpx03176.ts</span><br><span class="line">#EXTINF:17.240,</span><br><span class="line">http://*************/**/M00/00/BB/Cn1GQlfWRFaAaiz6AAn0SHY1csA7539.ts</span><br><span class="line">#EXTINF:3.720,</span><br><span class="line">http://*************/**/M00/00/BB/Cn1GQlfWRFaARLJ2AAGYUIIpGKA7707.ts</span><br><span class="line">#EXT-X-ENDLIST</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#EXT-X-VERSION:3 : 版本</span><br><span class="line">#EXT-X-TARGETDURATION: 11</span><br><span class="line">指定最大的媒体段时间长（秒）。所以#EXTINF中指定的时间长度必须小于或是等于这个最大值。这个tag在整个PlayList文件中只能出现一 次（在嵌套的情况下，一般有真正ts url     的m3u8才会出现该tag）</span><br><span class="line">#EXTINF: duration 指定每个媒体段(ts)的持续时间（秒），仅对其后面的URI有效，title是下载资源的url</span><br><span class="line">#EXT-X-ENDLIST 结束列表</span><br></pre></td></tr></table></figure>
-<p>这里我们看到了真正播放的流片段，ts 片，客户端拿到的就是这个 ts 片，然后不断下载请求到该片段并连续播放。</p>
-<p>有些人可能要问了，那 ts 文件又到底是个什么东西呢，那就下载来看看，拿着其中的一个 ts 文件浏览器打开保存到本地：</p>
-<p><img src="http://img.blog.csdn.net/20160913114717400" alt="这里写图片描述"></p>
-<p>发现保存到本地的文件就可以直接打开，其实就是真正的流媒体文件，但是这个文件只是片段，大概只有 10s 的时间。</p>
-<h2 id="HLS播放实现时序图"><a href="#HLS播放实现时序图" class="headerlink" title="HLS播放实现时序图"></a>HLS播放实现时序图</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">title:流媒体播放实现时序图</span><br><span class="line">客户端-&gt;服务端play接口:请求</span><br><span class="line">服务端play接口-&gt;客户端:返回一级 m3u8地址</span><br><span class="line">客户端-&gt;m3u8文件服务器:获取一级m3u8文件</span><br><span class="line">客户端-&gt;m3u8文件服务器:获取二级m3u8文件</span><br><span class="line">客户端-&gt;ts文件服务器:不断获取 ts 流媒体文件</span><br></pre></td></tr></table></figure>
-<h2 id="HLS-直播"><a href="#HLS-直播" class="headerlink" title="HLS 直播"></a>HLS 直播</h2><p>HLS 直播原理上还是按点播的方式实现的，通过 http 协议传输，生成 ts 索引文件以及 m3u8 索引文件。直播的复杂在于先要采集视频源和音频源的数据，然后再进行 H264 编码和音频 ACC 编码，并封装成 ts 包，其中还要考虑 ts 的分段生成策略。</p>
-<p>下一篇我会介绍一篇关于 rtmp 协议的文章。</p>
-<p>欢迎指正，Thanks…</p>
+<p>如果每隔 100ms 检查所有的 key, 如果数据库有 1000 万缓存key，那 redis 岂不是卡死。</p>
+<p>采用定期删除之后，还是会导致很多的已过期的缓存 key 没有被删除。</p>
+<ol start="2">
+<li>使用惰性删除策略：Redis 会在每次 <code>get</code> key 的时候先判断该 key 的过期时间，已经过期，则删除。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">采用了 定期删除 + 惰性删除 的策略，假如有一个 key , 即没有被定期删除随机获取到，也没有被使用，那么这个 key 岂不是永远还占用着内存？</span><br></pre></td></tr></table></figure>
+<p>没错，即使采用了 <code>定期删除</code>+<code>惰性删除</code> 的策略，还是不能保证所有的过期 key 都被删除。这种情况下，还是会导致内存占用率增高。</p>
+<p>有解决办法吗，有！那就是启用 <code>内存淘汰策略</code>！</p>
+<h2 id="内存淘汰策略"><a href="#内存淘汰策略" class="headerlink" title="内存淘汰策略"></a>内存淘汰策略</h2><p>内存淘汰策略：Redis 每执行一个命令，就会判断当前占用的内存是否大于设置的最大内存，大于，则开始内存淘汰机制。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 设置最大的内存，如果不设置该值的话，会导致 redis 一直运行最终以内存不足而终止</span><br><span class="line"># maxmemory &lt;bytes&gt;</span><br></pre></td></tr></table></figure>
+<p>Redis 内存淘汰的机制有以下几种方案可供选择：</p>
+<ul>
+<li>volatile-lru：从设置过期的数据集中淘汰最少使用的 key</li>
+<li>volatile-ttl：从设置过期的数据集中淘汰即将过期的 key</li>
+<li>volatile-random：从设置过期的数据集中随机选取 key 淘汰</li>
+<li>allkeys-lru：从所有的数据集中选取最少使用的数据</li>
+<li>allkyes-random：从所有的数据集中任意选取数据淘汰</li>
+<li>no-envicition：不进行淘汰</li>
+</ul>
+<p>注意这 6 主机制。volatile 和 allkeys 规定了是对已设置过期的数据集还是从全部的数据集淘汰数据。具<br>体的使用应根据不同的业务场景来配置不同的策略。一般来说，使用 volatile-lru 或者 allkeys-lru 是比<br>较合理的。删除最少使用的 key。如果使用 redis 作为缓存，就使用 volatile-lru 。如果除了缓存还使用存储，就使用 allkeys-lru。</p>
+<p>注意：ttl 和 random 的实现方法比较简单，lru 的实现方法是 redis 会随机挑选几个键值对，然后取出<br>lru 最大的键值对淘汰。所以并不是严格的就会淘汰整个数据集中最少使用的 key，而是随机数据集中的最少使用的 key。</p>
+<h2 id="AOF、RDB-和复制功能对过期键的处理"><a href="#AOF、RDB-和复制功能对过期键的处理" class="headerlink" title="AOF、RDB 和复制功能对过期键的处理"></a>AOF、RDB 和复制功能对过期键的处理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">那么 AOF、RDB持久化和复制功能对过期策略会有什么影响呢？</span><br></pre></td></tr></table></figure>
+<p>AOF、RDB持久化和主从复制的实现原理这里不再详细介绍，可参考之前写的文章。</p>
+<h3 id="RDB-文件的生成和载入"><a href="#RDB-文件的生成和载入" class="headerlink" title="RDB 文件的生成和载入"></a>RDB 文件的生成和载入</h3><p>当执行 <code>SAVE</code> 或者是 <code>BGSAVE</code> 命令的时候，程序会对数据库中所有的键进行检查，已过期的键不会被<br>保存到新创建的 RDB 文件中。 所以数据库保存过期键不会对 RDB 文件的创建产生影响。</p>
+<p>当服务启动的时候，如果开启了 <code>快照持久化</code> 则会载入 rdb 文件，如果是主从同步模式的集群模式，不同的节点的处理不一样：</p>
+<ul>
+<li>如果启动的服务节点是 Master 节点，则程序会对 rdb 文件中的键检查，只会将未过期的键载入到内存中。过期的键会忽略。</li>
+<li>如果启动的服务节点是 Slave 节点：则程序不会对 rdb 文件中键检查，不论是否过期都会载入到<br>数据库中。因为主从同步模式，当从节点重启之后，会再次和主节点同步，所以，最后数据会和主节点保持一致。过期的 key 依然会被删除。</li>
+</ul>
+<h3 id="AOF-文件的写入"><a href="#AOF-文件的写入" class="headerlink" title="AOF 文件的写入"></a>AOF 文件的写入</h3><p>当服务时开启了 AOF 的持久化机制时，如果某个 key 已过期，但是还是没有被 <code>定期删除</code> 和 <code>惰性删除</code> 清理掉，程序不会对 aof 文件做任何操作。<br>当过期的 key 被 <code>定期删除</code> 和 <code>惰性删除</code> 删除之后，程序会向 aof 文件写一条 DEL 命令来记录该键被删除。举例说明：<br>客户端使用 GET message 命令，试图访问过期的 key，那么程序执行以下步骤：</p>
+<ol>
+<li>从数据库中删除 message 键</li>
+<li>在 aof 文件追加一条 DEL 命令</li>
+<li>向客户端返回空</li>
+</ol>
+<h3 id="AOF-重写日志"><a href="#AOF-重写日志" class="headerlink" title="AOF 重写日志"></a>AOF 重写日志</h3><p>如果开启了 AOF 重写机制，再重写的子进程开始时，程序会对数据库中的 key 检查，并且只会将未过期的 key 写入到 aof 临时文件中。</p>
+<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><p>在处于主从复制的模式中，如果主服务器的过期键要删除：</p>
+<ul>
+<li>主服务器在删除了自己的数据之后，会发送一个 DEL 的命令给从服务器，告知从服务器这个键要删除</li>
+<li>从服务器只有在接受到这个 DEL 命令才会真正的将数据删除，即使从服务器在执行自己的 <code>定期删除</code> 和 <code>惰性删除</code>时，也不会删除该数据。</li>
+<li>从服务只会在接受到主服务器的 DEL 命令才会删除过期键</li>
+</ul>
+<p>主从复制规定数据的过期删除完全由主节点服务器来控制，正是通过这种机制，才能保证主从服务器的数据一致性。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过上面过期机制的了解，我们发现 Redis 并不能保证所有的 key 都能准时过期并删除。所以通过多种机制来协作保证。主要是采用：<br><code>定期删除</code> + <code>惰性删除</code> + <code>内存淘汰策略</code></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《Redis 设计与实现》<br><a href="https://www.cnblogs.com/moonandstar08/p/5686498.html" target="_blank" rel="noopener">Redis的缓存策略和主键失效机制</a></p>
 
         
         </div>
@@ -332,19 +391,10 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
 <nav id="article-nav">
     
-        <a href="/2016/09/22/elk-install/" id="article-nav-newer" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">上一篇</strong>
-            <div class="article-nav-title">
-                
-                    ELK 实时日志分析系统平台的学习与使用
-                
-            </div>
-        </a>
     
-    
-        <a href="/2016/09/12/you-get-install/" id="article-nav-older" class="article-nav-link-wrap">
+        <a href="/2018/09/25/Redis_4/" id="article-nav-older" class="article-nav-link-wrap">
             <strong class="article-nav-caption">下一篇</strong>
-            <div class="article-nav-title">You-get 的安装与使用</div>
+            <div class="article-nav-title">Redis系列（四）：Redis 持久化机制</div>
         </a>
     
 </nav>
