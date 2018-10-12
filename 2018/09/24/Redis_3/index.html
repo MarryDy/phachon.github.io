@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Redis系列（三）：Redis Cluster集群模式 | phachon&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="本篇文章来介绍 Redis 的第三种集群模式 Cluster 集群模式，该模式也是 Redis3.x 之后才引入的，在该模式下解决了主从同步和 哨兵模式 的不能水平扩容的问题，使得 Redis 集群的性能得到提高，也由此成为了Redis 官方推荐使用的集群方案。本篇文章来介绍如何搭建使用 Redis Cluster 集群并试图去探究 Redis Cluster 集群的实现原理。">
+<meta name="keywords" content="redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis系列（三）：Redis Cluster集群模式">
+<meta property="og:url" content="http://phachon.github.io/2018/09/24/Redis_3/index.html">
+<meta property="og:site_name" content="phachon&#39;s blog">
+<meta property="og:description" content="本篇文章来介绍 Redis 的第三种集群模式 Cluster 集群模式，该模式也是 Redis3.x 之后才引入的，在该模式下解决了主从同步和 哨兵模式 的不能水平扩容的问题，使得 Redis 集群的性能得到提高，也由此成为了Redis 官方推荐使用的集群方案。本篇文章来介绍如何搭建使用 Redis Cluster 集群并试图去探究 Redis Cluster 集群的实现原理。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://phachon.github.io/images/redis_cluster_slot.png">
+<meta property="og:image" content="http://phachon.github.io/images/redis_cluster2.png">
+<meta property="og:image" content="http://phachon.github.io/images/redis_slot_qy.png">
+<meta property="og:image" content="http://phachon.github.io/images/redis_cluster3.png">
+<meta property="og:updated_time" content="2018-10-12T02:24:56.169Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis系列（三）：Redis Cluster集群模式">
+<meta name="twitter:description" content="本篇文章来介绍 Redis 的第三种集群模式 Cluster 集群模式，该模式也是 Redis3.x 之后才引入的，在该模式下解决了主从同步和 哨兵模式 的不能水平扩容的问题，使得 Redis 集群的性能得到提高，也由此成为了Redis 官方推荐使用的集群方案。本篇文章来介绍如何搭建使用 Redis Cluster 集群并试图去探究 Redis Cluster 集群的实现原理。">
+<meta name="twitter:image" content="http://phachon.github.io/images/redis_cluster_slot.png">
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-brands.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-solid.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?37fc388c17633765d5d2b950f4682d91";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">phachon&#39;s blog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/opensource">开源项目</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/logo.jpg" />
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fas fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/opensource">开源项目</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile" class="profile-fixed">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/logo.jpg" />
+            <h2 id="name">phachon</h2>
+            <h3 id="title"></h3>
+            <span id="location"><i class="fas fa-map-marker-alt" style="padding-right: 5px"></i>Beijing, China</span>
+            <a id="follow" target="_blank" href="https://github.com/phachon">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                55
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                44
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="http://github.com/phachon" target="_blank" title="github" class=tooltip>
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://weibo.com/phachon" target="_blank" title="weibo" class=tooltip>
+                            <i class="fab fa-weibo"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Redis_3" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Redis系列（三）：Redis Cluster集群模式
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/2018/09/24/Redis_3/">
+            <time datetime="2018-09-24T10:09:10.000Z" itemprop="datePublished">2018-09-24 18:09:10</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/redis/">redis</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p>本篇文章来介绍 Redis 的第三种集群模式 Cluster 集群模式，该模式也是 Redis3.x 之后才引入的，在该<br>模式下解决了<code>主从同步</code>和 <code>哨兵模式</code> 的不能水平扩容的问题，使得 Redis 集群的性能得到提高，也由此成为了Redis 官方推荐使用的集群方案。本篇文章来介绍如何搭建使用 Redis Cluster 集群并试图去探究 Redis Cluster 集群的实现原理。</p>
+<a id="more"></a>
+<h2 id="Redis-Cluster-介绍"><a href="#Redis-Cluster-介绍" class="headerlink" title="Redis Cluster 介绍"></a>Redis Cluster 介绍</h2><p>首先我们需要了解 Redis Cluster 的设计目标：</p>
+<ol>
+<li>高性能：高性能是 Redis 赖以生存的看家本领，增加集群之后不能对性能产生太大影响，否则会得不尝失。</li>
+<li>水平扩展：之前 Redis 集群不能水平扩展的缺点时常被人诟病，所以必须具备水平扩展。</li>
+<li>高可用：在之前，高可用主要是通过 Redis Sentinel 来保障，Cluster 集群也应该具备 Sentinel 的监控、提醒、自动故障转移等功能。</li>
+</ol>
+<p>有了 Cluster 的集群方案，使得 Redis 变成了真正的分布式 NoSql 数据库。</p>
+<h2 id="数据分区方案"><a href="#数据分区方案" class="headerlink" title="数据分区方案"></a>数据分区方案</h2><p>为了使得集群能够水平扩展，首要解决的问题就是<code>如何将整个数据集按照一定的规则分配到多个节点上</code>，常用的数据分区的方法有：</p>
+<h3 id="普通哈希分区"><a href="#普通哈希分区" class="headerlink" title="普通哈希分区"></a>普通哈希分区</h3><p>普通的哈希分区比较简单，就是根据规定的哈希函数将数据哈希到指定的节点上，例如：现在有 3 个 Redis 结点 node1、node2、node3。我们的哈希函数采用取余法哈希</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function hash(key) &#123;</span><br><span class="line">    return key % 3</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当写数据的时候，根据哈希函数写到对应的节点中，读数据的时候先计算出数据在哪个节点，然后再去对应的节点去取。我们发现当节点数固定的时候，该种数据分区的方案没有问题，当增加一个节点或删除一个节点的时候。<br>取余哈希函数的分母会改变，导致之前已分配的数据分区大量改变，并且造成大量的数据获取不到。所以该种方案很少使用。</p>
+<h3 id="一致性哈希分区"><a href="#一致性哈希分区" class="headerlink" title="一致性哈希分区"></a>一致性哈希分区</h3><p>为了解决普通的哈希分区的缺点，提出了一致性哈希的概念。一致性哈希的核心原理是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">将数据 key 和节点都通过哈希函数映射到 2^32 次方的环上</span><br></pre></td></tr></table></figure></p>
+<p>关于一致性哈希的原理，超出了本文探讨的范围，后续再写专门的文章来详解。<br>一致性哈希尽最大限度的解决了节点数改变带来的数据不一致的问题。</p>
+<h3 id="虚拟槽分区"><a href="#虚拟槽分区" class="headerlink" title="虚拟槽分区"></a>虚拟槽分区</h3><p>Cluster 采用的正是这种分区的方式。虚拟槽分区巧妙的使用了哈希空间，使用分散度良好的哈希函数把<br>所有的数据映射到一个固定范围内的整数集合，整数定义为槽（slot）,Redis Cluster 的槽范围是 0<br>~ 16383，槽是集群内的数据管理和迁移的基本单位。<code>每个节点负责一定数量的槽</code>。计算公式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CRC16(key)&amp;16383</span><br></pre></td></tr></table></figure>
+<p>每一个节点负责维护一部分槽及槽所映射的键值数据，如下图所示（图片来源于网络）：</p>
+<p><img src="/images/redis_cluster_slot.png" alt="Redis Cluster Slot 数据分布"></p>
+<p>采用 <code>哈希虚拟槽分区</code> 的特性：</p>
+<ul>
+<li>解耦了数据和节点之间的关系，简化了节点的扩容和收缩的难度</li>
+<li>节点自身来维护槽的映射关系，不需要客户端或者代理来维护槽分区的元数据</li>
+<li>至此节点、槽、键之间的映射查询。</li>
+</ul>
+<h2 id="节点增加和删除"><a href="#节点增加和删除" class="headerlink" title="节点增加和删除"></a>节点增加和删除</h2><p>采用 Cluster 的集群方案，当节点增加和删除时，集群又是如何工作来保证服务的高可用？</p>
+<p>下图展现一个 5 个节点构成的集群，每个节点平均大约负责 3276 个槽，以及通过计算公式映射到对应节点的对应槽的过程。</p>
+<p><img src="/images/redis_cluster2.png" alt="Redis Cluster Slot 数据分布(图片来源于网络)"></p>
+<ul>
+<li><p>增加节点<br>当增加一个节点 Node-6 时，只需要把其他节点的某些哈希槽<code>挪到新的节点</code>就可以了。</p>
+</li>
+<li><p>移除节点<br>移除一个节点 Node-5 时，只需要把该节点上的哈希槽<code>挪到其他的节点上</code>就可以了。</p>
+</li>
+</ul>
+<p>在增加和删除节点，redis 的其他节点都不需要停机。</p>
+<h2 id="数据迁移"><a href="#数据迁移" class="headerlink" title="数据迁移"></a>数据迁移</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">那么如何将槽的数据挪到其他的结点呢？</span><br></pre></td></tr></table></figure>
+<p>为了实现节点之间的数据迁移，节点之间必须相互连接。数据迁移分为两部分：</p>
+<h3 id="槽的迁移"><a href="#槽的迁移" class="headerlink" title="槽的迁移"></a>槽的迁移</h3><p>现在要将 Master A 节点中的编号为 1,2,3 的槽迁移到 Master B 中</p>
+<p><img src="/images/redis_slot_qy.png" alt="数据迁移状态"></p>
+<p>在迁移的中间状态下，槽 1,2,3 在 MasterA 节点的状态为 <code>MIGRATING（迁移）</code>，在 MasterB 节点的状态为 <code>IMPORTING（入口）</code>。<br><code>IMPORTING(入口)</code> 状态是被迁移的槽在目标节点中出现的一种状态，准备迁移从A到B的时候，被迁移的槽的状态首先变为 <code>IMPORTING(入口)</code><br>注意：<code>此时并不刷新 node 的映射关系</code></p>
+<h3 id="键空间的迁移"><a href="#键空间的迁移" class="headerlink" title="键空间的迁移"></a>键空间的迁移</h3><p>在满足了槽迁移的条件下，通过相关命令将 slot1, slot2, slot3 中的键空间从 A 迁移到B。迁移过程大概如下：</p>
+<ol>
+<li>Master A 节点执行 <code>DUMP</code> 命令，序列化要迁移的 key，并将数据发送给 Master B</li>
+<li>Master B 节点接受到要迁移的序列化的 key 之后执行 <code>RESTORE</code> 命令反序列化为 key, 并保存</li>
+<li>Master A 节点执行 <code>DEL</code> 命令删除掉已迁移的 key</li>
+</ol>
+<p><code>迁移完成之后，刷新 node 的映射关系</code></p>
+<p><em>需要注意的是</em>： MIGRATE（迁移） 并不是原子的，如果在 MIGRATE 出现错误的情况可能会导致下面问题：</p>
+<ul>
+<li>键空间在两个节点都存在；</li>
+<li>键空间只存在第一个节点；</li>
+</ul>
+<h3 id="深挖细节"><a href="#深挖细节" class="headerlink" title="深挖细节"></a>深挖细节</h3><ol>
+<li><p>为什么不用一致性哈希，而用槽哈希分区，原因是什么？<br>Redis 使用的是 crc16 的简单算法，Redis 的作者认为 <code>crc16(key) mod 16384</code> 的效果已经不错了，虽然可能没有一致性哈希灵活，但实现比较简单，节点的增加和删除都比较方便</p>
+</li>
+<li><p>节点增加和删除的过程中，数据会不会丢失？<br>节点在数据迁移的时候数据会有备份，不会丢失</p>
+</li>
+</ol>
+<h2 id="主从同步"><a href="#主从同步" class="headerlink" title="主从同步"></a>主从同步</h2><p>我们已经了解了 Cluster 的集群的工作方式，那使用 Cluster 模式如何来实现主从同步？</p>
+<p>其实主从同步还是使用的 Redis 本身的主从复制模式，将主从同步和 Cluster 模式结合起来的架构如下：</p>
+<p><img src="/images/redis_cluster3.png" alt="主从同步+Cluster集群（图片来源于网络）"></p>
+<p>从图中可以看出，将多个 Master 节点作为 Cluster 的节点，每个 Master 的节点又增加多个 Slave 节点。并且数据读写分离。<br>如果想水平扩展读的并发能力，可以增加多个 Slave, 想水平扩展写的并发能力，可以增加多个 Master, 并且任何一个 Master 和 Slave 宕掉都不会影响服务稳定性。</p>
+<h2 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h2><p>Redis Cluster 搭建这里篇幅有限，暂不介绍，需要请自行查找相关资料</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.csdn.net/yejingtao703/article/details/78484151" target="_blank" rel="noopener">三张图秒懂Redis集群设计原理</a><br><a href="https://www.cnblogs.com/PatrickLiu/p/8458788.html" target="_blank" rel="noopener">Redis的Cluster集群搭建</a></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/10/11/Redis_4/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    Redis系列（四）：Redis 持久化机制
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/09/24/Redis_2/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Redis系列（二）：Redis 哨兵集群模式</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/10/11/Redis_4/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
+                            <p class="item-title"><a href="/2018/10/11/Redis_4/" class="title">Redis系列（四）：Redis 持久化机制</a></p>
+                            <p class="item-date"><time datetime="2018-10-11T09:41:47.000Z" itemprop="datePublished">2018-10-11 17:41:47</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/09/24/Redis_3/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
+                            <p class="item-title"><a href="/2018/09/24/Redis_3/" class="title">Redis系列（三）：Redis Cluster集群模式</a></p>
+                            <p class="item-date"><time datetime="2018-09-24T10:09:10.000Z" itemprop="datePublished">2018-09-24 18:09:10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/09/24/Redis_2/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
+                            <p class="item-title"><a href="/2018/09/24/Redis_2/" class="title">Redis系列（二）：Redis 哨兵集群模式</a></p>
+                            <p class="item-date"><time datetime="2018-09-24T04:09:10.000Z" itemprop="datePublished">2018-09-24 12:09:10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/09/23/Redis_1/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
+                            <p class="item-title"><a href="/2018/09/23/Redis_1/" class="title">Redis系列（一）：Redis 主从同步集群模式</a></p>
+                            <p class="item-date"><time datetime="2018-09-23T00:10:19.000Z" itemprop="datePublished">2018-09-23 08:10:19</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/09/22/TCP_IP_13/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Coding/">Coding</a></p>
+                            <p class="item-title"><a href="/2018/09/22/TCP_IP_13/" class="title">TCP/IP 协议栈系列（十三）：IP协议简单介绍</a></p>
+                            <p class="item-date"><time datetime="2018-09-21T16:00:00.000Z" itemprop="datePublished">2018-09-22 00:00:00</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Coding/">Coding</a><span class="category-list-count">46</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Summary/">Summary</a><span class="category-list-count">9</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">9</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Apache/" style="font-size: 14.29px;">Apache</a> <a href="/tags/Architecture/" style="font-size: 10px;">Architecture</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/CLI/" style="font-size: 10px;">CLI</a> <a href="/tags/CentOS/" style="font-size: 14.29px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.43px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.43px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 15.71px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 17.14px;">Mysql</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 18.57px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.43px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 11.43px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.43px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/dataStructure/" style="font-size: 11.43px;">dataStructure</a> <a href="/tags/go/" style="font-size: 14.29px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/redis/" style="font-size: 14.29px;">redis</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://php.net/manual/zh/">PHP 手册</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://www.oschina.net/">开源中国</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://studygolang.com/">Go语言中文网</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fas fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 phachon<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
