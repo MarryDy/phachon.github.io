@@ -14,7 +14,7 @@
 <meta property="og:description" content="上一篇文章讲解了 Mysql 在不同的存储引擎下索引的实现，在开始讲解索引的策略以及如何优化索引之前，我觉得有必要先来了解以下如何去使用 EXPLAIN 命令来查看sql 语句的查询方式，因为在后续的文章中，我们会经常使用该命令来调试和分析。除此之外，我们在工作中，也应该习惯去使用 EXPLAIN命令来分析和优化索引。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://phachon.github.io/images/redis_logo.png">
-<meta property="og:updated_time" content="2018-10-14T02:24:33.111Z">
+<meta property="og:updated_time" content="2018-10-14T03:07:12.848Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql 索引系列（二）：了解并使用 EXPLAIN 命令">
 <meta name="twitter:description" content="上一篇文章讲解了 Mysql 在不同的存储引擎下索引的实现，在开始讲解索引的策略以及如何优化索引之前，我觉得有必要先来了解以下如何去使用 EXPLAIN 命令来查看sql 语句的查询方式，因为在后续的文章中，我们会经常使用该命令来调试和分析。除此之外，我们在工作中，也应该习惯去使用 EXPLAIN命令来分析和优化索引。">
@@ -257,7 +257,8 @@ var _hmt = _hmt || [];
         <div class="article-entry" itemprop="articleBody">
         
             
-            <p>上一篇文章讲解了 Mysql 在不同的存储引擎下索引的实现，在开始讲解索引的策略以及如何优化索引之<br>前，我觉得有必要先来了解以下如何去使用 <code>EXPLAIN</code> 命令来查看sql 语句的查询方式，因为在后续的<br>文章中，我们会经常使用该命令来调试和分析。除此之外，我们在工作中，也应该习惯去使用 <code>EXPLAIN</code><br>命令来分析和优化索引。</p>
+            <hr>
+<p>上一篇文章讲解了 Mysql 在不同的存储引擎下索引的实现，在开始讲解索引的策略以及如何优化索引之<br>前，我觉得有必要先来了解以下如何去使用 <code>EXPLAIN</code> 命令来查看sql 语句的查询方式，因为在后续的<br>文章中，我们会经常使用该命令来调试和分析。除此之外，我们在工作中，也应该习惯去使用 <code>EXPLAIN</code><br>命令来分析和优化索引。</p>
 <a id="more"></a>
 <h2 id="EXPLAIN-命令简介"><a href="#EXPLAIN-命令简介" class="headerlink" title="EXPLAIN 命令简介"></a>EXPLAIN 命令简介</h2><p>EXPLAIN 命令用来查看 SQL 语句的执行计划。简单来说，就是通过和这个命令就可以查看该查询执行的<br>详细信息，通过查看并分析这些信息，我们可以优化我们的 SQL 语句和索引，最终来提高我们的查询效率。</p>
 <h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from user id=1\G</span><br></pre></td></tr></table></figure>
@@ -402,11 +403,11 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
 <nav id="article-nav">
     
-        <a href="/2018/09/28/Mysql_Index_4/" id="article-nav-newer" class="article-nav-link-wrap">
+        <a href="/2018/09/28/Mysql_Index_3/" id="article-nav-newer" class="article-nav-link-wrap">
             <strong class="article-nav-caption">上一篇</strong>
             <div class="article-nav-title">
                 
-                    Mysql 索引系列（四）：前缀索引
+                    Mysql 索引系列（三）：索引的策略
                 
             </div>
         </a>
@@ -437,25 +438,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <h3 class="widget-title">最新文章</h3>
         <div class="widget">
             <ul id="recent-post" class="">
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2018/09/28/Mysql_Index_3/" class="thumbnail">
-    
-    
-        <span style="background-image:url(/images/redis_logo.png)" alt="Mysql 索引系列（三）：索引的策略" class="thumbnail-image"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/2018/09/28/Mysql_Index_3/" class="title">Mysql 索引系列（三）：索引的策略</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
-                        </div>
-                    </li>
                 
                     <li>
                         
@@ -491,6 +473,25 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
                             <p class="item-title"><a href="/2018/09/28/Mysql_Index_4/" class="title">Mysql 索引系列（四）：前缀索引</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/09/28/Mysql_Index_3/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/redis_logo.png)" alt="Mysql 索引系列（三）：索引的策略" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/2018/09/28/Mysql_Index_3/" class="title">Mysql 索引系列（三）：索引的策略</a></p>
                             <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
                         </div>
                     </li>

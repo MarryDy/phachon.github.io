@@ -944,7 +944,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-centos-install-memcache" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-web-work" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -952,7 +952,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/07/26/centos-install-memcache/">CentOS 下安装 Memcache 和 php 扩展</a>
+            <a class="article-title" href="/2016/07/26/web-work/">Web 网站的基本工作原理</a>
         </h1>
     
 
@@ -961,7 +961,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/07/26/centos-install-memcache/">
+        <a href="/2016/07/26/web-work/">
             <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26 00:00:00</time>
         </a>
     </div>
@@ -976,7 +976,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/CentOS/">CentOS</a>, <a class="tag-link" href="/tags/Memcache/">Memcache</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>
+        <a class="tag-link" href="/tags/Apache/">Apache</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>
     </div>
 
                     </div>
@@ -987,15 +987,14 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <div class="article-entry" itemprop="articleBody">
         
             <p><hr>
-<blockquote>
-<p>CentOS 下安装 Memcache 和 php memcache 扩展</p>
-</blockquote>
-<h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><p>查看相关软件包</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Yum search memcached</span><br></pre></td></tr></table></figure>
-<p>有了，可以进行安装了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Yum -y install memcached</span><br></pre></td></tr></table></figure></p>
+<h2 id="静态页访问"><a href="#静态页访问" class="headerlink" title="静态页访问"></a>静态页访问</h2><ul>
+<li>示例：<a href="http://www.test.com/index.html" target="_blank" rel="noopener">http://www.test.com/index.html</a></li>
+<li>请求步骤：</li>
+</ul>
+<p>(1) 用户输入需要访问的地址或者具体的网页文件<br>(2) 开始域名解析,会先找到本地的 hosts 文件，然后再找网络上的 DNS 服务器,最终解析到 ip 地址<br>(3) ip 地址所在机器的 Web 服务器接收这个请求，获取请求文件 index.html<br>(4) web 服务器将这个文件的信息返回给用户所用的浏览器<br>(5) 浏览器解析 html 代码，显示出数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Title: 静态网页资源的访问流程图</span><br><span class="line">用户-&gt;浏览器:输入资源地址</span><br><span class="line">浏览器-&gt;域名解析(DNS):解析 ip</span><br><span class="line">域名解析(DNS)-&gt;web 服务器:根据 ip 找到服务器资源</span><br><span class="line">web 服务器-&gt;浏览器:返回资源给浏览器</span><br><span class="line">浏览器-&gt;用户:解析html显示</span><br></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2016/07/26/centos-install-memcache/#more">查看更多</a>
+                <a href="/2016/07/26/web-work/#more">查看更多</a>
             </p>
         
         </div>
@@ -1051,7 +1050,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-web-work" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-centos-install-memcache" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -1059,7 +1058,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/07/26/web-work/">Web 网站的基本工作原理</a>
+            <a class="article-title" href="/2016/07/26/centos-install-memcache/">CentOS 下安装 Memcache 和 php 扩展</a>
         </h1>
     
 
@@ -1068,7 +1067,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/07/26/web-work/">
+        <a href="/2016/07/26/centos-install-memcache/">
             <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26 00:00:00</time>
         </a>
     </div>
@@ -1083,7 +1082,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/Apache/">Apache</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>
+        <a class="tag-link" href="/tags/CentOS/">CentOS</a>, <a class="tag-link" href="/tags/Memcache/">Memcache</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>
     </div>
 
                     </div>
@@ -1094,14 +1093,15 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <div class="article-entry" itemprop="articleBody">
         
             <p><hr>
-<h2 id="静态页访问"><a href="#静态页访问" class="headerlink" title="静态页访问"></a>静态页访问</h2><ul>
-<li>示例：<a href="http://www.test.com/index.html" target="_blank" rel="noopener">http://www.test.com/index.html</a></li>
-<li>请求步骤：</li>
-</ul>
-<p>(1) 用户输入需要访问的地址或者具体的网页文件<br>(2) 开始域名解析,会先找到本地的 hosts 文件，然后再找网络上的 DNS 服务器,最终解析到 ip 地址<br>(3) ip 地址所在机器的 Web 服务器接收这个请求，获取请求文件 index.html<br>(4) web 服务器将这个文件的信息返回给用户所用的浏览器<br>(5) 浏览器解析 html 代码，显示出数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Title: 静态网页资源的访问流程图</span><br><span class="line">用户-&gt;浏览器:输入资源地址</span><br><span class="line">浏览器-&gt;域名解析(DNS):解析 ip</span><br><span class="line">域名解析(DNS)-&gt;web 服务器:根据 ip 找到服务器资源</span><br><span class="line">web 服务器-&gt;浏览器:返回资源给浏览器</span><br><span class="line">浏览器-&gt;用户:解析html显示</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>CentOS 下安装 Memcache 和 php memcache 扩展</p>
+</blockquote>
+<h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><p>查看相关软件包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Yum search memcached</span><br></pre></td></tr></table></figure>
+<p>有了，可以进行安装了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Yum -y install memcached</span><br></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2016/07/26/web-work/#more">查看更多</a>
+                <a href="/2016/07/26/centos-install-memcache/#more">查看更多</a>
             </p>
         
         </div>
@@ -1282,25 +1282,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2018/09/28/Mysql_Index_3/" class="thumbnail">
-    
-    
-        <span style="background-image:url(/images/redis_logo.png)" alt="Mysql 索引系列（三）：索引的策略" class="thumbnail-image"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/2018/09/28/Mysql_Index_3/" class="title">Mysql 索引系列（三）：索引的策略</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
                             <a href="/2018/09/28/Mysql_Index_5/" class="thumbnail">
     
     
@@ -1332,6 +1313,25 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
                             <p class="item-title"><a href="/2018/09/28/Mysql_Index_4/" class="title">Mysql 索引系列（四）：前缀索引</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/09/28/Mysql_Index_3/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/redis_logo.png)" alt="Mysql 索引系列（三）：索引的策略" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/2018/09/28/Mysql_Index_3/" class="title">Mysql 索引系列（三）：索引的策略</a></p>
                             <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
                         </div>
                     </li>
