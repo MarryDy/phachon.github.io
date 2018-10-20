@@ -75,7 +75,9 @@ var _hmt = _hmt || [];
                 
                     <a class="main-nav-link" href="/tags">标签</a>
                 
-                    <a class="main-nav-link" href="/opensource">开源项目</a>
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/opensource">开源</a>
                 
             </nav>
             
@@ -140,7 +142,9 @@ var _hmt = _hmt || [];
                 
                     <td><a class="main-nav-link" href="/tags">标签</a></td>
                 
-                    <td><a class="main-nav-link" href="/opensource">开源项目</a></td>
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                    <td><a class="main-nav-link" href="/opensource">开源</a></td>
                 
                 <td>
                     
@@ -163,17 +167,17 @@ var _hmt = _hmt || [];
         <div class="base-info profile-block">
             <img id="avatar" src="/css/images/logo.jpg" />
             <h2 id="name">phachon</h2>
-            <h3 id="title"></h3>
+            <h3 id="title">I am a free phper/goper</h3>
             <span id="location"><i class="fas fa-map-marker-alt" style="padding-right: 5px"></i>Beijing, China</span>
             <a id="follow" target="_blank" href="https://github.com/phachon">关注我</a>
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                61
+                63
                 <span>文章</span>
             </div>
             <div class="article-info-block">
-                45
+                44
                 <span>标签</span>
             </div>
         </div>
@@ -189,12 +193,6 @@ var _hmt = _hmt || [];
                         </a>
                     </td>
                     
-                    <td>
-                        <a href="http://weibo.com/phachon" target="_blank" title="weibo" class=tooltip>
-                            <i class="fab fa-weibo"></i>
-                        </a>
-                    </td>
-                    
                 </tr>
             </table>
         </div>
@@ -204,7 +202,7 @@ var _hmt = _hmt || [];
 
             
             <section id="main">
-    <article id="post-io" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-sphinx/sphinx-install" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -212,7 +210,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/09/05/io/">IO 模型简介</a>
+            <a class="article-title" href="/sphinx/sphinx-install.html">Sphinx 在 Linux 下的安装与基本配置</a>
         </h1>
     
 
@@ -221,8 +219,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/09/05/io/">
-            <time datetime="2016-09-04T16:00:00.000Z" itemprop="datePublished">2016-09-05 00:00:00</time>
+        <a href="/sphinx/sphinx-install.html">
+            <time datetime="2016-09-05T16:00:00.000Z" itemprop="datePublished">2016-09-06 00:00:00</time>
         </a>
     </div>
 
@@ -230,13 +228,13 @@ var _hmt = _hmt || [];
                         
     <div class="article-category">
     	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+        <a class="article-category-link" href="/categories/Sphinx/">Sphinx</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/IO/">IO</a>, <a class="tag-link" href="/tags/Linux/">Linux</a>
+        <a class="tag-link" href="/tags/Sphinx/">Sphinx</a>
     </div>
 
                     </div>
@@ -247,9 +245,13 @@ var _hmt = _hmt || [];
         <div class="article-entry" itemprop="articleBody">
         
             <p><hr>
-<p>最近工作中接触到关于网络编程的一些东西，发现对于网络、IO编程、socket、进程、线程、协程、TCP/IP等基本知识理解不够深入。所以需要从头到尾总结一下。</p></p>
+<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>Sphinx 官网：<a href="http://sphinxsearch.com/" target="_blank" rel="noopener">http://sphinxsearch.com/</a><br>wget <a href="http://sphinxsearch.com/files/sphinx-2.2.10-release.tar.gz" target="_blank" rel="noopener">http://sphinxsearch.com/files/sphinx-2.2.10-release.tar.gz</a></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="解压压缩包"><a href="#解压压缩包" class="headerlink" title="解压压缩包"></a>解压压缩包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar zxvf sphinx-2.2.10-release.tar.gz</span><br><span class="line">cd sphinx-2.2.10-release</span><br></pre></td></tr></table></figure>
+<p>找到 mysql 的安装目录，我的是在 /usr/bin/mysql 执行 /usr/lcoal/sphinx 为 sphinx 的安装目录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo ./configure --prefix=/usr/local/sphinx --with-mysql=/usr/local/mysql</span><br><span class="line">make </span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<p>不出问题的话应该已经安装成功了</p></p>
             <p class="article-more-link">
-                <a href="/2016/09/05/io/#more">查看更多</a>
+                <a href="/sphinx/sphinx-install.html#more">查看更多</a>
             </p>
         
         </div>
@@ -305,7 +307,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-crontab" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-sphinx/sphinx-web" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -313,7 +315,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/08/23/crontab/">CronTab 解决周期内未执行完重复执行</a>
+            <a class="article-title" href="/sphinx/sphinx-web.html">Sphinx 在网站应用中的服务架构设计</a>
         </h1>
     
 
@@ -322,7 +324,226 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/08/23/crontab/">
+        <a href="/sphinx/sphinx-web.html">
+            <time datetime="2016-09-05T16:00:00.000Z" itemprop="datePublished">2016-09-06 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Sphinx/">Sphinx</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Sphinx/">Sphinx</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><hr>
+<h2 id="Sphinx-简单介绍"><a href="#Sphinx-简单介绍" class="headerlink" title="Sphinx 简单介绍"></a>Sphinx 简单介绍</h2><ol>
+<li><p>介绍<br>Sphinx 是一个基于 SQL 的全文检索引擎，可以给 Mysql、PostgreSQL 做检索，提供比数据库更加专业的搜索功能。Sphinx 的搜索API接口支持 PHP,Python,Ruby,等。Sphinx 单一索引最大可包含1亿条记录，在1千万条记录情况下的查询速度为0.x秒（毫秒级）。Sphinx创建索引的速度为：创建100万条记录的索引只需 3～4分钟，创建1000万条记录的索引可以在50分钟内完成，而只包含最新10万条记录的增量索引，重建一次只需几十秒</p>
+</li>
+<li><p>主要特性</p>
+</li>
+</ol>
+<ul>
+<li>高速索引</li>
+<li>高速搜索</li>
+<li>支持分布式搜索</li>
+<li>提供从Mysql 内部的插件式存储引擎上搜索</li>
+<li>采用 UTF-8 字符集</li>
+<li>支持 Windows/Linux/MacOX</li>
+</ul>
+<ol start="3">
+<li>使用场景<br>如果数据库的数据量不是很多，百万级的数据，可以采用数据库索引来进行检索，但是对于上千万的数据量的话就用数据库直接检索的效率就会有所下降，特别对于采用分库分表的数据库设计，如果要检索非主键的字段的话，将会非常麻烦。<br>比如用户表 user，用户量大的时候，我们一般会采用分表的方式来提高应用的访问性能。user_0 ~ user_63 ,总共 64 张表,user_id 作为 主键<br>表结构如下。<br>user_id    name    password    age<br>int    char(100)    char(32)    int<br>如果知道 user_id = 65，那我们很容易找到用户的信息, 65 % 64 = 1，那就在 user_1 表中，采用 select <em> from user_1 ….<br>但是如果我想检索名字叫 “phachon” 的用户，这个就比较麻烦了，最笨的办法就是每一张表都去查找 select </em>  from user_* where name LIKE %phchon% ,这样要循环 64 次，再将数据合并起来，这样显然是不可行的，数据库的开销太大，造成应用程序的性能下降。</li>
+</ol>
+<p>Sphinx 就可以帮我们解决上面所说的问题。当然，Sphinx 可以应用的场景很多，上面只是其中的一种。</p></p>
+            <p class="article-more-link">
+                <a href="/sphinx/sphinx-web.html#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-linux/io" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/linux/io.html">IO 模型简介</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/linux/io.html">
+            <time datetime="2016-09-04T16:00:00.000Z" itemprop="datePublished">2016-09-05 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Linux/">Linux</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/IO/">IO</a>, <a class="tag-link" href="/tags/Linux/">Linux</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><hr>
+<p>最近工作中接触到关于网络编程的一些东西，发现对于网络、IO编程、socket、进程、线程、协程、TCP/IP等基本知识理解不够深入。所以需要从头到尾总结一下。</p></p>
+            <p class="article-more-link">
+                <a href="/linux/io.html#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-linux/crontab" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/linux/crontab.html">CronTab 解决周期内未执行完重复执行</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/linux/crontab.html">
             <time datetime="2016-08-22T16:00:00.000Z" itemprop="datePublished">2016-08-23 00:00:00</time>
         </a>
     </div>
@@ -331,7 +552,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-category">
     	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+        <a class="article-category-link" href="/categories/Linux/">Linux</a>
     </div>
 
                         
@@ -351,7 +572,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <h2 id="crontab-执行-php-脚本"><a href="#crontab-执行-php-脚本" class="headerlink" title="crontab 执行 php 脚本"></a>crontab 执行 php 脚本</h2><p>linux 下的 crontab 定时任务服务，可以用来定时运行脚本。工作中经常会用到这样的服务，使用起来比较简单。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/sbin/service crond start  # 开启服务</span><br><span class="line">/sbin/service crond stop  # 停止服务</span><br><span class="line">/sbin/service crond restart #重启服务</span><br><span class="line">/sbin/service crond reload #重新加载服务</span><br><span class="line"></span><br><span class="line">sudo crontab -e #插入一条定时任务</span><br><span class="line">sudo crontab -l #查看所有的 root 用户下的定时任务列表</span><br><span class="line">tail -f /var/log/cron # 实时查看定时任务日志</span><br></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2016/08/23/crontab/#more">查看更多</a>
+                <a href="/linux/crontab.html#more">查看更多</a>
             </p>
         
         </div>
@@ -407,7 +628,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-lump-install" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-install/lump-install" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -415,7 +636,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/07/29/lump-install/">CentOS6.3+Apache2.2+php5.3.8+Mysql5.5.4源码搭建Lump环境</a>
+            <a class="article-title" href="/install/lump-install.html">CentOS6.3+Apache2.2+php5.3.8+Mysql5.5.4源码搭建Lump环境</a>
         </h1>
     
 
@@ -424,7 +645,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/07/29/lump-install/">
+        <a href="/install/lump-install.html">
             <time datetime="2016-07-28T16:00:00.000Z" itemprop="datePublished">2016-07-29 00:00:00</time>
         </a>
     </div>
@@ -433,7 +654,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-category">
     	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+        <a class="article-category-link" href="/categories/Install/">Install</a>
     </div>
 
                         
@@ -457,7 +678,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <li>MySql版本：MySql-5.5.45.tar.gz</li>
 </ul></p>
             <p class="article-more-link">
-                <a href="/2016/07/29/lump-install/#more">查看更多</a>
+                <a href="/install/lump-install.html#more">查看更多</a>
             </p>
         
         </div>
@@ -513,7 +734,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-php-run-type" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-php/php-run-type" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -521,7 +742,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/07/29/php-run-type/">浅析 php 的几种运行方式</a>
+            <a class="article-title" href="/php/php-run-type.html">浅析 PHP 的几种运行方式</a>
         </h1>
     
 
@@ -530,7 +751,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/07/29/php-run-type/">
+        <a href="/php/php-run-type.html">
             <time datetime="2016-07-28T16:00:00.000Z" itemprop="datePublished">2016-07-29 00:00:00</time>
         </a>
     </div>
@@ -539,13 +760,13 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-category">
     	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+        <a class="article-category-link" href="/categories/PHP/">PHP</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/CGI/">CGI</a>, <a class="tag-link" href="/tags/CLI/">CLI</a>, <a class="tag-link" href="/tags/FAST-CGI/">FAST-CGI</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHP-FPM/">PHP-FPM</a>
+        <a class="tag-link" href="/tags/FAST-CGI/">FAST-CGI</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHP-FPM/">PHP-FPM</a>
     </div>
 
                     </div>
@@ -563,7 +784,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <li>CLI</li>
 </ol></p>
             <p class="article-more-link">
-                <a href="/2016/07/29/php-run-type/#more">查看更多</a>
+                <a href="/php/php-run-type.html#more">查看更多</a>
             </p>
         
         </div>
@@ -619,7 +840,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-linux-command" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-php/php-call-callStatic" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -627,7 +848,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/07/28/linux-command/">Linux 常用命令总结</a>
+            <a class="article-title" href="/php/php-call-callStatic.html">PHP 魔术方法</a>
         </h1>
     
 
@@ -636,7 +857,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/07/28/linux-command/">
+        <a href="/php/php-call-callStatic.html">
             <time datetime="2016-07-27T16:00:00.000Z" itemprop="datePublished">2016-07-28 00:00:00</time>
         </a>
     </div>
@@ -645,7 +866,108 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-category">
     	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+        <a class="article-category-link" href="/categories/PHP/">PHP</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/PHP/">PHP</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><hr>
+<h2 id="call-方法的使用"><a href="#call-方法的使用" class="headerlink" title="__call 方法的使用"></a>__call 方法的使用</h2><p>定义：在对象中调用一个不可访问方法时，__call() 会被调用。</p></p>
+            <p class="article-more-link">
+                <a href="/php/php-call-callStatic.html#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-linux/linux-command" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/linux/linux-command.html">Linux 常用命令总结</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/linux/linux-command.html">
+            <time datetime="2016-07-27T16:00:00.000Z" itemprop="datePublished">2016-07-28 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Linux/">Linux</a>
     </div>
 
                         
@@ -684,7 +1006,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <li>reboot   重启</li>
 </ul></p>
             <p class="article-more-link">
-                <a href="/2016/07/28/linux-command/#more">查看更多</a>
+                <a href="/linux/linux-command.html#more">查看更多</a>
             </p>
         
         </div>
@@ -740,7 +1062,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-php-call-callStatic" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-install/centos-install-memcache" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -748,7 +1070,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/07/28/php-call-callStatic/">PHP 魔术方法之 __call 与 __callStatic</a>
+            <a class="article-title" href="/install/centos-install-memcache.html">CentOS 下安装 Memcache 和 php 扩展</a>
         </h1>
     
 
@@ -757,108 +1079,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/07/28/php-call-callStatic/">
-            <time datetime="2016-07-27T16:00:00.000Z" itemprop="datePublished">2016-07-28 00:00:00</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/PHP/">PHP</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><hr>
-<h2 id="call-方法的使用"><a href="#call-方法的使用" class="headerlink" title="__call 方法的使用"></a>__call 方法的使用</h2><p>定义：在对象中调用一个不可访问方法时，__call() 会被调用。</p></p>
-            <p class="article-more-link">
-                <a href="/2016/07/28/php-call-callStatic/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
-<script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
-</div>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-wamp-install" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2016/07/26/wamp-install/">Wamp 环境的搭建</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/07/26/wamp-install/">
+        <a href="/install/centos-install-memcache.html">
             <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26 00:00:00</time>
         </a>
     </div>
@@ -867,216 +1088,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-category">
     	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/Apache/">Apache</a>, <a class="tag-link" href="/tags/Mysql/">Mysql</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/Windows/">Windows</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><hr>
-<h2 id="Apache"><a href="#Apache" class="headerlink" title="Apache"></a>Apache</h2><h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>Apache是一种b/s结构的软件，Apache属于s服务端</p>
-<p>下载地址：<a href="http://httpd.apache.org/download.cgi" target="_blank" rel="noopener">http://httpd.apache.org/download.cgi</a> 选择相应的版本下载</p>
-<p>我这里下载的是 httpd-2.2.22-win32-x86-no_ssl.msi<br>解释一下下载的文件：<br>版本：2.2.22<br>操作系统：win32 x86<br>是否提供ssl: no_ssl 不提供</p></p>
-            <p class="article-more-link">
-                <a href="/2016/07/26/wamp-install/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
-<script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
-</div>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-web-work" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2016/07/26/web-work/">Web 网站的基本工作原理</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/07/26/web-work/">
-            <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26 00:00:00</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/Apache/">Apache</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><hr>
-<h2 id="静态页访问"><a href="#静态页访问" class="headerlink" title="静态页访问"></a>静态页访问</h2><ul>
-<li>示例：<a href="http://www.test.com/index.html" target="_blank" rel="noopener">http://www.test.com/index.html</a></li>
-<li>请求步骤：</li>
-</ul>
-<p>(1) 用户输入需要访问的地址或者具体的网页文件<br>(2) 开始域名解析,会先找到本地的 hosts 文件，然后再找网络上的 DNS 服务器,最终解析到 ip 地址<br>(3) ip 地址所在机器的 Web 服务器接收这个请求，获取请求文件 index.html<br>(4) web 服务器将这个文件的信息返回给用户所用的浏览器<br>(5) 浏览器解析 html 代码，显示出数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Title: 静态网页资源的访问流程图</span><br><span class="line">用户-&gt;浏览器:输入资源地址</span><br><span class="line">浏览器-&gt;域名解析(DNS):解析 ip</span><br><span class="line">域名解析(DNS)-&gt;web 服务器:根据 ip 找到服务器资源</span><br><span class="line">web 服务器-&gt;浏览器:返回资源给浏览器</span><br><span class="line">浏览器-&gt;用户:解析html显示</span><br></pre></td></tr></table></figure></p>
-            <p class="article-more-link">
-                <a href="/2016/07/26/web-work/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
-<script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
-</div>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-centos-install-memcache" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2016/07/26/centos-install-memcache/">CentOS 下安装 Memcache 和 php 扩展</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/07/26/centos-install-memcache/">
-            <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26 00:00:00</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+        <a class="article-category-link" href="/categories/Install/">Install</a>
     </div>
 
                         
@@ -1101,7 +1113,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <p>有了，可以进行安装了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Yum -y install memcached</span><br></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2016/07/26/centos-install-memcache/#more">查看更多</a>
+                <a href="/install/centos-install-memcache.html#more">查看更多</a>
             </p>
         
         </div>
@@ -1157,7 +1169,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-centos-install-php-mcrypt" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-install/wamp-install" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -1165,7 +1177,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/07/25/centos-install-php-mcrypt/">CentOS下php安装 mcrypt 扩展</a>
+            <a class="article-title" href="/install/wamp-install.html">Wamp 环境的搭建</a>
         </h1>
     
 
@@ -1174,8 +1186,8 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/2016/07/25/centos-install-php-mcrypt/">
-            <time datetime="2016-07-24T16:00:00.000Z" itemprop="datePublished">2016-07-25 00:00:00</time>
+        <a href="/install/wamp-install.html">
+            <time datetime="2016-07-25T16:00:00.000Z" itemprop="datePublished">2016-07-26 00:00:00</time>
         </a>
     </div>
 
@@ -1183,13 +1195,13 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-category">
     	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Coding/">Coding</a>
+        <a class="article-category-link" href="/categories/Install/">Install</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/CentOS/">CentOS</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/mcrypt/">mcrypt</a>
+        <a class="tag-link" href="/tags/Apache/">Apache</a>, <a class="tag-link" href="/tags/Mysql/">Mysql</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/Windows/">Windows</a>
     </div>
 
                     </div>
@@ -1200,16 +1212,11 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <div class="article-entry" itemprop="articleBody">
         
             <p><hr>
-<h2 id="源码编译安装"><a href="#源码编译安装" class="headerlink" title="源码编译安装"></a>源码编译安装</h2><p>需要下载Libmcrypt,mhash,mcrypt安装包</p>
-<p>下载地址：<a href="http://www.sourceforge.net" target="_blank" rel="noopener">http://www.sourceforge.net</a></p>
-<ul>
-<li>libmcrypt(libmcrypt-2.5.8.tar.gz );</li>
-<li>mcrypt(mcrypt-2.6.8.tar.gz );</li>
-<li>mhash(mhash-0.9.9.9.tar.gz );</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget &quot;http://downloads.sourceforge.net/mcrypt/libmcrypt-2.5.8.tar.gz&quot;</span><br><span class="line">wget &quot;http://downloads.sourceforge.net/mcrypt/mcrypt-2.6.8.tar.gz&quot;</span><br><span class="line">wget &quot;http://downloads.sourceforge.net/mhash/mhash-0.9.9.9.tar.gz&quot;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Apache"><a href="#Apache" class="headerlink" title="Apache"></a>Apache</h2><h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>Apache是一种b/s结构的软件，Apache属于s服务端</p>
+<p>下载地址：<a href="http://httpd.apache.org/download.cgi" target="_blank" rel="noopener">http://httpd.apache.org/download.cgi</a> 选择相应的版本下载</p>
+<p>我这里下载的是 httpd-2.2.22-win32-x86-no_ssl.msi<br>解释一下下载的文件：<br>版本：2.2.22<br>操作系统：win32 x86<br>是否提供ssl: no_ssl 不提供</p></p>
             <p class="article-more-link">
-                <a href="/2016/07/25/centos-install-php-mcrypt/#more">查看更多</a>
+                <a href="/install/wamp-install.html#more">查看更多</a>
             </p>
         
         </div>
@@ -1282,10 +1289,29 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2018/09/28/Mysql_Index_5/" class="thumbnail">
+                            <a href="/nginx/Nginx-1.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/redis_logo.png)" alt="Mysql 索引系列（五）：覆盖索引" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/nginx_logo.png)" alt="Nginx 系列（一）：工作原理" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Nginx/">Nginx</a></p>
+                            <p class="item-title"><a href="/nginx/Nginx-1.html" class="title">Nginx 系列（一）：工作原理</a></p>
+                            <p class="item-date"><time datetime="2018-10-07T10:25:15.000Z" itemprop="datePublished">2018-10-07 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-3.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（三）：索引的策略" class="thumbnail-image"></span>
     
 </a>
 
@@ -1293,7 +1319,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/2018/09/28/Mysql_Index_5/" class="title">Mysql 索引系列（五）：覆盖索引</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-3.html" class="title">Mysql 索引系列（三）：索引的策略</a></p>
                             <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
                         </div>
                     </li>
@@ -1301,10 +1327,10 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2018/09/28/Mysql_Index_4/" class="thumbnail">
+                            <a href="/mysql/mysql-index-5.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/redis_logo.png)" alt="Mysql 索引系列（四）：前缀索引" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（五）：覆盖索引" class="thumbnail-image"></span>
     
 </a>
 
@@ -1312,7 +1338,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/2018/09/28/Mysql_Index_4/" class="title">Mysql 索引系列（四）：前缀索引</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-5.html" class="title">Mysql 索引系列（五）：覆盖索引</a></p>
                             <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
                         </div>
                     </li>
@@ -1320,10 +1346,10 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2018/09/28/Mysql_Index_3/" class="thumbnail">
+                            <a href="/mysql/mysql-index-4.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/redis_logo.png)" alt="Mysql 索引系列（三）：索引的策略" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（四）：前缀索引" class="thumbnail-image"></span>
     
 </a>
 
@@ -1331,7 +1357,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/2018/09/28/Mysql_Index_3/" class="title">Mysql 索引系列（三）：索引的策略</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-4.html" class="title">Mysql 索引系列（四）：前缀索引</a></p>
                             <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
                         </div>
                     </li>
@@ -1339,10 +1365,10 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2018/09/28/Mysql_Index_2/" class="thumbnail">
+                            <a href="/mysql/mysql-index-2.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/redis_logo.png)" alt="Mysql 索引系列（二）：了解并使用 EXPLAIN 命令" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（二）：了解并使用 EXPLAIN 命令" class="thumbnail-image"></span>
     
 </a>
 
@@ -1350,27 +1376,8 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/2018/09/28/Mysql_Index_2/" class="title">Mysql 索引系列（二）：了解并使用 EXPLAIN 命令</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-2.html" class="title">Mysql 索引系列（二）：了解并使用 EXPLAIN 命令</a></p>
                             <p class="item-date"><time datetime="2018-09-28T02:25:15.000Z" itemprop="datePublished">2018-09-28 10:25:15</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2018/09/28/Mysql_Index_1/" class="thumbnail">
-    
-    
-        <span style="background-image:url(/images/mysql_logo.gif)" alt="Mysql 索引系列（一）：索引的实现" class="thumbnail-image"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/2018/09/28/Mysql_Index_1/" class="title">Mysql 索引系列（一）：索引的实现</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T01:15:45.000Z" itemprop="datePublished">2018-09-28 09:15:45</time></p>
                         </div>
                     </li>
                 
@@ -1383,7 +1390,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Coding/">Coding</a><span class="category-list-count">42</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Summary/">Summary</a><span class="category-list-count">9</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Go/">Go</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Html/">Html</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Install/">Install</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Live/">Live</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenSource/">OpenSource</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Sphinx/">Sphinx</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Summary/">Summary</a><span class="category-list-count">11</span></li></ul>
         </div>
     </div>
 
@@ -1392,7 +1399,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">9</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">9</span></li></ul>
         </div>
     </div>
 
@@ -1401,7 +1408,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">标签云</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Apache/" style="font-size: 13.75px;">Apache</a> <a href="/tags/Architecture/" style="font-size: 10px;">Architecture</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CGI/" style="font-size: 10px;">CGI</a> <a href="/tags/CLI/" style="font-size: 10px;">CLI</a> <a href="/tags/CentOS/" style="font-size: 13.75px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.25px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.25px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 16.25px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 17.5px;">Mysql</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 18.75px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.25px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 11.25px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.25px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 12.5px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/dataStructure/" style="font-size: 11.25px;">dataStructure</a> <a href="/tags/go/" style="font-size: 13.75px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/redis/" style="font-size: 15px;">redis</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a>
+            <a href="/tags/Apache/" style="font-size: 14.29px;">Apache</a> <a href="/tags/Architecture/" style="font-size: 10px;">Architecture</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CentOS/" style="font-size: 14.29px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.43px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.43px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 15.71px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 17.14px;">Mysql</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 18.57px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.43px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 11.43px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.43px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/dataStructure/" style="font-size: 11.43px;">dataStructure</a> <a href="/tags/go/" style="font-size: 14.29px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a> <a href="/tags/mysql/" style="font-size: 15.71px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/redis/" style="font-size: 15.71px;">redis</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a>
         </div>
     </div>
 

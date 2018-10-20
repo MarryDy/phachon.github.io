@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Redis系列（一）：Redis 主从同步集群模式 | phachon&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="在生产环境中，为了保证 Redis 服务的高可用，我们往往要使用 Redis 的集群模式，Redis 的集群模式有三种：主从同步集群模式、哨兵集群模式、Cluster 集群模式，本篇文章先介绍 Redis 主从同步集群模式的原理及实现。">
+<meta name="keywords" content="redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis系列（一）：Redis 主从同步集群模式">
+<meta property="og:url" content="http://phachon.github.io/redis/redis-1.html">
+<meta property="og:site_name" content="phachon&#39;s blog">
+<meta property="og:description" content="在生产环境中，为了保证 Redis 服务的高可用，我们往往要使用 Redis 的集群模式，Redis 的集群模式有三种：主从同步集群模式、哨兵集群模式、Cluster 集群模式，本篇文章先介绍 Redis 主从同步集群模式的原理及实现。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://phachon.github.io/images/redis_logo.png">
+<meta property="og:updated_time" content="2018-10-20T10:39:14.328Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis系列（一）：Redis 主从同步集群模式">
+<meta name="twitter:description" content="在生产环境中，为了保证 Redis 服务的高可用，我们往往要使用 Redis 的集群模式，Redis 的集群模式有三种：主从同步集群模式、哨兵集群模式、Cluster 集群模式，本篇文章先介绍 Redis 主从同步集群模式的原理及实现。">
+<meta name="twitter:image" content="http://phachon.github.io/images/redis_logo.png">
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-brands.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-solid.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?37fc388c17633765d5d2b950f4682d91";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">phachon&#39;s blog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/opensource">开源</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/logo.jpg" />
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fas fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                    <td><a class="main-nav-link" href="/opensource">开源</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile" class="profile-fixed">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/logo.jpg" />
+            <h2 id="name">phachon</h2>
+            <h3 id="title">I am a free phper/goper</h3>
+            <span id="location"><i class="fas fa-map-marker-alt" style="padding-right: 5px"></i>Beijing, China</span>
+            <a id="follow" target="_blank" href="https://github.com/phachon">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                63
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                44
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="http://github.com/phachon" target="_blank" title="github" class=tooltip>
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-redis/redis-1" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            
+	
+		<img src="/images/redis_logo.png" class="article-banner" />
+	
+
+
+
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Redis系列（一）：Redis 主从同步集群模式
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/redis/redis-1.html">
+            <time datetime="2018-09-23T00:10:19.000Z" itemprop="datePublished">2018-09-23 08:10:19</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Redis/">Redis</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/redis/">redis</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p>在生产环境中，为了保证 Redis 服务的高可用，我们往往要使用 Redis 的集群模式，Redis 的集群模式有三种：主从同步集群模式、哨兵集群模式、Cluster 集群模式，本篇文章先介绍 Redis 主从同步集群模式的原理及实现。</p>
+<a id="more"></a>
+<h2 id="什么是主从同步"><a href="#什么是主从同步" class="headerlink" title="什么是主从同步"></a>什么是主从同步</h2><p>简单来说，<code>主从同步</code> 就是指以一个主节点作为基准节点，将数据同步给从节点，使得主从节点的数据保持一致。这里的主节点一般也称为 Master 节点，从节点一般也叫做 Slave 节点。一个 Master 节点可以<br>拥有多个 Slave 节点。这种架构就叫做 <code>一主多从</code> 的主从架构。如果每一个 Slave 节点也作为基准节点，同时也拥有多个 Slave 节点，那么这中架构就叫做 <code>级联结构</code>的主从架构。本篇文章仅研究 <code>一主多从</code>主从架构。</p>
+<p><img src="/images/redis_1.png" alt="一主多从&amp;级联结构"></p>
+<h2 id="Redis-主从同步集群模式的应用场景"><a href="#Redis-主从同步集群模式的应用场景" class="headerlink" title="Redis 主从同步集群模式的应用场景"></a>Redis 主从同步集群模式的应用场景</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">那么什么时候需要使用主从同步的集群模式？</span><br></pre></td></tr></table></figure>
+<p>个人认为 Redis 主从同步有一下几种应用场景</p>
+<h3 id="场景一：Slave-作为-Master-节点的数据备份"><a href="#场景一：Slave-作为-Master-节点的数据备份" class="headerlink" title="场景一：Slave 作为 Master 节点的数据备份"></a>场景一：Slave 作为 Master 节点的数据备份</h3><p>主从服务器架构的设计，可以大大加强 Redis 服务的健壮性。当主服务器出现故障时，可以人工或自动切换到从服务器继续提供服务，同时当主服务器的数据因为某种原因不能恢复时，可以使用从服务器备份的数据。<br>除了这些之外，还经常使用从服务器来处理一些操作比较耗时的命令，以防止阻塞主服务器的工作，导致主服务的请求不能及时处理。<br>例如: Redis里面有1亿个key，其中有10w个key是以某个固定的已知的前缀开头的，如果将它们全部找出来？我们知道使用 <code>keys</code> 命令可以扫出指定模式的 key 列表。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如果 Redis 正在线上提供服务，会有什么问题吗？</span><br></pre></td></tr></table></figure>
+<p>因为 Redis 是单线程的，keys 指令会导致线程阻塞一段时间，线上服务会停顿，直到指令执行完毕，服务才能恢复。这个时候如果我们可以将 Redis 配置一个从服务器，将比较耗时或者阻塞的操作都在从<br>服务器来操作，以防止主服务器停顿。当然除了这种解决办法，还可以使用 scan 命令（scan 命令是无阻塞的）来扫描出需要的 key , 但是有一定的重复率。可以在客户端进行去重。</p>
+<h3 id="场景二：数据读写分离"><a href="#场景二：数据读写分离" class="headerlink" title="场景二：数据读写分离"></a>场景二：数据读写分离</h3><p>读写分离的场景往往是我们最多使用的场景，类似于 Mysql 读写分离，一般是主服务器来提供写操作，从服务器提供读操作。主服务器的写操作会同步给从服务器。<br>数据读写分离将读操作和写操作隔离开，使得读写相互不影响效率，提高了服务的读写速度。</p>
+<h3 id="场景三：多个从服务器根据业务拆分"><a href="#场景三：多个从服务器根据业务拆分" class="headerlink" title="场景三：多个从服务器根据业务拆分"></a>场景三：多个从服务器根据业务拆分</h3><p>此种场景其实是基于场景二的基础上增加的，当读多写少的情况下，我们还可以根据读的不同业务将多个从服务器拆分，例如，从服务器 A 专门用来提供视频业务的数据访问，从服务 B 专门用来新闻业务的数据访问，从服务器 C 专门用来提供用户的数据访问。<br>此种场景不仅减轻了主服务器的压力，同时也使得不同的业务数据访问互不影响。</p>
+<h2 id="Redis-主从同步的配置"><a href="#Redis-主从同步的配置" class="headerlink" title="Redis 主从同步的配置"></a>Redis 主从同步的配置</h2><p>Redis 的安装这里不再介绍，我们以两台机器为例来搭建主从同步的 Redis 集群，一台在 windows 下，一个 Redis 实例为 192.168.238.1:6379; 一台在虚拟机里， 两个 Redis 实例为 192.168.238.129:6379, 192.168.238.129:6380<br>假如我们配置让 windows 机器的 Redis 实例为主节点，另外两个节点为从节点。</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><ul>
+<li><p>运行主节点的 Redis 实例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; redis-server.exe</span><br><span class="line">[8616] 09 Oct 17:31:00.826 # Server started, Redis version 3.0.502</span><br><span class="line">[8616] 09 Oct 17:31:00.826 * DB loaded from disk: 0.000 seconds</span><br><span class="line">[8616] 09 Oct 17:31:00.826 * The server is now ready to accept connections on port 6379</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行节点的 Redis 实例<br>从节点有两种方式来指定自己所需要连接的主节点，一种是直接在启动的命令行参数指定，一种是修改 /etc/redis.conf 文件，两个从节点为分别用两种不同的方式来演示：</p>
+</li>
+</ul>
+<p>从节点 192.168.238.129:6379 采用命令行参数的方式指定 Master<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&gt; /usr/local/redis/bin/redis-server --slaveof 192.168.238.1 6379</span><br><span class="line">13316:S 21 Sep 21:46:05.087 * The server is now ready to accept connections on port 6379</span><br><span class="line">13316:S 21 Sep 21:46:05.087 * Connecting to MASTER 192.168.238.1:6379</span><br><span class="line">13316:S 21 Sep 21:46:05.087 * MASTER &lt;-&gt; SLAVE sync started</span><br><span class="line">13316:S 21 Sep 21:46:05.088 * Non blocking connect for SYNC fired the event.</span><br><span class="line">13316:S 21 Sep 21:46:05.093 * Master replied to PING, replication can continue...</span><br><span class="line">13316:S 21 Sep 21:46:05.100 * Partial resynchronization not possible (no cached master)</span><br><span class="line">13316:S 21 Sep 21:46:05.118 * Full resync from master: 3c4a283f5c5f503d833bf3cad3ae1adde7af283d:1</span><br><span class="line">13316:S 21 Sep 21:46:05.337 * MASTER &lt;-&gt; SLAVE sync: receiving 44 bytes from master</span><br><span class="line">13316:S 21 Sep 21:46:05.338 * MASTER &lt;-&gt; SLAVE sync: Flushing old data</span><br><span class="line">13316:S 21 Sep 21:46:05.339 * MASTER &lt;-&gt; SLAVE sync: Loading DB in memory</span><br><span class="line">13316:S 21 Sep 21:46:05.339 * MASTER &lt;-&gt; SLAVE sync: Finished with success</span><br></pre></td></tr></table></figure></p>
+<p>从节点 192.168.238.129:6380 采用修改配置文件的方式指定 Master<br>打开 redis 的配置文件，修改 salveof 配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">265 # slaveof &lt;masterip&gt; &lt;masterport&gt;</span><br><span class="line">266 slaveof 192.168.238.1 6379</span><br></pre></td></tr></table></figure></p>
+<p>运行从节点 Redis 实例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&gt; /usr/local/redis/bin/redis-server /usr/local/redis/etc/redis_6380.conf</span><br><span class="line">13521:S 21 Sep 21:52:34.853 * The server is now ready to accept connections on port 6380</span><br><span class="line">13521:S 21 Sep 21:52:34.854 * Connecting to MASTER 192.168.238.1:6379</span><br><span class="line">13521:S 21 Sep 21:52:34.854 * MASTER &lt;-&gt; SLAVE sync started</span><br><span class="line">13521:S 21 Sep 21:52:34.860 * Non blocking connect for SYNC fired the event.</span><br><span class="line">13521:S 21 Sep 21:52:34.863 * Master replied to PING, replication can continue...</span><br><span class="line">13521:S 21 Sep 21:52:34.866 * Partial resynchronization not possible (no cached master)</span><br><span class="line">13521:S 21 Sep 21:52:34.885 * Full resync from master: 3c4a283f5c5f503d833bf3cad3ae1adde7af283d:547</span><br><span class="line">13521:S 21 Sep 21:52:35.063 * MASTER &lt;-&gt; SLAVE sync: receiving 44 bytes from master</span><br><span class="line">13521:S 21 Sep 21:52:35.063 * MASTER &lt;-&gt; SLAVE sync: Flushing old data</span><br><span class="line">13521:S 21 Sep 21:52:35.063 * MASTER &lt;-&gt; SLAVE sync: Loading DB in memory</span><br><span class="line">13521:S 21 Sep 21:52:35.063 * MASTER &lt;-&gt; SLAVE sync: Finished with success</span><br></pre></td></tr></table></figure></p>
+<p>这时，我们注意观察一下主节点的输出，我们能看出，主节点已经和两个从节点同步成功<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[8616] 09 Oct 17:37:39.515 * Slave 192.168.238.129:6379 asks for synchronization</span><br><span class="line">[8616] 09 Oct 17:37:39.517 * Full resync requested by slave 192.168.238.129:6379</span><br><span class="line">[8616] 09 Oct 17:37:39.517 * Starting BGSAVE for SYNC with target: disk</span><br><span class="line">[8616] 09 Oct 17:37:39.523 * Background saving started by pid 5384</span><br><span class="line">[8616] 09 Oct 17:37:39.657 # fork operation complete</span><br><span class="line">[8616] 09 Oct 17:37:39.657 * Background saving terminated with success</span><br><span class="line">[8616] 09 Oct 17:37:39.658 * Synchronization with slave 192.168.238.129:6379 succeeded</span><br><span class="line">[8616] 09 Oct 17:43:09.583 * Slave 192.168.238.129:6380 asks for synchronization</span><br><span class="line">[8616] 09 Oct 17:43:09.592 * Full resync requested by slave 192.168.238.129:6380</span><br><span class="line">[8616] 09 Oct 17:43:09.599 * Starting BGSAVE for SYNC with target: disk</span><br><span class="line">[8616] 09 Oct 17:43:09.601 * Background saving started by pid 8996</span><br><span class="line">[8616] 09 Oct 17:43:09.778 # fork operation complete</span><br><span class="line">[8616] 09 Oct 17:43:09.778 * Background saving terminated with success</span><br><span class="line">[8616] 09 Oct 17:43:09.779 * Synchronization with slave 192.168.238.129:6380 succeeded</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意：如果主节点启用了密码认证，需要将从节点的配置文件的配置 masterauth xxxxxx 修改</p>
+</blockquote>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>不要轻易相信别人说的，要始终相信眼睛看到；接下来我们来验证一下主服务器是否能将数据同步到两个从服务器</p>
+<ul>
+<li><p>主节点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; redis-cli.exe</span><br><span class="line">127.0.0.1:6379&gt; set &quot;foo&quot; bar</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get &quot;foo&quot;</span><br><span class="line">&quot;bar&quot;</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从节点1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; ./redis-cli -p 6379</span><br><span class="line">127.0.0.1:6379&gt; get foo</span><br><span class="line">&quot;bar&quot;</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从节点2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; ./redis-cli -p 6380</span><br><span class="line">127.0.0.1:6380&gt; get foo</span><br><span class="line">&quot;bar&quot;</span><br><span class="line">127.0.0.1:6380&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>至此，<code>一主两从</code> 的 Redis 主从同步集群已经搭建成功。</p>
+<h2 id="Redis-主从同步的原理"><a href="#Redis-主从同步的原理" class="headerlink" title="Redis 主从同步的原理"></a>Redis 主从同步的原理</h2><p>虽然我们已经能够配置并使用主从同步的 Redis 集群，但是我们还是有必要了解一下主从同步的实现原理，这样才能在遇到问题的时候迅速判断问题的发生的原因。<br>Redis 主从同步分为两个过程：全量同步和增量同步</p>
+<h3 id="全量同步"><a href="#全量同步" class="headerlink" title="全量同步"></a>全量同步</h3><p>全量同步一般发生在 Slave 的初始化阶段，也就是 Slave 节点的启动阶段。具体的步骤如下（最好对照着刚刚启动的日志来看）：</p>
+<ul>
+<li>从服务器连接主服务器（Log: Connecting to MASTER 192.168.238.1:6379）</li>
+<li>从服务器发送 <code>SYNC</code> 命令到主服务器（Log: MASTER <-> SLAVE sync started）</-></li>
+<li>主服务器接收到 <code>SYNC</code> 命名后，开始执行 <code>BGSAVE</code> 命令生成 <code>RDB</code> 文件并使用缓冲区记录此后执行的所有写命令（Log: Starting BGSAVE for SYNC with target: disk）</li>
+<li>主服务器 <code>BGSAVE</code> 执行完后，递增地将文件发送到从服务器，并在发送期间继续记录被执行的写命令（Log: Synchronization with slave 192.168.238.129:6379 succeeded）</li>
+<li>从服务器收到快照文件后丢弃所有旧数据，载入收到的快照（Log: MASTER <-> SLAVE sync: Flushing old data）</-></li>
+<li>从服务器将快照载入内存（Log: MASTER <-> SLAVE sync: Loading DB in memory）</-></li>
+<li>主服务器快照发送完毕后开始向从服务器发送缓冲区的写命令</li>
+<li>从服务器完成对快照的载入，开始接收主服务器发送的写命令请求，并执行写命令。</li>
+<li>至此，一次全量同步完成</li>
+</ul>
+<h3 id="增量同步"><a href="#增量同步" class="headerlink" title="增量同步"></a>增量同步</h3><p>增量同步是指 Redis 在主从模式已经正常工作的情况下，主服务器将写操作同步到从服务器的过程<br>增量复制的原理当主服务器每执行一个写命令，就会将该命令发送给所有的从服务器，从服务器接收到命令之后立即执行。</p>
+<h3 id="深挖细节"><a href="#深挖细节" class="headerlink" title="深挖细节"></a>深挖细节</h3><ol>
+<li><p>主节点执行 <code>BGSAVE</code> 生成全量镜像的 RDB 文件，是如何来工作的？<br>首先 <code>BGSAVE</code> 指令是用来在后台异步保存当前数据库的数据到磁盘，不会阻塞主节点的进程，当执行 <code>BGSAVE</code> 后，会立即返回 OK, 然后 Redis <code>fork 出一个新子进程</code> 来专门生成全量镜像文件的工作，将数据保存到磁盘后，子进程退出。</p>
+</li>
+<li><p>当主节点在 <code>BGSAVE</code> 的过程中，又有新的写请求到来，主节点怎么工作？这些写数据怎么保存？<br>根据 1 的细节，我们知道主节点会有一个新的子进程来单独处理全量镜像的生成工作，那么主节点父进程可以继续来接收新的请求。这里需要注意的是，当发生 fork 的时候，操作系统会采用<code>写时复制（copy-on-write）策略</code><br>即 fork 函数发生的那一刻，父子进程共享同一块内存数据，当父进程接收到写操作时，操作系统会复制一份数据以保证子进程的数据不受影响。所以新生产的 RDB 文件存储的是执行 fork 那一刻的数据。</p>
+</li>
+<li><p>主服务执行 <code>BGSAVE</code> 命令如果磁盘不够生成 <code>rdb</code> 文件数据的大小怎么办？不能同步了吗？<br>可以采用 <code>无磁盘复制</code> 技术; 通常来讲，一个完全重同步需要在磁盘上创建一个 RDB 文件，然后加载这个文件以便为从服务器发送数据。如果使用比较低速或者容量较小的磁盘，这种操作会给主服务器带来较大的压力。<br>Redis从2.8.18版本开始尝试支持无磁盘的复制。使用这种设置时，子进程直接将 RDB 文件通过网络发送给从服务器，不使用磁盘作为中间存储。<br>这里需要注意：使用硬盘备份传送是多个从节点排队等待传送，也就是说传送是串行的，而<code>无磁盘复制</code>技术是主节点在传送之前会等待一段时间（可以配置，以秒为单位），希望等待多个从节点都到达后，并行传送。<br>相关配置键如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 配置取消硬盘备份</span><br><span class="line">repl-diskless-sync no</span><br><span class="line"># 延迟时间以秒为单位，默认为5秒。如果设置为 0 秒，传送会立即启动，不会延迟</span><br><span class="line">repl-diskless-sync-delay 5</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>主从同步的过程中，从服务器是阻塞的吗？<br>主从同步的过程中，也不会阻塞从服务器。当从服务器进程初始同步时，会使用旧的数据继续提供查询服务。当然这个也可以在配置文件修改。但是，需要注意的是，并不是整个过程都是不阻塞的，当从服务器接受到快照文件，需要删除旧的快照并加装新的数据集到内存，在这个短暂的<br>时间内，从服务器会阻塞连接进来的请求。</p>
+</li>
+<li><p>当主从节点断开复制之后，从节点的数据会删除吗？<br>如果需要断开复制，从节点执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slaveof no one</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>从节点不会删除已有的数据，只是不再接受主节点新的数据变化</p>
+<h2 id="Redis-重同步机制"><a href="#Redis-重同步机制" class="headerlink" title="Redis 重同步机制"></a>Redis 重同步机制</h2><blockquote>
+<p>如果节点宕掉了或者主从重新连接是如何重新恢复同步机制的？</p>
+</blockquote>
+<p>在 Redis 2.8 之前同步机制和 Redis2.8 之后的同步机制不太一样。下面分开来介绍</p>
+<h3 id="旧版同步机制的缺陷"><a href="#旧版同步机制的缺陷" class="headerlink" title="旧版同步机制的缺陷"></a>旧版同步机制的缺陷</h3><p>复制的情况分为两种情况：</p>
+<ol>
+<li><p>初次同步<br>初次同步即从节点在复制当前主节点之前，没有复制过任何的主节点，或者是从节点要复制的和上一次要复制的主节点不同。对于初次复制来说，旧版的复制功能没有任何问题，能够完成同步功能。</p>
+</li>
+<li><p>断线后重同步<br>当处于增量复制阶段的时候，主从节点的连接因为网络原因中断了复制，但从节点又重新连接上了主节点，并继续复制主服务器。重同步的机制如下：</p>
+</li>
+</ol>
+<ul>
+<li>从节点重新连接上了主节点</li>
+<li>从节点向主节点发送 <code>SYNC</code> 的命令</li>
+<li>主节点接受到 <code>SYNC</code> 的命令，执行 <code>BGSAVE</code> 命令开始生成 rdb 文件, 并使用缓冲区来记录所有的写命令。注意这里生成的并不是全量的文件，是从未同步成功的key开始到当前的key的数据文件。</li>
+<li>主节点向从节点发送 rdb 文件</li>
+<li>从节点接受到 rdb 文件，将数据载入</li>
+<li>主从节点数据恢复一致</li>
+</ul>
+<p>从上面可以看出，基本上和初次同步没什么不同。都要进行 <code>SYNC</code> 的操作，  而 <code>SYNC</code> 是一个非常耗费资源的操作：</p>
+<ul>
+<li>每次都要进行 <code>BGSAVE</code> 操作，会耗费服务器大量的 CPU、内存和磁盘</li>
+<li>将生成的 rdb 文件通过网络发送给从服务器，这个操作会耗费主从服务器大量的网络带宽和流量，会对主节点响应命令请求的时间产生影响</li>
+<li>从节点接受到 rdb 文件之后会将数据载入内存，这个时候从服务器是阻塞的，没有办法处理请求</li>
+</ul>
+<h3 id="新版同步机制的核心原理"><a href="#新版同步机制的核心原理" class="headerlink" title="新版同步机制的核心原理"></a>新版同步机制的核心原理</h3><p>为了解决旧版的<code>断线后重同步</code>的缺陷，新版的 Redis 使用 <code>PSYNC</code> 命令来代替 <code>SYNC</code> 来执行复制时的同步操作。<code>PSYNC</code> 的工作模式有两种：<code>完整重同步</code> 和 <code>初次重同步</code>。</p>
+<ol>
+<li><p>完整重同步<br>完整重同步和旧版的初次同步一样，这里不再详细说明</p>
+</li>
+<li><p>部分重同步<br>部分重同步则主要用于处理断线后重连的情况：当从节点连接到主节点之后，如果 <code>条件允许</code>，则主节点可以将主从节点连接断开期间执行的写命令发送给从节点，从节点接受到这些命令后执行，就可以将数据更新至一致<br>部分重同步主要由三部分组成：</p>
+</li>
+</ol>
+<ul>
+<li>主节点的 <code>复制偏移量</code> 和从节点的 <code>复制偏移量</code></li>
+<li>主节点的 <code>复制积压缓冲区</code></li>
+<li>节点的运行 ID</li>
+</ul>
+<h4 id="复制偏移量"><a href="#复制偏移量" class="headerlink" title="复制偏移量"></a>复制偏移量</h4><p>主从节点都会维护一个复制偏移量：</p>
+<ul>
+<li>主节点每次向从节点发送 N 个字节的数据时，就将自己的复制偏移量加 N</li>
+<li>从节点接受到 N 个字节数据时，也将自己的复制偏移量加 N</li>
+</ul>
+<p>当发生断线重连的时候，从节点发送 <code>PSYN</code> 命令给主节点，主节点会将当前的复制偏移量发送给从节点，通过对比主从节点的复制偏移量就很容易知道主从节点的数据是否处于一致。</p>
+<h4 id="复制积压缓冲区"><a href="#复制积压缓冲区" class="headerlink" title="复制积压缓冲区"></a>复制积压缓冲区</h4><p>复制积压缓冲区是由主节点维护的一个固定长度的队列，默认大小是 1 M。当主节点在增量同步的时候，不仅会将命令发送给从节点，同时也会将命令写入到复制积压缓冲区的队列里。<br>当队列满时，会自动弹出队首的数据，所以复制积压缓冲区会保存一部分最近发送的写命令。</p>
+<p><img src="/images/redis2.png" alt="复制积压缓冲区的工作图"></p>
+<p>那么当从节点连上主节点之后，从节点也会将自己的 <code>复制偏移量</code>发送给主节点，主节点会根据偏移量的不同来决定采取何种的重同步机制：</p>
+<ul>
+<li>当从节点的复制偏移量还在复制积压缓冲区里，那么主节点将对从节点执行部分重同步，即只发送丢失的写命令</li>
+<li>相反，如果从节点的复制偏移量已经不在复制积压缓冲区里，那么主节点必须执行完整的重同步</li>
+</ul>
+<p>注意：可以根据需要来调整复制积压缓冲区的大小。如果主服务器平均每秒产生 1 MB的写数据，而从节点断线之后平均要 5 秒才能重新连接上主节点，那么复制积压缓冲区的大小就不能低于5MB</p>
+<h4 id="节点运行ID"><a href="#节点运行ID" class="headerlink" title="节点运行ID"></a>节点运行ID</h4><p>无论是主从节点都会在服务启动时自动生成生成一个运行ID，由40个随机字符串组成，例如：9di9b28df834rf09iab5e345fbbab667ydoopp2b3</p>
+<ol>
+<li>当初次同步时，主节点会将自己的运行ID发送给从节点，而从节点会将这个运行ID保存下来。即<code>从节点保存了主节点的的运行ID</code></li>
+<li>当从节点重新连接上主节点时，从节点会向主节点发送保存的主节点运行ID:</li>
+</ol>
+<ul>
+<li>主节点判断从节点发送过来的保存的运行ID和自己的运行ID相同，则证明节点断线之前就是连接的这个主节点，主节点就可以继续尝试去部分重同步。</li>
+<li>相反，如果运行ID不相同，则说明从节点断线之前复制的主节点不是当前的主节点，主节点将直接进行完整重同步操作。</li>
+</ul>
+<h3 id="心跳机制"><a href="#心跳机制" class="headerlink" title="心跳机制"></a>心跳机制</h3><p>主从节点连接断掉之后，主节点是如何知道的？<br><code>心跳监测</code>机制，在增量同步的过程中，从节点默认会以<code>每秒一次的频率</code>向主节点发送命令：REPLCONF ACK &lt;replication_offset&gt;，命令的作用在于：</p>
+<ul>
+<li>检测主从服务器的网络连接状态</li>
+<li>检测命令是否丢失<br>如果主服务器超过 1 秒钟没有收到从节点发来的 REPLCONF ACK 命令，那么主节点就知道与从节点之间的连接出现问题了。</li>
+</ul>
+<h2 id="主节点不持久化的安全性"><a href="#主节点不持久化的安全性" class="headerlink" title="主节点不持久化的安全性"></a>主节点不持久化的安全性</h2><p>如果使用主从同步的集群模式，强烈建议开启主节点的持久化机制，但这并不是必须的，如果不开启持久化机制，也应当关闭主节点实例自动重启，原因如下：<br>当主节点不持久化，从节点正常复制主节点的数据，当主出现了一个崩溃，这时候如果 Redis 自动重启服务，因为没有持久化，节点重启后就只有一个空的数据集。<br>其他的从节点依旧从主节点复制数据，所以最终从节点的数据也会为空。</p>
+<h2 id="Redis-主从同步的优缺点"><a href="#Redis-主从同步的优缺点" class="headerlink" title="Redis 主从同步的优缺点"></a>Redis 主从同步的优缺点</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ol>
+<li>同一个 Master 可以部署多个 Slave</li>
+<li>Slave 还可以接受其他的 Slave 的连接和同步，即所谓的 <code>级联结构</code>。有效的减轻 Master 的压力</li>
+<li>主从同步期间，主从节点均是非阻塞。不影响服务的查询和写入</li>
+<li>可以很好的实现读写分离的架构，系统的伸缩性得到提高</li>
+</ol>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ol>
+<li>主机的宕机会非常严重，导致整个数据不一致的问题。</li>
+<li>全量的复制的过程中，必须保证主节点必须有足够的内存。若快照的文件过大，还会对集群的服务能力产生影响。</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Redis 主从集群模式的介绍就到这里。下一篇文章介绍 Redis 集群的哨兵模式。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://www.cnblogs.com/kevingrace/p/5685332.html" target="_blank" rel="noopener">Redis主从复制原理总结</a><br><a href="https://www.cnblogs.com/lukexwang/p/4711977.html" target="_blank" rel="noopener">主从同步（复制）</a></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/redis/redis-2.html" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    Redis系列（二）：Redis 哨兵集群模式
+                
+            </div>
+        </a>
+    
+    
+        <a href="/network/TCP-IP-13.html" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">TCP/IP 协议栈系列（十三）：IP协议简单介绍</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/nginx/Nginx-1.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/nginx_logo.png)" alt="Nginx 系列（一）：工作原理" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Nginx/">Nginx</a></p>
+                            <p class="item-title"><a href="/nginx/Nginx-1.html" class="title">Nginx 系列（一）：工作原理</a></p>
+                            <p class="item-date"><time datetime="2018-10-07T10:25:15.000Z" itemprop="datePublished">2018-10-07 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-3.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（三）：索引的策略" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-3.html" class="title">Mysql 索引系列（三）：索引的策略</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-5.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（五）：覆盖索引" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-5.html" class="title">Mysql 索引系列（五）：覆盖索引</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-4.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（四）：前缀索引" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-4.html" class="title">Mysql 索引系列（四）：前缀索引</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-2.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（二）：了解并使用 EXPLAIN 命令" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-2.html" class="title">Mysql 索引系列（二）：了解并使用 EXPLAIN 命令</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T02:25:15.000Z" itemprop="datePublished">2018-09-28 10:25:15</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Go/">Go</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Html/">Html</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Install/">Install</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Live/">Live</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenSource/">OpenSource</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Sphinx/">Sphinx</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Summary/">Summary</a><span class="category-list-count">11</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">9</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Apache/" style="font-size: 14.29px;">Apache</a> <a href="/tags/Architecture/" style="font-size: 10px;">Architecture</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CentOS/" style="font-size: 14.29px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.43px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.43px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 15.71px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 17.14px;">Mysql</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 18.57px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.43px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 11.43px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.43px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/dataStructure/" style="font-size: 11.43px;">dataStructure</a> <a href="/tags/go/" style="font-size: 14.29px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a> <a href="/tags/mysql/" style="font-size: 15.71px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/redis/" style="font-size: 15.71px;">redis</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://php.net/manual/zh/">PHP 手册</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://www.oschina.net/">开源中国</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://studygolang.com/">Go语言中文网</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fas fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 phachon<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

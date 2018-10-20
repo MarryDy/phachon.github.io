@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Redis系列（五）：Redis 缓存机制与淘汰策略 | phachon&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Redis 是基于内存的 Key Value 的 NoSql 数据库，由于其高性能，高可用，支持分布式集群的优点被广泛应用于缓存的业务场景。本篇文章就来详细了解下 Redis 缓存机制及内存淘汰策略。">
+<meta name="keywords" content="redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis系列（五）：Redis 缓存机制与淘汰策略">
+<meta property="og:url" content="http://phachon.github.io/redis/redis-5.html">
+<meta property="og:site_name" content="phachon&#39;s blog">
+<meta property="og:description" content="Redis 是基于内存的 Key Value 的 NoSql 数据库，由于其高性能，高可用，支持分布式集群的优点被广泛应用于缓存的业务场景。本篇文章就来详细了解下 Redis 缓存机制及内存淘汰策略。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://phachon.github.io/images/redis_logo.png">
+<meta property="og:updated_time" content="2018-10-20T10:39:14.331Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis系列（五）：Redis 缓存机制与淘汰策略">
+<meta name="twitter:description" content="Redis 是基于内存的 Key Value 的 NoSql 数据库，由于其高性能，高可用，支持分布式集群的优点被广泛应用于缓存的业务场景。本篇文章就来详细了解下 Redis 缓存机制及内存淘汰策略。">
+<meta name="twitter:image" content="http://phachon.github.io/images/redis_logo.png">
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-brands.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-solid.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?37fc388c17633765d5d2b950f4682d91";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">phachon&#39;s blog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/opensource">开源</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/logo.jpg" />
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fas fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                    <td><a class="main-nav-link" href="/opensource">开源</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile" class="profile-fixed">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/logo.jpg" />
+            <h2 id="name">phachon</h2>
+            <h3 id="title">I am a free phper/goper</h3>
+            <span id="location"><i class="fas fa-map-marker-alt" style="padding-right: 5px"></i>Beijing, China</span>
+            <a id="follow" target="_blank" href="https://github.com/phachon">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                63
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                44
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="http://github.com/phachon" target="_blank" title="github" class=tooltip>
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-redis/redis-5" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            
+	
+		<img src="/images/redis_logo.png" class="article-banner" />
+	
+
+
+
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Redis系列（五）：Redis 缓存机制与淘汰策略
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/redis/redis-5.html">
+            <time datetime="2018-09-26T09:41:47.000Z" itemprop="datePublished">2018-09-26 17:41:47</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Redis/">Redis</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/redis/">redis</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p>Redis 是基于内存的 Key Value 的 NoSql 数据库，由于其高性能，高可用，支持分布式集群的优点被广泛应用于缓存的业务场景。本篇文章就来详细了解下 Redis 缓存机制及内存淘汰策略。</p>
+<a id="more"></a>
+<h2 id="如何使用缓存？"><a href="#如何使用缓存？" class="headerlink" title="如何使用缓存？"></a>如何使用缓存？</h2><p>我们先来插入一个最简单的 key</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set name phachon</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+<p>OK, 插入成功。我们再来设置一下 key 的过期时间, redis 有 4 个命令来设置过期时间：</p>
+<ul>
+<li>EXPIRE <key> <ttl>：key 的生存时间设置为 ttl 秒</ttl></key></li>
+<li>PEXPIRE <key> <ttl>：key 的生存时间设置为 ttl 毫秒 </ttl></key></li>
+<li>EXPIREAT <key> <timestamp>：将 key 的过期时间设置为 timestamp 指定的秒数时间戳</timestamp></key></li>
+<li>PEXPIREAT <key> <timestamp>：将 key 的过期时间设置为 timestamp 指定的毫秒数时间戳</timestamp></key></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; EXPIRE name 1000</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; PEXPIRE name 30000</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; EXPIREAT name 1539331476</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; PEXPIREAT name 1539337307000</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
+<p>OK, 该 key 在 1000s 之后将过期。过期之前我们可以通过命令查看剩余的时间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ttl name</span><br><span class="line">(integer) 936</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+<p>可以看到，剩余 936s 该 key 才会过期，<code>ttl</code> 返回的是秒，如果想要看剩余多少毫秒，可以使用 <code>pttl</code> 命令</p>
+<p>有的时候，我们可以将 set 和 expire 命令合并一个命令使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; setex name 1000 phachon</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></table></figure>
+<p>注意：setex 命令只能对字符串类型的数据进行 <code>set</code> 和 <code>expire</code> 操作。</p>
+<p>看来使用缓存的方法是非常的简单。这里只演示了字符串类型的数据，其他的数据类型也是用的 <code>expire</code> 命令来设置过期时间。</p>
+<h2 id="如何判断过期？"><a href="#如何判断过期？" class="headerlink" title="如何判断过期？"></a>如何判断过期？</h2><p>RedisDb 结构的 expires 字典保存了所有 key 的过期时间。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">那么 Redis 是使用什么方法来判断时间是否过期并删除呢？</span><br></pre></td></tr></table></figure></p>
+<p>在了解 Redis 的删除过期键的策略之前我们来看看有哪些方式可以实现：</p>
+<ul>
+<li><p>定时删除<br>定时删除恐怕是我们最容易想到的方法了，原理就是在一个 key 被设置了过期时间之后，启动一个定时器，当定时器到了过期时间，则删除掉这个 key。<br>该种方法肯定能保证键的过期删除，并且不会有遗漏的键，但是要为每一个key实现一个定时器，会耗费较多的资源，无疑会对 CPU 和当前任务造成影响。</p>
+</li>
+<li><p>定期删除<br>定期删除策略的原理就是规定一定时间内定期的扫描一遍 expires 字典，将已过期的键删除掉。这种方法解决了定时删除的耗费资源的问题，但是该种方法不能保证所有的 key 过期删除。<br>例如：key1 生存时间是 3s, 而定期删除的时间间隔是 5s, 那这个 key 在 3 秒后还存在内存中，并没有被删除。</p>
+</li>
+<li><p>惰性删除<br>惰性删除的原理是，在获取每一个 key 的时候，判断一下该 key 是否已经过了过期时间，如果已经失效，则删除掉这个 key。惰性删除的缺点也很明显，如果一个 key 一直不使用，则即使到了过<br>期时间也会一直占有内存，大量的不使用的 key 会使得内存暴增。</p>
+</li>
+</ul>
+<p>综合三种过期键删除的策略我们发现似乎都不能很好的完成过期键的精确删除。Redis 采用了两种删除策略来协同工作： <code>定期删除</code> + <code>惰性删除</code></p>
+<ol>
+<li>使用定期删除策略：Redis 会每隔一段时间（默认是 100 ms）会从所有的 key 中<code>随机获取一些 key</code> ，判断时间是否过期，是，则删除。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">为什么不直接获取整个数据，而只随机找到一些 key 来判断，这样不是还有可能会造成某些 key 一直未被判断？</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果每隔 100ms 检查所有的 key, 如果数据库有 1000 万缓存key，那 redis 岂不是卡死。</p>
+<p>采用定期删除之后，还是会导致很多的已过期的缓存 key 没有被删除。</p>
+<ol start="2">
+<li>使用惰性删除策略：Redis 会在每次 <code>get</code> key 的时候先判断该 key 的过期时间，已经过期，则删除。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">采用了 定期删除 + 惰性删除 的策略，假如有一个 key , 即没有被定期删除随机获取到，也没有被使用，那么这个 key 岂不是永远还占用着内存？</span><br></pre></td></tr></table></figure>
+<p>没错，即使采用了 <code>定期删除</code>+<code>惰性删除</code> 的策略，还是不能保证所有的过期 key 都被删除。这种情况下，还是会导致内存占用率增高。</p>
+<p>有解决办法吗，有！那就是启用 <code>内存淘汰策略</code>！</p>
+<h2 id="内存淘汰策略"><a href="#内存淘汰策略" class="headerlink" title="内存淘汰策略"></a>内存淘汰策略</h2><p>内存淘汰策略：Redis 每执行一个命令，就会判断当前占用的内存是否大于设置的最大内存，大于，则开始内存淘汰机制。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 设置最大的内存，如果不设置该值的话，会导致 redis 一直运行最终以内存不足而终止</span><br><span class="line"># maxmemory &lt;bytes&gt;</span><br></pre></td></tr></table></figure>
+<p>Redis 内存淘汰的机制有以下几种方案可供选择：</p>
+<ul>
+<li>volatile-lru：从设置过期的数据集中淘汰最少使用的 key</li>
+<li>volatile-ttl：从设置过期的数据集中淘汰即将过期的 key</li>
+<li>volatile-random：从设置过期的数据集中随机选取 key 淘汰</li>
+<li>allkeys-lru：从所有的数据集中选取最少使用的数据</li>
+<li>allkyes-random：从所有的数据集中任意选取数据淘汰</li>
+<li>no-envicition：不进行淘汰</li>
+</ul>
+<p>注意这 6 主机制。volatile 和 allkeys 规定了是对已设置过期的数据集还是从全部的数据集淘汰数据。具<br>体的使用应根据不同的业务场景来配置不同的策略。一般来说，使用 volatile-lru 或者 allkeys-lru 是比<br>较合理的。删除最少使用的 key。如果使用 redis 作为缓存，就使用 volatile-lru 。如果除了缓存还使用存储，就使用 allkeys-lru。</p>
+<p>注意：ttl 和 random 的实现方法比较简单，lru 的实现方法是 redis 会随机挑选几个键值对，然后取出<br>lru 最大的键值对淘汰。所以并不是严格的就会淘汰整个数据集中最少使用的 key，而是随机数据集中的最少使用的 key。</p>
+<h2 id="AOF、RDB-和复制功能对过期键的处理"><a href="#AOF、RDB-和复制功能对过期键的处理" class="headerlink" title="AOF、RDB 和复制功能对过期键的处理"></a>AOF、RDB 和复制功能对过期键的处理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">那么 AOF、RDB持久化和复制功能对过期策略会有什么影响呢？</span><br></pre></td></tr></table></figure>
+<p>AOF、RDB持久化和主从复制的实现原理这里不再详细介绍，可参考之前写的文章。</p>
+<h3 id="RDB-文件的生成和载入"><a href="#RDB-文件的生成和载入" class="headerlink" title="RDB 文件的生成和载入"></a>RDB 文件的生成和载入</h3><p>当执行 <code>SAVE</code> 或者是 <code>BGSAVE</code> 命令的时候，程序会对数据库中所有的键进行检查，已过期的键不会被<br>保存到新创建的 RDB 文件中。 所以数据库保存过期键不会对 RDB 文件的创建产生影响。</p>
+<p>当服务启动的时候，如果开启了 <code>快照持久化</code> 则会载入 rdb 文件，如果是主从同步模式的集群模式，不同的节点的处理不一样：</p>
+<ul>
+<li>如果启动的服务节点是 Master 节点，则程序会对 rdb 文件中的键检查，只会将未过期的键载入到内存中。过期的键会忽略。</li>
+<li>如果启动的服务节点是 Slave 节点：则程序不会对 rdb 文件中键检查，不论是否过期都会载入到<br>数据库中。因为主从同步模式，当从节点重启之后，会再次和主节点同步，所以，最后数据会和主节点保持一致。过期的 key 依然会被删除。</li>
+</ul>
+<h3 id="AOF-文件的写入"><a href="#AOF-文件的写入" class="headerlink" title="AOF 文件的写入"></a>AOF 文件的写入</h3><p>当服务时开启了 AOF 的持久化机制时，如果某个 key 已过期，但是还是没有被 <code>定期删除</code> 和 <code>惰性删除</code> 清理掉，程序不会对 aof 文件做任何操作。<br>当过期的 key 被 <code>定期删除</code> 和 <code>惰性删除</code> 删除之后，程序会向 aof 文件写一条 DEL 命令来记录该键被删除。举例说明：<br>客户端使用 GET message 命令，试图访问过期的 key，那么程序执行以下步骤：</p>
+<ol>
+<li>从数据库中删除 message 键</li>
+<li>在 aof 文件追加一条 DEL 命令</li>
+<li>向客户端返回空</li>
+</ol>
+<h3 id="AOF-重写日志"><a href="#AOF-重写日志" class="headerlink" title="AOF 重写日志"></a>AOF 重写日志</h3><p>如果开启了 AOF 重写机制，再重写的子进程开始时，程序会对数据库中的 key 检查，并且只会将未过期的 key 写入到 aof 临时文件中。</p>
+<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><p>在处于主从复制的模式中，如果主服务器的过期键要删除：</p>
+<ul>
+<li>主服务器在删除了自己的数据之后，会发送一个 DEL 的命令给从服务器，告知从服务器这个键要删除</li>
+<li>从服务器只有在接受到这个 DEL 命令才会真正的将数据删除，即使从服务器在执行自己的 <code>定期删除</code> 和 <code>惰性删除</code>时，也不会删除该数据。</li>
+<li>从服务只会在接受到主服务器的 DEL 命令才会删除过期键</li>
+</ul>
+<p>主从复制规定数据的过期删除完全由主节点服务器来控制，正是通过这种机制，才能保证主从服务器的数据一致性。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过上面过期机制的了解，我们发现 Redis 并不能保证所有的 key 都能准时过期并删除。所以通过多种机制来协作保证。主要是采用：<br><code>定期删除</code> + <code>惰性删除</code> + <code>内存淘汰策略</code></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《Redis 设计与实现》<br><a href="https://www.cnblogs.com/moonandstar08/p/5686498.html" target="_blank" rel="noopener">Redis的缓存策略和主键失效机制</a></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/mysql/mysql-index-1.html" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    Mysql 索引系列（一）：索引的实现
+                
+            </div>
+        </a>
+    
+    
+        <a href="/redis/redis-4.html" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Redis系列（四）：Redis 持久化机制</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/nginx/Nginx-1.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/nginx_logo.png)" alt="Nginx 系列（一）：工作原理" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Nginx/">Nginx</a></p>
+                            <p class="item-title"><a href="/nginx/Nginx-1.html" class="title">Nginx 系列（一）：工作原理</a></p>
+                            <p class="item-date"><time datetime="2018-10-07T10:25:15.000Z" itemprop="datePublished">2018-10-07 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-3.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（三）：索引的策略" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-3.html" class="title">Mysql 索引系列（三）：索引的策略</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-5.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（五）：覆盖索引" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-5.html" class="title">Mysql 索引系列（五）：覆盖索引</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-4.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（四）：前缀索引" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-4.html" class="title">Mysql 索引系列（四）：前缀索引</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-2.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（二）：了解并使用 EXPLAIN 命令" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-2.html" class="title">Mysql 索引系列（二）：了解并使用 EXPLAIN 命令</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T02:25:15.000Z" itemprop="datePublished">2018-09-28 10:25:15</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Go/">Go</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Html/">Html</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Install/">Install</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Live/">Live</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenSource/">OpenSource</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Sphinx/">Sphinx</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Summary/">Summary</a><span class="category-list-count">11</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">9</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Apache/" style="font-size: 14.29px;">Apache</a> <a href="/tags/Architecture/" style="font-size: 10px;">Architecture</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CentOS/" style="font-size: 14.29px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.43px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.43px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 15.71px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 17.14px;">Mysql</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 18.57px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.43px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 11.43px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.43px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/dataStructure/" style="font-size: 11.43px;">dataStructure</a> <a href="/tags/go/" style="font-size: 14.29px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a> <a href="/tags/mysql/" style="font-size: 15.71px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/redis/" style="font-size: 15.71px;">redis</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://php.net/manual/zh/">PHP 手册</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://www.oschina.net/">开源中国</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://studygolang.com/">Go语言中文网</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fas fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 phachon<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

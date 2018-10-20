@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>PHP 内核知识点总结 | phachon&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="PHP 的基本架构 Zend引擎：Zend 整体用纯C实现，是 PHP 的内核部分，它将 PHP 代码翻译（词法、语法解析等一系列编译过程）为可执行 opcode 的处理并实现相应的处理方法、实现了基本的数据结构（如hashtable、oo）、内存分配及管理、提供了相应的 api 方法供外部调用，是一切的核心，所有的外围功能均围绕 Zend 实现。 Extensions：围绕着 Zend 引擎，">
+<meta name="keywords" content="php">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP 内核知识点总结">
+<meta property="og:url" content="http://phachon.github.io/php/php-kernel.html">
+<meta property="og:site_name" content="phachon&#39;s blog">
+<meta property="og:description" content="PHP 的基本架构 Zend引擎：Zend 整体用纯C实现，是 PHP 的内核部分，它将 PHP 代码翻译（词法、语法解析等一系列编译过程）为可执行 opcode 的处理并实现相应的处理方法、实现了基本的数据结构（如hashtable、oo）、内存分配及管理、提供了相应的 api 方法供外部调用，是一切的核心，所有的外围功能均围绕 Zend 实现。 Extensions：围绕着 Zend 引擎，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://phachon.github.io/images/php_life.png">
+<meta property="og:updated_time" content="2018-10-20T10:39:14.326Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP 内核知识点总结">
+<meta name="twitter:description" content="PHP 的基本架构 Zend引擎：Zend 整体用纯C实现，是 PHP 的内核部分，它将 PHP 代码翻译（词法、语法解析等一系列编译过程）为可执行 opcode 的处理并实现相应的处理方法、实现了基本的数据结构（如hashtable、oo）、内存分配及管理、提供了相应的 api 方法供外部调用，是一切的核心，所有的外围功能均围绕 Zend 实现。 Extensions：围绕着 Zend 引擎，">
+<meta name="twitter:image" content="http://phachon.github.io/images/php_life.png">
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-brands.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-solid.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?37fc388c17633765d5d2b950f4682d91";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">phachon&#39;s blog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/opensource">开源</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/logo.jpg" />
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fas fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                    <td><a class="main-nav-link" href="/opensource">开源</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile" class="profile-fixed">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/logo.jpg" />
+            <h2 id="name">phachon</h2>
+            <h3 id="title">I am a free phper/goper</h3>
+            <span id="location"><i class="fas fa-map-marker-alt" style="padding-right: 5px"></i>Beijing, China</span>
+            <a id="follow" target="_blank" href="https://github.com/phachon">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                63
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                44
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="http://github.com/phachon" target="_blank" title="github" class=tooltip>
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-php/php-kernel" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            PHP 内核知识点总结
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/php/php-kernel.html">
+            <time datetime="2017-07-22T16:00:00.000Z" itemprop="datePublished">2017-07-23 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/PHP/">PHP</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/php/">php</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<h2 id="PHP-的基本架构"><a href="#PHP-的基本架构" class="headerlink" title="PHP 的基本架构"></a>PHP 的基本架构</h2><ul>
+<li>Zend引擎：Zend 整体用纯C实现，是 PHP 的内核部分，它将 PHP 代码翻译（词法、语法解析等一系列编译过程）为可执行 opcode 的处理并实现相应的处理方法、实现了基本的数据结构（如hashtable、oo）、内存分配及管理、提供了相应的 api 方法供外部调用，是一切的核心，所有的外围功能均围绕 Zend 实现。</li>
+<li>Extensions：围绕着 Zend 引擎，extensions 通过组件式的方式提供各种基础服务，我们常见的各种内置函数（如 array 系列）、标准库等都是通过 extension 来实现，用户也可以根据需要实现自己的 extension 以达到功能扩展、性能优化等目的（如贴吧正在使用的 PHP 中间层、富文本解析就是 extension 的典型应用）。</li>
+<li>Sapi：Sapi 全称是 Server Application Programming Interface，也就是服务端应用编程接口，Sapi 通过一系列钩子函数，使得 PHP 可以和外围交互数据，这是 PHP 非常优雅和成功的一个设计，通过 sapi 成功的将PHP本身和上层应用解耦隔离，PHP 可以不再考虑如何针对不同应用进行兼容，而应用本身也可以针对自己的特点实现不同的处理方式。<ul>
+<li>apache2handler：这是以apache作为webserver，采用mod_PHP模式运行时候的处理方式，也是现在应用最广泛的一种。</li>
+<li>cgi：这是webserver和PHP直接的另一种交互方式，也就是大名鼎鼎的fastcgi协议，在最近今年fastcgi+PHP得到越来越多的应用，也是异步webserver所唯一支持的方式。</li>
+<li>cli：命令行调用的应用模式</li>
+</ul>
+</li>
+<li>上层应用：这就是我们平时编写的 PHP 程序，通过不同的 sapi 方式得到各种各样的应用模式，如通过 webserver 实现 web 应用、在命令行下以脚本方式运行等等。</li>
+</ul>
+<h2 id="PHP-执行过程"><a href="#PHP-执行过程" class="headerlink" title="PHP 执行过程"></a>PHP 执行过程</h2><ul>
+<li>第一步：启动 web 服务器，如果是 apache, apache 通过 mod_php5.so 调用 sapi 接口启动 php 解释器，如果是 nginx, nginx 调用 php-fpm(php fast-cgi进程管理器)启动 php-fpm，php 内核调用各个扩展的初始化方法，使之处于激活状态</li>
+<li>第二部：当发生请求时候, SAPI 将控制权交给 php 核心层, php 设置了本次请求的变量</li>
+<li>第三部：php 核心层调用 zend 引擎将 php 源代码编译成 opcode 码，并在 zend 虚拟机运行得出结果，将结果返回给 php 核心层<ul>
+<li>词法分析</li>
+<li>语法分析</li>
+<li>生成 opcode 码</li>
+<li>执行 opcode 码</li>
+</ul>
+</li>
+<li>第四部：php 核心层将返回结果通过 sapi 返回给 web 服务器，web 服务器将结果渲染在浏览器</li>
+</ul>
+<h2 id="PHP-SAPI-生命周期"><a href="#PHP-SAPI-生命周期" class="headerlink" title="PHP SAPI 生命周期"></a>PHP SAPI 生命周期</h2><p>PHP开始执行以后会经过两个主要的阶段：</p>
+<ul>
+<li>处理请求之前的开始阶段<ul>
+<li>第一个过程是模块初始化阶段（MINIT），在整个SAPI生命周期内 (例如 Apache 启动以后的整个生命周期内或者命令行程序整个执行过程中)， 该过程只进行一次。</li>
+<li>第二个过程是模块激活阶段（RINIT），该过程发生在请求阶段，例如通过 url 请求某个页面，则在每次请求之前都会进行模块激活（RINIT请求开始）。</li>
+</ul>
+</li>
+</ul>
+<p>请求处理完后就进入了结束阶段，一般脚本执行到末尾或者通过调用 exit() 或 die() 函数， PHP 都将进入结束阶段。和开始阶段对应，结束阶段也分为两个环节。</p>
+<ul>
+<li>请求之后的结束阶段<ul>
+<li>一个在请求结束后停用模块(RSHUTDOWN，对应RINIT)</li>
+<li>一个在 SAPI 生命周期结束（Web服务器退出或者命令行脚本执行完毕退出）时关闭模块(MSHUTDOWN，对应MINIT)</li>
+</ul>
+</li>
+</ul>
+<p>例如执行 test.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -f test.php</span><br></pre></td></tr></table></figure>
+<p><img src="/images/php_life.png" alt="单进程 SAPI 生命周期"></p>
+<p>调用每个模块的初始化前，初始化过程：</p>
+<ul>
+<li>初始化若干全局变量</li>
+<li>初始化若干常量</li>
+<li>初始化Zend引擎和核心组件</li>
+<li>解析 php.ini</li>
+<li>全局操作函数的初始化</li>
+<li>初始化静态构建的模块和共享模块(MINIT)</li>
+</ul>
+<h2 id="多进程SAPI生命周期"><a href="#多进程SAPI生命周期" class="headerlink" title="多进程SAPI生命周期"></a>多进程SAPI生命周期</h2><p>通常PHP是编译为apache的一个模块来处理PHP请求。Apache一般会采用多进程模式， Apache启动后会fork出多个子进程，每个进程的内存空间独立，每个子进程都会经过开始和结束环节， 不过每个进程<br>的开始阶段只在进程fork出来以来后进行，在整个进程的生命周期内可能会处理多个请求。 只有在Apache关闭或者进程被结束之后才会进行关闭阶段，在这两个阶段之间会随着每个请求重复请求开始-请求关闭的<br>环节。</p>
+<h2 id="多线程的SAPI生命周期"><a href="#多线程的SAPI生命周期" class="headerlink" title="多线程的SAPI生命周期"></a>多线程的SAPI生命周期</h2><p>多线程模式和多进程中的某个进程类似，不同的是在整个进程的生命周期内会并行的重复着 请求开始-<br>请求关闭的环节</p>
+<h2 id="Apache-加载-PHP-模块"><a href="#Apache-加载-PHP-模块" class="headerlink" title="Apache 加载 PHP 模块"></a>Apache 加载 PHP 模块</h2><p>当PHP需要在Apache服务器下运行时，一般来说，它可以mod_php5模块的形式集成， 此时mod_php5模块的作用是接收Apache传递过来的PHP⽂件请求，并处理这些请求， 然后将处理后的结果返<br>回给Apache。如果我们在Apache启动前在其配置⽂件中配置好了PHP模块（mod_php5）， PHP模块通过注册apache2的ap_hook_post_config挂钩，在Apache启动的时候启动此模块以接受PHP文件的请求。</p>
+<ul>
+<li><p>静态加载</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LoadModule php5_module modules/mod_php5.so</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>动态加载<br>如果需要在服务器运行时加载模块， 可以通过发送信号HUP或者AP_SIG_GRACEFUL给服务器，一旦接受到该信号，Apache将重新装载模块， ⽽不需要重新启动服务<br>器。</p>
+</li>
+</ul>
+<h2 id="Apache-运行过程"><a href="#Apache-运行过程" class="headerlink" title="Apache 运行过程"></a>Apache 运行过程</h2><p>Apache的运行分为启动阶段和运行阶段。</p>
+<h3 id="启动阶段"><a href="#启动阶段" class="headerlink" title="启动阶段"></a>启动阶段</h3><p>Apache为了获得系统资源最⼤的使用权限，将以特权用户root（*nix系统）或超级管理员Administrator(Windows系统)完成启动， 并且整个过程处于一<br>个单进程单线程的环境中。 这个阶段包括配置⽂件解析(如http.conf⽂件)、模块加载(如mod_php，mod_perl)和系统资源初始化（例如⽇志⽂件、共享内存段、数据库连接等）等⼯作。<br>Apache的启动阶段执行了⼤量的初始化操作，并且将许多⽐较慢或者花费⽐较⾼的操作都集中在这个阶段完成，以减少了后⾯处理请求服务的压⼒。</p>
+<h3 id="运行阶段"><a href="#运行阶段" class="headerlink" title="运行阶段"></a>运行阶段</h3><p>Apache主要⼯作是处理用户的服务请求。 在这个阶段，Apache放弃特权用户级别，使用普通权限，这主要是基于安全性的考虑，防⽌由于代码的缺陷引起的安全漏洞。 Apache对HTTP的请求<br>可以分为连接、处理和断开连接三个⼤的阶段。</p>
+<h2 id="PHP-的几种运行方式"><a href="#PHP-的几种运行方式" class="headerlink" title="PHP 的几种运行方式"></a>PHP 的几种运行方式</h2><p><a href="https://phachon.com/2016/07/29/php-run-type/" target="_blank" rel="noopener">https://phachon.com/2016/07/29/php-run-type/</a></p>
+<h2 id="PHP-程序的执行过程"><a href="#PHP-程序的执行过程" class="headerlink" title="PHP 程序的执行过程"></a>PHP 程序的执行过程</h2><ol>
+<li>如上例中， 传递给php程序需要执行的⽂件， php程序完成基本的准备⼯作后启动PHP及Zend引<br>擎，加载注册的扩展模块。</li>
+<li>初始化完成后读取脚本⽂件，Zend引擎对脚本⽂件进行词法分析，语法分析。然后编译成opcode执<br>行。 如过安装了apc之类的opcode缓存， 编译环节可能会被跳过⽽直接从缓存中读取opcode执<br>行。</li>
+</ol>
+<h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><p>PHP的词法分析器是通过 lex 生成的， 词法规则⽂件在$PHP_SRC/Zend/zend_language_scanner.l， 这一阶段lex会会将源代码按照词法规则切分一个一个<br>的标记(token)。PHP中提供了一个函数 token_get_all()， 该函数接收一个字符串参数， 返回一个按照词法<br>规则切分好的数组。</p>
+<h2 id="PHP-变量类型及存储结构"><a href="#PHP-变量类型及存储结构" class="headerlink" title="PHP 变量类型及存储结构"></a>PHP 变量类型及存储结构</h2><p>变量的值存储到以下所⽰ zval 结构体中。变量的 key 和指向 zval 的指针存储在符号表里。 zval 结构体定义在Zend/zend.h⽂件，其结构如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _zval_struct zval;</span><br><span class="line"></span><br><span class="line">struct _zval_struct &#123;</span><br><span class="line">    /* Variable information */</span><br><span class="line">    zvalue_value value; /* value */</span><br><span class="line">    zend_uint refcount__gc;</span><br><span class="line">    zend_uchar type; /* active type */</span><br><span class="line">    zend_uchar is_ref__gc;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>变量的值存储在 zvalue_value 联合体中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">typedef union _zvalue_value &#123;</span><br><span class="line">    long lval; /* long value */</span><br><span class="line">    double dval; /* double value */</span><br><span class="line">    struct &#123;</span><br><span class="line">        char *val;</span><br><span class="line">        int len;</span><br><span class="line">    &#125; str;</span><br><span class="line">    HashTable *ht; /* hash table value */</span><br><span class="line">    zend_object_value obj;</span><br><span class="line">&#125; zvalue_value;</span><br></pre></td></tr></table></figure></p>
+<p>使用联合体⽽不是用结构体是出于空间利用率的考虑，因为一个变量同时只能属于一种类型。 如果使用结构体的话将会不必要的浪费空间，⽽PHP中的所有逻辑都围绕变量来进行的，这样的话， 内存浪费将是⼗分⼤的。这种做法成本⼩但收益⾮常⼤。</p>
+<h2 id="PHP-哈希表实现"><a href="#PHP-哈希表实现" class="headerlink" title="PHP 哈希表实现"></a>PHP 哈希表实现</h2><p>PHP内核中的哈希表是⼗分重要的数据结构，PHP的⼤部分的语⾔特性都是基于哈希表实现的，例如：变量的作用域、函数表、类的属性、⽅法等，Zend引擎内部的很多数据都是保存在哈希表中的。</p>
+<p>PHP中的哈希表是使用拉链法来解决冲突的，具体点讲就是使用链表来存储哈希到同一个槽位的数据， Zend为了保存数据之间的关系使用了双向列表来链接元素。</p>
+<p>PHP 哈希表实现中的数据结构，PHP使用两个数据结构来实现哈希表，HashTable结构体用于保存整个哈希表需要的基本信息，⽽ Bucket 结构体用于保存具体的数据内容</p>
+<ul>
+<li>HashTable 结构</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">typedef struct _hashtable &#123;</span><br><span class="line">     uint nTableSize; //表长度，并非元素个数</span><br><span class="line">     uint nTableMask;//表的掩码，始终等于nTableSize-1</span><br><span class="line">     uint nNumOfElements;//存储的元素个数</span><br><span class="line">     ulong nNextFreeElement;//指向下一个空的元素位置</span><br><span class="line">     Bucket *pInternalPointer;//foreach循环时，用来记录当前遍历到的元素位置</span><br><span class="line">     Bucket *pListHead;</span><br><span class="line">     Bucket *pListTail;</span><br><span class="line">     Bucket **arBuckets;//存储的元素数组</span><br><span class="line">     dtor_func_t pDestructor;//析构函数</span><br><span class="line">     zend_bool persistent;//是否持久保存。从这可以发现，PHP数组是可以实现持久保存在内存中的，而无需每次请求都重新加载。</span><br><span class="line">     unsigned char nApplyCount;</span><br><span class="line">     zend_bool bApplyProtection;</span><br><span class="line">&#125; HashTable;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Bucket 结构</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">typedef struct bucket &#123;</span><br><span class="line">     ulong h; //数组索引</span><br><span class="line">     uint nKeyLength; //字符串索引的长度</span><br><span class="line">     void *pData; //实际数据的存储地址</span><br><span class="line">     void *pDataPtr; //引入的数据存储地址</span><br><span class="line">     struct bucket *pListNext;</span><br><span class="line">     struct bucket *pListLast;</span><br><span class="line">     struct bucket *pNext; //双向链表的下一个元素的地址</span><br><span class="line">     struct bucket *pLast;//双向链表的下一个元素地址</span><br><span class="line">     char arKey[1]; /* Must be last element */</span><br><span class="line">&#125; Bucket;</span><br></pre></td></tr></table></figure>
+<p>PHP中初始化一个空数组或不足8个元素的数组，都会被创建8个长度的 HashTable。同样创建100个元素的数组，也会被分配128长度的HashTable。依次类推。</p>
+<h3 id="PHP-哈希算法"><a href="#PHP-哈希算法" class="headerlink" title="PHP 哈希算法"></a>PHP 哈希算法</h3><p>PHP内核哈希表的散列函数很简单，直接使用 （HashTable-&gt;nTableSize &amp; HashTable-&gt;nTableMask）的结果作为散列函数的实现。这样做的目的可能也是为了降低Hash算法的复杂度和提高性能。</p>
+<h3 id="PHP-对字符串索引处理方式"><a href="#PHP-对字符串索引处理方式" class="headerlink" title="PHP 对字符串索引处理方式"></a>PHP 对字符串索引处理方式</h3><p>与数字索引相比，只是多了一步将字符串转换为整型。用到的算法是time33，就是对字符串的每个字符转换为ASCII码乘上33并且相加得到的结果。</p>
+<h2 id="PHP7-中-HashTable-优化"><a href="#PHP7-中-HashTable-优化" class="headerlink" title="PHP7 中 HashTable 优化"></a>PHP7 中 HashTable 优化</h2><p><a href="https://blog.csdn.net/xiaolei1982/article/details/52292866#t0" target="_blank" rel="noopener">blog</a></p>
+<h2 id="PHP7-变量存储的优化"><a href="#PHP7-变量存储的优化" class="headerlink" title="PHP7 变量存储的优化"></a>PHP7 变量存储的优化</h2><h2 id="内存管理机制"><a href="#内存管理机制" class="headerlink" title="内存管理机制"></a>内存管理机制</h2><p>PHP的内存管理可以被看作是分层（hierarchical）的。 它分为三层：存储层（storage）、堆层（heap）和接⼝层（emalloc/efree）。 存储层通过 malloc()、mmap() 等函数向系统真正的申请内存，并通过 free() 函数释放所申请的内存。 存储层通常申请的内存块都⽐较⼤，这⾥申请的内存⼤并不是指<br>storage层结构所需要的内存⼤， 只是堆层通过调用存储层的分配⽅法时，其以⼤块⼤块的⽅式申请的内存，存储层的作用是将内存分配的⽅式对堆层透明化。</p>
+<p>初始化内存管理顺序：</p>
+<ul>
+<li>初始化 storage 层的分配方案</li>
+<li>初始化 heap 堆层</li>
+</ul>
+<p>PHP中的内存管理主要⼯作就是维护三个列表：⼩块内存列表（free_buckets）、 ⼤块内存列表（large_free_buckets）和剩余内存列表（rest_buckets）<br>从内存分配的过程中可以看出，内存块查找判断顺序依次是⼩块内存列表，⼤块内存列表，剩余内存列表。<br>ZendMM向系统进行的内存申请，并不是有需要时向系统即时申请， ⽽是由ZendMM的最底层（heap层）先向系统申请一⼤块的内存，通过对上⾯三种列表的填充， 建立一个类似于内存池的管理机制。 在程序运行需要使用<br>内存的时候，ZendMM会在内存池中分配相应的内存供使用。 这样做的好处是避免了PHP向系统频繁的内存申请操作</p>
+<h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><p>引用计数、引用计数的问题。如何解决。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/summary/knowledage.html" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    后端知识点总结
+                
+            </div>
+        </a>
+    
+    
+        <a href="/html/firefox-input.html" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">火狐浏览器下刷新不清除表单问题</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/nginx/Nginx-1.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/nginx_logo.png)" alt="Nginx 系列（一）：工作原理" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Nginx/">Nginx</a></p>
+                            <p class="item-title"><a href="/nginx/Nginx-1.html" class="title">Nginx 系列（一）：工作原理</a></p>
+                            <p class="item-date"><time datetime="2018-10-07T10:25:15.000Z" itemprop="datePublished">2018-10-07 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-3.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（三）：索引的策略" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-3.html" class="title">Mysql 索引系列（三）：索引的策略</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-5.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（五）：覆盖索引" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-5.html" class="title">Mysql 索引系列（五）：覆盖索引</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-4.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（四）：前缀索引" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-4.html" class="title">Mysql 索引系列（四）：前缀索引</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-2.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（二）：了解并使用 EXPLAIN 命令" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-2.html" class="title">Mysql 索引系列（二）：了解并使用 EXPLAIN 命令</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T02:25:15.000Z" itemprop="datePublished">2018-09-28 10:25:15</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Go/">Go</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Html/">Html</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Install/">Install</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Live/">Live</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenSource/">OpenSource</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Sphinx/">Sphinx</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Summary/">Summary</a><span class="category-list-count">11</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">9</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Apache/" style="font-size: 14.29px;">Apache</a> <a href="/tags/Architecture/" style="font-size: 10px;">Architecture</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CentOS/" style="font-size: 14.29px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.43px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.43px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 15.71px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 17.14px;">Mysql</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 18.57px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.43px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 11.43px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.43px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/dataStructure/" style="font-size: 11.43px;">dataStructure</a> <a href="/tags/go/" style="font-size: 14.29px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a> <a href="/tags/mysql/" style="font-size: 15.71px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/redis/" style="font-size: 15.71px;">redis</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://php.net/manual/zh/">PHP 手册</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://www.oschina.net/">开源中国</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://studygolang.com/">Go语言中文网</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fas fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 phachon<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

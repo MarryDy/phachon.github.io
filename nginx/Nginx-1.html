@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Nginx 系列（一）：工作原理 | phachon&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Nginx 作为高性能的 HTTP 和 反向代理服务器，被广泛使用在互联网的业务中。经典的比如 Nginx + PHP-FPM 的组合。本篇文章来简单了解一下 Nginx 的基本原理。">
+<meta name="keywords" content="nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx 系列（一）：工作原理">
+<meta property="og:url" content="http://phachon.github.io/nginx/Nginx-1.html">
+<meta property="og:site_name" content="phachon&#39;s blog">
+<meta property="og:description" content="Nginx 作为高性能的 HTTP 和 反向代理服务器，被广泛使用在互联网的业务中。经典的比如 Nginx + PHP-FPM 的组合。本篇文章来简单了解一下 Nginx 的基本原理。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://phachon.github.io/images/nginx_logo.png">
+<meta property="og:updated_time" content="2018-10-20T10:39:14.324Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nginx 系列（一）：工作原理">
+<meta name="twitter:description" content="Nginx 作为高性能的 HTTP 和 反向代理服务器，被广泛使用在互联网的业务中。经典的比如 Nginx + PHP-FPM 的组合。本篇文章来简单了解一下 Nginx 的基本原理。">
+<meta name="twitter:image" content="http://phachon.github.io/images/nginx_logo.png">
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-brands.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-solid.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?37fc388c17633765d5d2b950f4682d91";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">phachon&#39;s blog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+                    <a class="main-nav-link" href="/opensource">开源</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/logo.jpg" />
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fas fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                    <td><a class="main-nav-link" href="/opensource">开源</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile" class="profile-fixed">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/logo.jpg" />
+            <h2 id="name">phachon</h2>
+            <h3 id="title">I am a free phper/goper</h3>
+            <span id="location"><i class="fas fa-map-marker-alt" style="padding-right: 5px"></i>Beijing, China</span>
+            <a id="follow" target="_blank" href="https://github.com/phachon">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                63
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                44
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="http://github.com/phachon" target="_blank" title="github" class=tooltip>
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-nginx/Nginx-1" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            
+	
+		<img src="/images/nginx_logo.png" class="article-banner" />
+	
+
+
+
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Nginx 系列（一）：工作原理
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/nginx/Nginx-1.html">
+            <time datetime="2018-10-07T10:25:15.000Z" itemprop="datePublished">2018-10-07 18:25:15</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Nginx/">Nginx</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/nginx/">nginx</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>Nginx 作为高性能的 HTTP 和 反向代理服务器，被广泛使用在互联网的业务中。经典的比如 Nginx + PHP-FPM 的组合。本篇文章来简单了解一下 Nginx 的基本原理。</p>
+<a id="more"></a>
+<h2 id="Nginx-体系架构"><a href="#Nginx-体系架构" class="headerlink" title="Nginx 体系架构"></a>Nginx 体系架构</h2><p>总体来说，Nginx 是由 <code>模块</code> 和 <code>内核</code> 组成，内核的设计非常的简洁。完成的工作也非常的简单。其实内核也是由模块组成的。内核的主要任务是：</p>
+<p><code>通过查找配置，将客户端的请求映射到对应的 location 块</code>，在每个 <code>location</code> 块中所配置的一些指令就会去启动不同的模块去完成对应的工作。例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">location ~ \.php$ &#123;</span><br><span class="line">    root           html;</span><br><span class="line">    fastcgi_pass   127.0.0.1:9000;</span><br><span class="line">    fastcgi_index  index.php;</span><br><span class="line">    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span><br><span class="line">    include        fastcgi_params;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>内核查找将 .php 结尾的请求全部映射到该 <code>location</code> 块中，在该块中又有相关的指令来启动其他的第三方模块来工作。</p>
+<p>Nginx 从结构上分为三部分：</p>
+<ul>
+<li>核心模块：HTTP 模块，EVENT 模块，MAIL 模块</li>
+<li>基础模块：HTTP Access 模块，HTTP FastCGI 模块，HTTP Proxy 模块和 HTTP Rewrite 模块。</li>
+<li>第三方模块：HTTP Upstream Request Hash 模块，Notice 模块，Rtmp 模块等等。</li>
+</ul>
+<p>当然，如果用能力的话你也可以开发符合自己需求的模块。总体来说，采用了多模块组合的体系架构，使得 Nginx 才能如此的强大。</p>
+<p>总体上 Nginx 对一个请求处理的过程如下：</p>
+<ul>
+<li>Nginx 接受到请求，通过查找配置信息，将请求映射到一个 location 块</li>
+<li>location 块在接收到请求后开始执行指令。会涉及到多个 handle 模块和多个 filter 模块。<ul>
+<li>handle 模块处理请求，并生产响应的内容</li>
+<li>filter 模块对生成的响应内容处理并返回</li>
+</ul>
+</li>
+</ul>
+<h2 id="Nginx-进程模型"><a href="#Nginx-进程模型" class="headerlink" title="Nginx 进程模型"></a>Nginx 进程模型</h2><p>Nginx 的进程模型总体来说是属于<code>多进程模型</code>。在多进程模型下，会有一个唯一的 <code>Master</code> 进程，至少有一个 <code>Worker</code> 进程。在 Worker 进程中的线程数量的不同又可分为两类：</p>
+<ul>
+<li>多线程：多线程即 Worker 进程中有多个线程在工作</li>
+<li>单线程：单线程即 Worker 进程中有单个线程工作</li>
+</ul>
+<p>Nginx  默认是多进程单线程的模型。启用线程池支持，编译时 configure 时需要显式加入 –with-threads 选项。</p>
+<h3 id="Master-进程"><a href="#Master-进程" class="headerlink" title="Master 进程"></a>Master 进程</h3><p>Master 的进程的工作比较简单，主要工作有一下几点：</p>
+<ul>
+<li>接受来自外界的信号，向各个 worker 进程发送信号</li>
+<li>监控 worker 进程的运行状态，当 worker 进程异常退出，会启用新的 worker</li>
+</ul>
+<h4 id="reload-平滑重启实现的原理？"><a href="#reload-平滑重启实现的原理？" class="headerlink" title="reload 平滑重启实现的原理？"></a>reload 平滑重启实现的原理？</h4><p>首先 reload 或者 -HUP pid 会向 master 进程发送一个重载信号，master 接受到信号后，重新加载配置文件，然后重新启动新的 worker 进程，并向老的 worker 进程发送信号，告诉它们可以退出了。<br>老的  worker 进程在接受到信号好，会停止接受新的请求，并处理完当前的请求，然后退出。</p>
+<h3 id="Worker-进程"><a href="#Worker-进程" class="headerlink" title="Worker 进程"></a>Worker 进程</h3><p>Worker 进程才是真正处理我们的网络请求的地方，一个请求，只可能被一个 worker 进程来处理。每个 worker 进程的竞争机会都是相等的。这就出现了问题，当一个请求过来之后，到底是哪个 worker 来执行？</p>
+<p>每一个 worker 进程采用的是 epoll 异步非阻塞的方式来处理请求，epoll 支持监听多个 socket 网络套接字，这些套接字被注册到 listen_fd 变量里。</p>
+<h4 id="惊群问题"><a href="#惊群问题" class="headerlink" title="惊群问题"></a>惊群问题</h4><p>当 listen_fd 有新的 accept() 请求过来的时候，操作系统会唤醒所有的 epoll_wait 该 listen_fd 变量的进程（Nginx 的每一个 worker 进程)。因为操作系统并不知道谁到底可以执行 accept，所以全部都唤醒。<br>但是，最终只能给一个 worker 来执行 accept，其他的 worker 都执行失败。所以这样的子进程似乎都是被 “吓醒” 的，所以又称为 “惊群问题”。<br>惊群问题的解决：</p>
+<ol>
+<li><p>我们最容易想到的，就是全局锁机制。原理类似于分布式的全局锁。具体的实现办法是：nginx 的每一个 worker 进程在被 “惊醒” 之后，都回首先去抢占一个全局的互斥锁。抢到锁的进程，那么恭喜，该进程就获得执行本次请求的机会，<br>开始读写数据。没有抢占到锁的则继续等待下一次机会。这里还需要注意到一点的是，当某个进程处理的工作量达到总设置的一定的比例时（7/8）,则就会停止申请锁。这样可以来均衡各个进程的任务量<br>该方法也是 Nginx 内核解决惊群问题的实现方法。</p>
+</li>
+<li><p>Nginx 1.9.1 采用新的机制，socket 分片机制。具体实现的原理是依赖操作系统的 Socket RequestPort 功能。选项允许多个socket监听同一个IP地址和端口的组合。内核负载均衡这些进来的sockets连接,将这些socket有效的分片。<br>当SO_REUSEPORT选项没开启时,连接进来时监听socket默认会通知某个进程，每个进程都有自己独立的监听socket.内核决定哪个是有效的socket(进程)得到这个连接。</p>
+</li>
+</ol>
+<p>在 worker 在 accept 这个连接之后，就开始读取数据，解析请求，处理请求，产生数据后，返回给客户端，最后才断开连接。</p>
+<p>总体来说，Nginx 的多任务多请求处理机制，其实是抢占式的机制。多个 worker 去抢占。而不是 master 分配。</p>
+<p>Worker 进程的数量最好与 CPU 核数一致，并且可以帮到进程到指定的 CPU 内核</p>
+<h2 id="Nginx-网络模型"><a href="#Nginx-网络模型" class="headerlink" title="Nginx 网络模型"></a>Nginx 网络模型</h2><p>Nginx 之所以能够高并发，主要是采用了<code>异步非阻塞</code>的网络并发模型方式。</p>
+<p>异步：针对内核的 I/O 事件，当向内核发出 I/O 请求的命令，不用等待 I/O 事件真正发生就返回，可以做另外的事情。</p>
+<p>非阻塞IO：针对网络 I/O 操作，例如 socket ，不同等待 socket 是否可以操作，而是将 socket 注册到监听的变量里，通过不断的循环来监听是否有准备好的读写socket再来操作。</p>
+<p>Nginx 异步 I/O 的实现是调用的操作系统的异步 I/O，AIO。<br>Nginx 非阻塞 I/O 的实现是通过 select, epoll 机制实现。</p>
+<p>所以，Nginx 的异步非阻塞是 AIO + epoll 的机制共同来实现的。</p>
+<p>epoll/select/poll 的网络模型的比较这里不再详细介绍。参考阅读 <a href="https://phachon.github.io/2018/09/09/concurrrent_server/">并发服务器的实现方式</a></p>
+<h2 id="Nginx-PHP-FPM"><a href="#Nginx-PHP-FPM" class="headerlink" title="Nginx + PHP-FPM"></a>Nginx + PHP-FPM</h2><p>PHP-FPM 其实就是php 实现的 fastcgi 进程管理器。PHP-FPM 的优点就是把动态语言与 HTTP Server 分离开来，Nginx 专门来处理一些静态请求。PHP-FPM 来处理动态的请求。</p>
+<p>整体的工作流程如下：</p>
+<ul>
+<li>fastcgi 进程管理器 php-fpm 自身初始化，启动主进程 php-fpm 并且启动多个 cgi 子进程。<ul>
+<li>主进程的 php-fpm 主要是用来管理 fastcgi 的子进程，监听端口 9000。</li>
+<li>fastcgi 子进程等待来自 web server 的连接。</li>
+</ul>
+</li>
+<li>当客户端的请求到达 nginx 时，nginx 通过 location 指令，将所有的 .php 文件都交给 :9000 来处理，即 Nginx 通过 location 指令，将所有的 php 文件交给 9000 的 php-fpm 处理</li>
+<li>php-fpm 进程管理器选择并连接到一个进程 cgi 解释器。Nginx 将 cgi 环境变量和标准输入发送到 fastcgi 子进程。</li>
+<li>fastcgi 子进程处理完请求后将标准输出和错误信息从同一连接返回给 nginx。当 fastcgi 子进程关闭时，请求便完成。</li>
+<li>fastcgi 子进程等待并处理来自 fastcgi 进程管理器的下一个连接。</li>
+</ul>
+<p>php-fpm 进程数的配置：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 对于专用服务器，pm可以设置为static。</span><br><span class="line">pm = dynamic </span><br><span class="line"><span class="meta">#</span> 如何控制子进程，选项有static和dynamic。如果选择static，则由pm.max_children指定固定的子进程数。如果选择dynamic，则由下开参数决定：</span><br><span class="line">pm.max_children #，子进程最大数</span><br><span class="line">pm.start_servers #，启动时的进程数</span><br><span class="line">pm.min_spare_servers #，保证空闲进程数最小值，如果空闲进程小于此值，则创建新的子进程</span><br><span class="line">pm.max_spare_servers #，保证空闲进程数最大值，如果空闲进程大于此值，此进行清理</span><br><span class="line"><span class="meta">#</span> 设置每个子进程重生之前服务的请求数. 对于可能存在内存泄漏的第三方模块来说是非常有用的. 如果设置为 ’0′ 则一直接受请求.</span><br><span class="line">pm.max_requests = 1000</span><br></pre></td></tr></table></figure></p>
+<p>一般情况下，一个 php-fpm 子进程开启时占用 3-4M,运行一段时间后，会占用 20-30M，所以 php-fpm 进程数需要合理控制，一般对于 8G 内存，可以设置为 100个，最多占用 3G 内存。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本篇文章介绍了 Nginx 的工作体系结构和进程模型，以及 Nginx + PHP-FPM 的工作原理。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/linguoguo/p/5511293.html" target="_blank" rel="noopener">Nginx 工作原理和优化</a></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/mysql/mysql-index-3.html" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Mysql 索引系列（三）：索引的策略</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/nginx/Nginx-1.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/nginx_logo.png)" alt="Nginx 系列（一）：工作原理" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Nginx/">Nginx</a></p>
+                            <p class="item-title"><a href="/nginx/Nginx-1.html" class="title">Nginx 系列（一）：工作原理</a></p>
+                            <p class="item-date"><time datetime="2018-10-07T10:25:15.000Z" itemprop="datePublished">2018-10-07 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-3.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（三）：索引的策略" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-3.html" class="title">Mysql 索引系列（三）：索引的策略</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-5.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（五）：覆盖索引" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-5.html" class="title">Mysql 索引系列（五）：覆盖索引</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-4.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（四）：前缀索引" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-4.html" class="title">Mysql 索引系列（四）：前缀索引</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-2.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（二）：了解并使用 EXPLAIN 命令" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-2.html" class="title">Mysql 索引系列（二）：了解并使用 EXPLAIN 命令</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T02:25:15.000Z" itemprop="datePublished">2018-09-28 10:25:15</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Go/">Go</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Html/">Html</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Install/">Install</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Live/">Live</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenSource/">OpenSource</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Sphinx/">Sphinx</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Summary/">Summary</a><span class="category-list-count">11</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">9</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Apache/" style="font-size: 14.29px;">Apache</a> <a href="/tags/Architecture/" style="font-size: 10px;">Architecture</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CentOS/" style="font-size: 14.29px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.43px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.43px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 15.71px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 17.14px;">Mysql</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 18.57px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.43px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 11.43px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.43px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/dataStructure/" style="font-size: 11.43px;">dataStructure</a> <a href="/tags/go/" style="font-size: 14.29px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a> <a href="/tags/mysql/" style="font-size: 15.71px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/redis/" style="font-size: 15.71px;">redis</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://php.net/manual/zh/">PHP 手册</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://www.oschina.net/">开源中国</a>
+                    </li>
+                
+                    <li>
+                        <a href="https://studygolang.com/">Go语言中文网</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fas fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 phachon<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
