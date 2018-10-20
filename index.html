@@ -312,12 +312,12 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-mysql/mysql-index-4" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-mysql/mysql-index-5" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
             
 	
-		<a href="/mysql/mysql-index-4.html" itemprop="url">
+		<a href="/mysql/mysql-index-5.html" itemprop="url">
             <img src="/images/mysql_logo.png" class="article-banner" />
         </a>
 	
@@ -330,7 +330,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/mysql/mysql-index-4.html">Mysql 索引系列（四）：前缀索引</a>
+            <a class="article-title" href="/mysql/mysql-index-5.html">Mysql 索引系列（五）：覆盖索引</a>
         </h1>
     
 
@@ -339,8 +339,8 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/mysql/mysql-index-4.html">
-            <time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time>
+        <a href="/mysql/mysql-index-5.html">
+            <time datetime="2018-09-28T12:25:15.000Z" itemprop="datePublished">2018-09-28 20:25:15</time>
         </a>
     </div>
 
@@ -420,12 +420,12 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-mysql/mysql-index-5" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-mysql/mysql-index-4" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
             
 	
-		<a href="/mysql/mysql-index-5.html" itemprop="url">
+		<a href="/mysql/mysql-index-4.html" itemprop="url">
             <img src="/images/mysql_logo.png" class="article-banner" />
         </a>
 	
@@ -438,7 +438,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/mysql/mysql-index-5.html">Mysql 索引系列（五）：覆盖索引</a>
+            <a class="article-title" href="/mysql/mysql-index-4.html">Mysql 索引系列（四）：前缀索引</a>
         </h1>
     
 
@@ -447,8 +447,8 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         
     <div class="article-date">
         <i class="fas fa-calendar-alt"></i>
-        <a href="/mysql/mysql-index-5.html">
-            <time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time>
+        <a href="/mysql/mysql-index-4.html">
+            <time datetime="2018-09-28T11:25:15.000Z" itemprop="datePublished">2018-09-28 19:25:15</time>
         </a>
     </div>
 
@@ -581,7 +581,8 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <div class="article-entry" itemprop="articleBody">
         
             <p><hr>
-<p>Mysql 的索引使用的是 B Tree 索引，B Tree 索引适用于全健值、键值范围、键前缀查询。索引在创建索引的时候，我们必须了解存储引擎的索引的策略。这样才能是得查询尽量达到最优。</p></p>
+<p>Mysql 的索引使用的是 B Tree 索引，B Tree 索引适用于全健值、键值范围、键前缀查询。所以在创建索引的时候，我们必须了解存储引擎的索引的策略。这样才能使得查询效率尽量达到最优。</p>
+<p>本示例中使用的 Mysql 版本是： <code>5.7.23</code></p></p>
             <p class="article-more-link">
                 <a href="/mysql/mysql-index-3.html#more">查看更多</a>
             </p>
@@ -692,7 +693,8 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <div class="article-entry" itemprop="articleBody">
         
             <p><hr>
-<p>上一篇文章讲解了 Mysql 在不同的存储引擎下索引的实现，在开始讲解索引的策略以及如何优化索引之<br>前，我觉得有必要先来了解以下如何去使用 <code>EXPLAIN</code> 命令来查看sql 语句的查询方式，因为在后续的<br>文章中，我们会经常使用该命令来调试和分析。除此之外，我们在工作中，也应该习惯去使用 <code>EXPLAIN</code><br>命令来分析和优化索引。</p></p>
+<p>上一篇文章讲解了 Mysql 在不同的存储引擎下索引的实现，在开始讲解索引的策略以及如何优化索引之<br>前，我觉得有必要先来了解以下如何去使用 <code>EXPLAIN</code> 命令来查看sql 语句的查询方式，因为在后续的<br>文章中，我们会经常使用该命令来调试和分析。除此之外，我们在工作中，也应该习惯去使用 <code>EXPLAIN</code><br>命令来分析和优化索引。</p>
+<p>本示例中使用的 Mysql 版本是： <code>5.7.23</code></p></p>
             <p class="article-more-link">
                 <a href="/mysql/mysql-index-2.html#more">查看更多</a>
             </p>
@@ -1341,25 +1343,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/mysql/mysql-index-4.html" class="thumbnail">
-    
-    
-        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（四）：前缀索引" class="thumbnail-image"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/mysql/mysql-index-4.html" class="title">Mysql 索引系列（四）：前缀索引</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
                             <a href="/mysql/mysql-index-5.html" class="thumbnail">
     
     
@@ -1372,7 +1355,26 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
                             <p class="item-title"><a href="/mysql/mysql-index-5.html" class="title">Mysql 索引系列（五）：覆盖索引</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                            <p class="item-date"><time datetime="2018-09-28T12:25:15.000Z" itemprop="datePublished">2018-09-28 20:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-4.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（四）：前缀索引" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-4.html" class="title">Mysql 索引系列（四）：前缀索引</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T11:25:15.000Z" itemprop="datePublished">2018-09-28 19:25:15</time></p>
                         </div>
                     </li>
                 

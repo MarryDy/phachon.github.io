@@ -5,19 +5,19 @@
     
     <title>Mysql 索引系列（二）：了解并使用 EXPLAIN 命令 | phachon&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="上一篇文章讲解了 Mysql 在不同的存储引擎下索引的实现，在开始讲解索引的策略以及如何优化索引之前，我觉得有必要先来了解以下如何去使用 EXPLAIN 命令来查看sql 语句的查询方式，因为在后续的文章中，我们会经常使用该命令来调试和分析。除此之外，我们在工作中，也应该习惯去使用 EXPLAIN命令来分析和优化索引。">
+    <meta name="description" content="上一篇文章讲解了 Mysql 在不同的存储引擎下索引的实现，在开始讲解索引的策略以及如何优化索引之前，我觉得有必要先来了解以下如何去使用 EXPLAIN 命令来查看sql 语句的查询方式，因为在后续的文章中，我们会经常使用该命令来调试和分析。除此之外，我们在工作中，也应该习惯去使用 EXPLAIN命令来分析和优化索引。 本示例中使用的 Mysql 版本是： 5.7.23">
 <meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mysql 索引系列（二）：了解并使用 EXPLAIN 命令">
 <meta property="og:url" content="http://phachon.github.io/mysql/mysql-index-2.html">
 <meta property="og:site_name" content="phachon&#39;s blog">
-<meta property="og:description" content="上一篇文章讲解了 Mysql 在不同的存储引擎下索引的实现，在开始讲解索引的策略以及如何优化索引之前，我觉得有必要先来了解以下如何去使用 EXPLAIN 命令来查看sql 语句的查询方式，因为在后续的文章中，我们会经常使用该命令来调试和分析。除此之外，我们在工作中，也应该习惯去使用 EXPLAIN命令来分析和优化索引。">
+<meta property="og:description" content="上一篇文章讲解了 Mysql 在不同的存储引擎下索引的实现，在开始讲解索引的策略以及如何优化索引之前，我觉得有必要先来了解以下如何去使用 EXPLAIN 命令来查看sql 语句的查询方式，因为在后续的文章中，我们会经常使用该命令来调试和分析。除此之外，我们在工作中，也应该习惯去使用 EXPLAIN命令来分析和优化索引。 本示例中使用的 Mysql 版本是： 5.7.23">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://phachon.github.io/images/mysql_logo.png">
-<meta property="og:updated_time" content="2018-10-20T10:54:08.750Z">
+<meta property="og:updated_time" content="2018-10-20T11:10:15.550Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql 索引系列（二）：了解并使用 EXPLAIN 命令">
-<meta name="twitter:description" content="上一篇文章讲解了 Mysql 在不同的存储引擎下索引的实现，在开始讲解索引的策略以及如何优化索引之前，我觉得有必要先来了解以下如何去使用 EXPLAIN 命令来查看sql 语句的查询方式，因为在后续的文章中，我们会经常使用该命令来调试和分析。除此之外，我们在工作中，也应该习惯去使用 EXPLAIN命令来分析和优化索引。">
+<meta name="twitter:description" content="上一篇文章讲解了 Mysql 在不同的存储引擎下索引的实现，在开始讲解索引的策略以及如何优化索引之前，我觉得有必要先来了解以下如何去使用 EXPLAIN 命令来查看sql 语句的查询方式，因为在后续的文章中，我们会经常使用该命令来调试和分析。除此之外，我们在工作中，也应该习惯去使用 EXPLAIN命令来分析和优化索引。 本示例中使用的 Mysql 版本是： 5.7.23">
 <meta name="twitter:image" content="http://phachon.github.io/images/mysql_logo.png">
     
 
@@ -257,6 +257,7 @@ var _hmt = _hmt || [];
             
             <hr>
 <p>上一篇文章讲解了 Mysql 在不同的存储引擎下索引的实现，在开始讲解索引的策略以及如何优化索引之<br>前，我觉得有必要先来了解以下如何去使用 <code>EXPLAIN</code> 命令来查看sql 语句的查询方式，因为在后续的<br>文章中，我们会经常使用该命令来调试和分析。除此之外，我们在工作中，也应该习惯去使用 <code>EXPLAIN</code><br>命令来分析和优化索引。</p>
+<p>本示例中使用的 Mysql 版本是： <code>5.7.23</code></p>
 <a id="more"></a>
 <h2 id="EXPLAIN-命令简介"><a href="#EXPLAIN-命令简介" class="headerlink" title="EXPLAIN 命令简介"></a>EXPLAIN 命令简介</h2><p>EXPLAIN 命令用来查看 SQL 语句的执行计划。简单来说，就是通过和这个命令就可以查看该查询执行的<br>详细信息，通过查看并分析这些信息，我们可以优化我们的 SQL 语句和索引，最终来提高我们的查询效率。</p>
 <h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from user id=1\G</span><br></pre></td></tr></table></figure>
@@ -335,7 +336,7 @@ var _hmt = _hmt || [];
 <p>在 user 表中我们有联合索引 <code>KEY (first_name, last_name, age)</code> 举例说明:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from user where first_name=&apos;yu&apos;\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">           id: 1</span><br><span class="line">  select_type: SIMPLE</span><br><span class="line">        table: user</span><br><span class="line">   partitions: NULL</span><br><span class="line">         type: ref</span><br><span class="line">possible_keys: firstName_lastName_age_index</span><br><span class="line">          key: firstName_lastName_age_index</span><br><span class="line">      key_len: 30</span><br><span class="line">          ref: const</span><br><span class="line">         rows: 1</span><br><span class="line">     filtered: 100.00</span><br><span class="line">        Extra: Using index</span><br><span class="line">1 row in set, 1 warning (0.00 sec)</span><br></pre></td></tr></table></figure></p>
 <p>我们的查询语句使用的是 <code>first_name=&#39;yu&#39;</code>，根据<code>最左匹配原则</code>，只匹配了第一列 first_name, first_name 的字段类型是 char, 且是 NOT NULL, 所以 key_len 是 30, 表示只使用了 30 字节的索引长度。<br>再来看一个例子：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from user where first_name=&apos;yu&apos; and last_name=&quot;jiu&quot;\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">           id: 1</span><br><span class="line">  select_type: SIMPLE</span><br><span class="line">        table: user</span><br><span class="line">   partitions: NULL</span><br><span class="line">         type: ref</span><br><span class="line">possible_keys: firstName_lastName_age_index</span><br><span class="line">          key: firstName_lastName_age_index</span><br><span class="line">      key_len: 62</span><br><span class="line">          ref: const,const</span><br><span class="line">         rows: 1</span><br><span class="line">     filtered: 100.00</span><br><span class="line">        Extra: Using index</span><br><span class="line">1 row in set, 1 warning (0.00 sec)</span><br></pre></td></tr></table></figure>
-<p>这个例子中匹配了前两列，所以是 key_len(first_name) + key_len(last_name) 等于 3<em>10 + 3</em>10+2 = 62 字节</p>
+<p>这个例子中匹配了前两列，所以是 key_len(first_name) + key_len(last_name) 等于 3 <em> 10 + 3 </em> 10 + 2 = 62 字节</p>
 <h3 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h3><p>哪个字段或常数与 key 一起被使用</p>
 <h3 id="rows"><a href="#rows" class="headerlink" title="rows"></a>rows</h3><p>rows 也是一个重要的字段. MySQL 查询优化器根据统计信息, 估算 SQL 要查找到结果集需要扫描读取的数据行数。</p>
 <h3 id="filtered"><a href="#filtered" class="headerlink" title="filtered"></a>filtered</h3><p>表示此查询条件所过滤的数据的百分比</p>
@@ -464,25 +465,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/mysql/mysql-index-4.html" class="thumbnail">
-    
-    
-        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（四）：前缀索引" class="thumbnail-image"></span>
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/mysql/mysql-index-4.html" class="title">Mysql 索引系列（四）：前缀索引</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
                             <a href="/mysql/mysql-index-5.html" class="thumbnail">
     
     
@@ -495,7 +477,26 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
                             <p class="item-title"><a href="/mysql/mysql-index-5.html" class="title">Mysql 索引系列（五）：覆盖索引</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                            <p class="item-date"><time datetime="2018-09-28T12:25:15.000Z" itemprop="datePublished">2018-09-28 20:25:15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/mysql/mysql-index-4.html" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（四）：前缀索引" class="thumbnail-image"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
+                            <p class="item-title"><a href="/mysql/mysql-index-4.html" class="title">Mysql 索引系列（四）：前缀索引</a></p>
+                            <p class="item-date"><time datetime="2018-09-28T11:25:15.000Z" itemprop="datePublished">2018-09-28 19:25:15</time></p>
                         </div>
                     </li>
                 
