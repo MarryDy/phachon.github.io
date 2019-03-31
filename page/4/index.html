@@ -723,6 +723,126 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
+    <article id="post-go/go-bootstrap" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            
+	
+		<a href="/go/go-bootstrap.html" itemprop="url">
+            <img src="/images/go_logo.jpg" class="article-banner" />
+        </a>
+	
+
+
+
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/go/go-bootstrap.html">Go 启动过程</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/go/go-bootstrap.html">
+            <time datetime="2018-09-08T16:00:00.000Z" itemprop="datePublished">2018-09-09 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Go/">Go</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/go/">go</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><hr>
+<p>通过查阅资料，了解 Go 语言的启动过程。</p>
+<h2 id="启动总体顺序"><a href="#启动总体顺序" class="headerlink" title="启动总体顺序"></a>启动总体顺序</h2><ol>
+<li>命令行参数解析</li>
+<li>操作系统相关初始化</li>
+<li>调度器初始化</li>
+<li>创建 main.goroutine</li>
+<li>运行 main 函数</li>
+</ol>
+<h3 id="命令行参数初始化"><a href="#命令行参数初始化" class="headerlink" title="命令行参数初始化"></a>命令行参数初始化</h3><p>主要是解析命令行参数并保存</p>
+<h3 id="操作系统相关初始化"><a href="#操作系统相关初始化" class="headerlink" title="操作系统相关初始化"></a>操作系统相关初始化</h3><p>主要是确定操作系统的 CPU 核数，CPU 核数决定默认的了 P 的数量</p></p>
+            <p class="article-more-link">
+                <a href="/go/go-bootstrap.html#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
     <article id="post-linux/concurrrent-server" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -880,126 +1000,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <li>epoll_wait 的工作实际上就是在这个就绪的链表中查看有没有就绪的 fd。</li>
 </ul>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
-<script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
-</div>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-go/go-bootstrap" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-            
-	
-		<a href="/go/go-bootstrap.html" itemprop="url">
-            <img src="/images/go_logo.jpg" class="article-banner" />
-        </a>
-	
-
-
-
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/go/go-bootstrap.html">Go 启动过程</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/go/go-bootstrap.html">
-            <time datetime="2018-09-08T16:00:00.000Z" itemprop="datePublished">2018-09-09 00:00:00</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Go/">Go</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/go/">go</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><hr>
-<p>通过查阅资料，了解 Go 语言的启动过程。</p>
-<h2 id="启动总体顺序"><a href="#启动总体顺序" class="headerlink" title="启动总体顺序"></a>启动总体顺序</h2><ol>
-<li>命令行参数解析</li>
-<li>操作系统相关初始化</li>
-<li>调度器初始化</li>
-<li>创建 main.goroutine</li>
-<li>运行 main 函数</li>
-</ol>
-<h3 id="命令行参数初始化"><a href="#命令行参数初始化" class="headerlink" title="命令行参数初始化"></a>命令行参数初始化</h3><p>主要是解析命令行参数并保存</p>
-<h3 id="操作系统相关初始化"><a href="#操作系统相关初始化" class="headerlink" title="操作系统相关初始化"></a>操作系统相关初始化</h3><p>主要是确定操作系统的 CPU 核数，CPU 核数决定默认的了 P 的数量</p></p>
-            <p class="article-more-link">
-                <a href="/go/go-bootstrap.html#more">查看更多</a>
-            </p>
         
         </div>
         <footer class="article-footer">
@@ -1269,115 +1269,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-php/PHPUnit-Lean1" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/php/PHPUnit-Lean1.html">PHPUnit 学习实例代码</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/php/PHPUnit-Lean1.html">
-            <time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20 00:00:00</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/PHP/">PHP</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHPUnit/">PHPUnit</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><hr>
-<blockquote>
-<p>PHPUnit 基本用法+实例详解<br>上一篇文章介绍了 PHPUnit 在 windows  的安装和配置。今天我们来介绍一下 PHPUnit 如何编写一些基本的测试用例。我也是在最近才开始慢慢使用的 PHPUnit , 用不足之处，欢迎指正。</p>
-</blockquote>
-<h1 id="编写规范"><a href="#编写规范" class="headerlink" title="编写规范"></a>编写规范</h1><ol>
-<li>测试类一般以***Test 命名；</li>
-<li>该类必须继承 PHPUnit_Framework_TestCase 类；</li>
-<li>类里的测试用例方法一般以test开头，当然也可以通过@test注释来定义一个名字不为test开头的方法为测试方法；</li>
-<li>测试方法中需要使用断言方法来断言实际传入的参数与期望的参数是否一致来达到测试的目的；</li>
-</ol></p>
-            <p class="article-more-link">
-                <a href="/php/PHPUnit-Lean1.html#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
-<script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
-</div>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
     <article id="post-php/PHPUnit-install-windows" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -1433,6 +1324,115 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 </ul></p>
             <p class="article-more-link">
                 <a href="/php/PHPUnit-install-windows.html#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-php/PHPUnit-Lean1" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/php/PHPUnit-Lean1.html">PHPUnit 学习实例代码</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/php/PHPUnit-Lean1.html">
+            <time datetime="2017-10-19T16:00:00.000Z" itemprop="datePublished">2017-10-20 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/PHP/">PHP</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/PHPUnit/">PHPUnit</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><hr>
+<blockquote>
+<p>PHPUnit 基本用法+实例详解<br>上一篇文章介绍了 PHPUnit 在 windows  的安装和配置。今天我们来介绍一下 PHPUnit 如何编写一些基本的测试用例。我也是在最近才开始慢慢使用的 PHPUnit , 用不足之处，欢迎指正。</p>
+</blockquote>
+<h1 id="编写规范"><a href="#编写规范" class="headerlink" title="编写规范"></a>编写规范</h1><ol>
+<li>测试类一般以***Test 命名；</li>
+<li>该类必须继承 PHPUnit_Framework_TestCase 类；</li>
+<li>类里的测试用例方法一般以test开头，当然也可以通过@test注释来定义一个名字不为test开头的方法为测试方法；</li>
+<li>测试方法中需要使用断言方法来断言实际传入的参数与期望的参数是否一致来达到测试的目的；</li>
+</ol></p>
+            <p class="article-more-link">
+                <a href="/php/PHPUnit-Lean1.html#more">查看更多</a>
             </p>
         
         </div>
