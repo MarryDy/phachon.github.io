@@ -5,15 +5,27 @@
     
     <title>TCP/IP 协议栈系列（三）：TCP协议详解 | phachon&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="keywords" content="tcp">
+    <meta name="description" content="TCP 简介TCP 协议属于 TCP/IP 的传输层协议，特点是  面向连接 保证高可靠性 数据无丢失 数据无有序 数据无完整 数据无重复到达  TCP 协议头 协议头总共 20byte，以下分别介绍各个部分的含义：  （Source Port）源端口：表示发送方应用程序对应的端口。占 2 byte （Destination port）目标端口：表示要发送到的目标程序的端口。占 2 byte （">
+<meta name="keywords" content="tcp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TCP&#x2F;IP 协议栈系列（三）：TCP协议详解">
 <meta property="og:url" content="http://phachon.github.io/network/TCP-IP-3.html">
 <meta property="og:site_name" content="phachon&#39;s blog">
+<meta property="og:description" content="TCP 简介TCP 协议属于 TCP/IP 的传输层协议，特点是  面向连接 保证高可靠性 数据无丢失 数据无有序 数据无完整 数据无重复到达  TCP 协议头 协议头总共 20byte，以下分别介绍各个部分的含义：  （Source Port）源端口：表示发送方应用程序对应的端口。占 2 byte （Destination port）目标端口：表示要发送到的目标程序的端口。占 2 byte （">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-10-20T10:39:14.321Z">
+<meta property="og:image" content="http://phachon.github.io/images/tcp.png">
+<meta property="og:image" content="http://phachon.github.io/images/tcp_conn.png">
+<meta property="og:image" content="http://phachon.github.io/images/tcp_close.png">
+<meta property="og:image" content="http://phachon.github.io/images/tcp_client.gif">
+<meta property="og:image" content="http://phachon.github.io/images/tcp_server.gif">
+<meta property="og:image" content="http://phachon.github.io/images/tcp_window_1.png">
+<meta property="og:image" content="http://phachon.github.io/images/tcp_window_2.png">
+<meta property="og:image" content="http://phachon.github.io/images/tcp_window_3.png">
+<meta property="og:updated_time" content="2019-03-31T00:43:18.571Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP&#x2F;IP 协议栈系列（三）：TCP协议详解">
+<meta name="twitter:description" content="TCP 简介TCP 协议属于 TCP/IP 的传输层协议，特点是  面向连接 保证高可靠性 数据无丢失 数据无有序 数据无完整 数据无重复到达  TCP 协议头 协议头总共 20byte，以下分别介绍各个部分的含义：  （Source Port）源端口：表示发送方应用程序对应的端口。占 2 byte （Destination port）目标端口：表示要发送到的目标程序的端口。占 2 byte （">
+<meta name="twitter:image" content="http://phachon.github.io/images/tcp.png">
     
 
     
@@ -171,11 +183,11 @@ var _hmt = _hmt || [];
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                63
+                72
                 <span>文章</span>
             </div>
             <div class="article-info-block">
-                44
+                45
                 <span>标签</span>
             </div>
         </div>
@@ -243,6 +255,137 @@ var _hmt = _hmt || [];
         
             
             <hr>
+<h2 id="TCP-简介"><a href="#TCP-简介" class="headerlink" title="TCP 简介"></a>TCP 简介</h2><p>TCP 协议属于 TCP/IP 的传输层协议，特点是</p>
+<ul>
+<li>面向连接</li>
+<li>保证高可靠性</li>
+<li>数据无丢失</li>
+<li>数据无有序</li>
+<li>数据无完整</li>
+<li>数据无重复到达</li>
+</ul>
+<h2 id="TCP-协议头"><a href="#TCP-协议头" class="headerlink" title="TCP 协议头"></a>TCP 协议头</h2><p><img src="/images/tcp.png" alt="tcp协议头"></p>
+<p>协议头总共 20byte，以下分别介绍各个部分的含义：</p>
+<ul>
+<li>（Source Port）源端口：表示发送方应用程序对应的端口。占 2 byte</li>
+<li>（Destination port）目标端口：表示要发送到的目标程序的端口。占 2 byte</li>
+<li>（Sequence Number）TCP 序列号：表示该消息的序号，通过序列号，TCP接收端可以识别出重复接收到的TCP包，从而丢弃重复包，同时对于乱序数据包也可以依靠系列号进行重排序，进而对高层提供有序的数据流。占 4 字节</li>
+<li>（ACK Number）ACK 序列号：ACK确认包。占 4 字节</li>
+<li>（Header Length）TCP头部长度：用来保存 TCP 头部长度。占 4 bit</li>
+<li>（Reserved）保留值：为了将来定义新的值所用。占 4 bit</li>
+<li>（Code Bits）标志位：用来表示消息的类型。占 8 bit</li>
+<li>（Window Size）窗口大小：表示从 ack 开始还愿意或者还可以接收多少 byte 的数据量，也可以理解位当前接受端的接受窗口还剩余多少空间。主要用于 TCP 的流量控制。占 2 字节</li>
+<li>（Checksum）校验和：发送端基于数据内容计算一个数值，接收端要与发送端数值结果完全一样，才能证明数据的有效性。用来校验数据的完整性。占 2 字节</li>
+<li>（Urgent Pointer）紧急指针：指向后面是优先数据的字节，在URG标志设置了时才有效。紧急指针优先处理数据段。占 2 byte</li>
+<li>（Option）选项：长度不定，但长度必须以是32bits的整数倍。常见的选项包括MSS、SACK、Timestamp 等等。</li>
+</ul>
+<p>8 位标志位：</p>
+<ul>
+<li>CWR：拥塞窗口减少标志被发送主机设置，用来表明它接收到了设置ECE标志的TCP包，发送端通过降低发送窗口的大小来降低发送速率</li>
+<li>ECE：标志被用来在TCP3次握手时表明一个TCP端是具备ECN功能的</li>
+<li>URG：该标志位置位表示紧急(The urgent pointer) 标志有效</li>
+<li>ACK：这是一个确认的TCP包，取值0则不是确认包</li>
+<li>PSH：一般是表示发送端缓存中已经没有待发送的数据，接收端不将该数据进行队列处理，而是尽可能快将数据转由应用处理</li>
+<li>RST：用于复位相应的TCP连接。通常在发生异常或者错误的时候会触发复位TCP连接</li>
+<li>SYN：同步序列编号</li>
+<li>FIN：带有该标志置位的数据包用来结束一个TCP会话</li>
+</ul>
+<h2 id="TCP-三次握手"><a href="#TCP-三次握手" class="headerlink" title="TCP 三次握手"></a>TCP 三次握手</h2><p>client 代表客户端 server 代表服务端</p>
+<ol>
+<li>client 发送 SYN=1 seq=1000 的同步消息到 server 端</li>
+<li>server 回复 SYN=1 seq=2000 ACK=1001 的消息到 client 端</li>
+<li>client 端回复 seq=1001 ack=20001 消息到 server 端</li>
+</ol>
+<p>成功建立连接，开始传输数据</p>
+<blockquote>
+<p>为什么建立连接是三次握手而不是两次握手？</p>
+</blockquote>
+<p>主要是为了防止已经失效的连接请求报文段又突然传到了 server 端，产生错误。假如出现一种异常情况：客户端发出的一段报文段由于网络原因滞留了，本来这个连接已经失效了，过了一段时间才释放后才到达 server 端，但是 server 端认为是一次新的请求连接，便回复确认的数据包给 client 端。如果不是三次握手而是次握手，这个时候连接已经建立。但是这个连接一直在等待客户端发来数据，资源被白白浪费。</p>
+<blockquote>
+<p>SYN 攻击是典型的 DDOS 攻击的原理是什么？</p>
+</blockquote>
+<p>在三次握手的过程中，服务器发送 SYN + ACK 之后，在收到 ACK 之前的连接是半连接。此时服务器处于 SYN_RCVD 状态。SYN 攻击就是利用这段时间伪造大量不存在的 IP 地址向服务器不断的发送 SYN 包。服务器不断回复确认包。并等待客户端的确认，由于原地址不存在，服务器需要不断的重发直到超时，这些伪造的 SYN 包将很长时间占用未连接的队列，而正常的 SYN 请求被丢弃。目标系统运行缓慢，引起网络瘫痪。</p>
+<h2 id="TCP-四次挥手"><a href="#TCP-四次挥手" class="headerlink" title="TCP 四次挥手"></a>TCP 四次挥手</h2><p>主动断开连接可以是客户端也可以是服务端。以下以客户端主动断开为例：</p>
+<ol>
+<li>客户端主动断开连接，发送 FIN 包给服务端。</li>
+<li>服务端收到 FIN 包后，回复 ACK 确认包。</li>
+<li>服务端发送完缓冲区的数据后，发送 FIN 包给客户端。</li>
+<li>客户端发送 ACK 确认包给服务端。客户端处于 TIME_WAIT，需要等待 2MSL</li>
+</ol>
+<blockquote>
+<p>为什么TCP建立连接时是三次握手，而关闭连接时是四次挥手？</p>
+</blockquote>
+<p>这是由于TCP传输协议是全双工的原因造成的。<br>在建立连接时，服务器收到客户端的SYN包后，可以将应答的ACK包和同步的SYN包放在同一个报文里发送给客户端。但在关闭连接时，当收到对方的FIN包后，仅仅表示对方没有数据传给你了，并不表示你的所有数据都已经传给了对方，可能还有一部分缓冲区的数据未发送完成。因此不能马上关闭，先发送一个ACK包确认已收到对方的关闭请求。然后等你的所有数据都发送完了再发送一个FIN包给对方表示同意关闭连接，因此ACK和FIN需要分开发送，故比建立连接时多了一个交互过程。</p>
+<blockquote>
+<p>为什么需要 TIME_WAIT 状态，即为什么需要等待2MSL？</p>
+</blockquote>
+<ol>
+<li><p>为实现TCP这种全双工（full-duplex）连接的可靠释放<br>如果客户端在发完ACK之后直接进入CLOSED状态，若由于某种原因这个ACK丢失，那么服务器由于超时将重传FIN包，而此时客户端已经关闭连接，就找不到与重发的FIN包对应的连接，最后服务器收到的将是RST而不是ACK，服务器以为是连接错误而把问题报告给上层。这样的情况虽然不会导致数据丢失，但是却导致TCP协议不可靠。因此，客户端发完ACK之后必须维护这条连接直至2MSL的时间结束。</p>
+</li>
+<li><p>为使旧的数据包在网络因过期而消失<br>若不存在TIME_WAIT阶段，若有一个新的四元组(local_ip,local_port,rempte_ip,remote_port)建立一条新的TCP连接。由于TCP协议栈是无法区分前后两条连接是否相同，在它看来，这条连接跟上一个关闭的连接使用的端口号完全相同。而等待2MSL的时间，保证网络中旧的数据包已经完全消失，这样建立新的连接时可以使用旧的端口号，避免两次连接数据错乱的情况。</p>
+</li>
+</ol>
+<h2 id="TCP-的11种状态"><a href="#TCP-的11种状态" class="headerlink" title="TCP 的11种状态"></a>TCP 的11种状态</h2><p>上面我们分析了 TCP 建立连接和关闭连接过程，具体 TCP 状态转化如下：</p>
+<h3 id="握手阶段"><a href="#握手阶段" class="headerlink" title="握手阶段"></a>握手阶段</h3><p><img src="/images/tcp_conn.png" alt="tcp握手"></p>
+<ol>
+<li>客户端发送 SYN 同步信号包到服务端，处于 SYN_SEND 状态</li>
+<li>服务端接收到 SYN 信号后，回复 SYN + ACK 给客户端，处于 SYN_RCVD 状态</li>
+<li>客户端发送 ACK 包给服务端后，双方处于 ESTABLISHED 状态</li>
+</ol>
+<h3 id="挥手阶段"><a href="#挥手阶段" class="headerlink" title="挥手阶段"></a>挥手阶段</h3><p><img src="/images/tcp_close.png" alt="tcp握手"></p>
+<ol>
+<li>客户端主动断开连接，发送 FIN 包给服务端。客户端处于 FIN_WAIT_1 状态</li>
+<li>服务端收到 FIN 包后，回复 ACK 确认包。服务端处于 CLOSE_WAIT 状态，客户端接收到 ACK 之后，处于 FIN_WAIT_2 状态</li>
+<li>服务端发送完缓冲区的数据后，发送 FIN 包给客户端。服务端处于  LAST_ACK 状态。</li>
+<li>客户端发送 ACK 确认包给服务端。客户端处于 TIME_WAIT 状态，需要等待 2MSL 后断开</li>
+</ol>
+<h3 id="客户端状态转化图"><a href="#客户端状态转化图" class="headerlink" title="客户端状态转化图"></a>客户端状态转化图</h3><p><img src="/images/tcp_client.gif" alt="客户端状态变化"></p>
+<p>CLOSED -&gt; SYNC_SENT -&gt; ESTABLISTION -&gt; FIN_WAIT_1 -&gt; FIN_WAIT_2 -&gt; TIME_WAIT -&gt; CLOSED</p>
+<h3 id="服务端状态转化图"><a href="#服务端状态转化图" class="headerlink" title="服务端状态转化图"></a>服务端状态转化图</h3><p><img src="/images/tcp_server.gif" alt="服务端状态变化"></p>
+<p>CLOSED -&gt; LISTEN -&gt; SYNC_REVD -&gt; ESTABLISTION -&gt; CLOSE_WAIT -&gt; LASK_ACK -&gt; CLOSED</p>
+<h2 id="TCP-流量控制"><a href="#TCP-流量控制" class="headerlink" title="TCP 流量控制"></a>TCP 流量控制</h2><p>TCP 协议机制里窗口机制有两种：一种是固定窗口大小；一种是滑动窗口大小；<br>窗口就是我们一次传输几个数据。对所有的数据帧按照顺序赋予编号，发送方在发送过程中始终保持着一个发送窗口，只有落在发送窗口内的帧才允许被发送；同时接收方也维持着一个接收窗口，只有落在接收窗口内的帧才允许接收。这样通过调整发送方窗口和接收方窗口的大小可以实现流量控制。</p>
+<h3 id="固定窗口"><a href="#固定窗口" class="headerlink" title="固定窗口"></a>固定窗口</h3><p>假设窗口大小为 1，也是就每次只能发送一个数据只有接受方对这个数据进行确认了以后才能发送第2个数据。发送方每发送一个数据接受方就要给发送方一个ACK对这个数据进行确认。只有接受到了这个确认数据以后发送方才能传输下个数据。 这样我们考虑一下如果说窗口过小，那么当传输比较大的数据的时候需要不停的对数据进行确认，这个时候就会造成很大的延迟。  </p>
+<p>假设窗口大小为 100，但是接收方只能处理50个数据。这样每次都会只对这50个数据进行确认。发送方下一次还是发送100个数据，但是接受方还是只能处理50个数据。这样就避免了不必要的数据来拥塞我们的链路。  </p>
+<p>所以我们需要引入滑动窗口机制。</p>
+<h3 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h3><p>滑动窗口机制，窗口的大小并不是固定的而是根据我们之间的链路的带宽的大小，这个时候链路是否拥护塞。接受方是否能处理这么多数据了。  </p>
+<p><img src="/images/tcp_window_1.png" alt="tcp滑动窗口"></p>
+<p>首先是第一次发送数据这个时候的窗口大小是根据链路带宽的大小来决定的。我们假设这个时候窗口的大小是3。这个时候接受方收到数据以后会对数据进行确认告诉发送方我下次希望手到的是数据是多少。这里我们看到接收方发送的ACK=3(这是发送方发送序列2的回答确认，下一次接收方期望接收到的是3序列信号)。这个时候发送方收到这个数据以后就知道我第一次发送的3个数据对方只收到了2个。就知道第3个数据对方没有收到。下次在发送的时候就从第3个数据开始发。这个时候窗口大小就变成了2 。 </p>
+<p><img src="/images/tcp_window_2.png" alt="tcp滑动窗口"></p>
+<p>这个时候发送方发送2个数据。 </p>
+<p><img src="/images/tcp_window_3.png" alt="tcp滑动窗口"></p>
+<p>看到接收方发送的ACK是5就表示他下一次希望收到的数据是5，发送方就知道我刚才发送的2个数据对方收了这个时候开始发送第5个数据。<br>这就是滑动窗口的工作机制，当链路变好了或者变差了这个窗口还会发生变话，并不是第一次协商好了以后就永远不变了。                 </p>
+<p>滑动窗口协议，是TCP使用的一种流量控制方法。该协议允许发送方在停止并等待确认前可以连续发送多个分组。由于发送方不必每发一个分组就停下来等待确认，因此该协议可以加速数据的传输。 </p>
+<h3 id="传输效率"><a href="#传输效率" class="headerlink" title="传输效率"></a>传输效率</h3><p>TCP使用Negle算法，它只允许一个TCP连接上最多只有一个未被确认的未完成的小分组。</p>
+<h2 id="TCP-四种计时器"><a href="#TCP-四种计时器" class="headerlink" title="TCP 四种计时器"></a>TCP 四种计时器</h2><ol>
+<li>超时重传计时器</li>
+</ol>
+<p>TCP是可靠的传输协议，在网络交互的过程中，由于TCP报文是封装在IP中的，而IP是无连接的，就可能导致报文在交互的过程中丢失。因此当TCP发送报文时，就会设置一个超时重传计时器，如果计时器溢出，还没有收到来自对方的确认，它就重传该报文。</p>
+<ol start="2">
+<li>坚持计时器</li>
+</ol>
+<p>是为了解决零窗口大小通知时可能发生的死锁状态。</p>
+<ol start="3">
+<li>保活计时器</li>
+</ol>
+<p>是为了防止在两个TCP连接之间出现的长时间的空闲。若客户端打开了服务器的连接，并且发送了数据，之后就保持沉默状态，也许这个客户发生了故障，但是这个连接会一直处于打开状态。因此在大多数的服务器中设置一个保活计时器，每当服务器接收到客户端的报文时，就将该计时器复位。若发送了10个探测报文时，客户端仍然无应答，则关闭该连接。</p>
+<ol start="4">
+<li>时间等待计时器</li>
+</ol>
+<p>时间等待计时器是在终止TCP连接时的四次握手的时候使用的。时间等待计时器是用来记录2MSL这个时间的，当计时器到了2MSL，客服端才能断开连接。</p>
+<h2 id="TCP-可靠传输"><a href="#TCP-可靠传输" class="headerlink" title="TCP 可靠传输"></a>TCP 可靠传输</h2><p>可靠传输是TCP的一大特色，它主要从确认连接、检验数据、重新排序、丢重和流量控制这几个方面来提供可靠性的：</p>
+<ol>
+<li>当TCP收到对方发来的报文后，会回复一个确认包表明以已收到对方的报文。</li>
+<li>当TCP发送一个报文后，会启动一个超时重传计时器，等待对方确认收到这个报文。如果计时器溢出后未收到这个确认，那么将重传这个报文。</li>
+<li>TCP将保持它的首部和数据的检验和。这是一个端到端的检验，用以检测数据在传输过程中有无发生差错。若检验和有错，则TCP会丢弃这个报文和不回复确认，等待对方超时重传。</li>
+<li>由于TCP报文段是作为IP数据来传输的，而IP数据报的到达可能会失序，因此TCP会对数据进行重新排序，将正确顺序上交给应用层。</li>
+<li>由于IP数据会发生重复，因此TCP的接收端必须丢弃重复的数据。</li>
+<li>TCP采用流量控制使得发送端只能发送小于接收端窗口大小的报文，以防止较快主机致使较慢主机的缓冲区溢出，从而防止数据丢失。</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>[TCP知识点总结]<a href="https://blog.csdn.net/slforeverlove/article/details/47018015" target="_blank" rel="noopener">https://blog.csdn.net/slforeverlove/article/details/47018015</a></li>
+<li>[TCP滑动窗口控制流量的原理]<a href="https://www.cnblogs.com/luoquan/p/4886345.html" target="_blank" rel="noopener">https://www.cnblogs.com/luoquan/p/4886345.html</a></li>
+<li>[TCP协议中的三次握手和四次挥手]<a href="https://blog.csdn.net/whuslei/article/details/6667471/" target="_blank" rel="noopener">https://blog.csdn.net/whuslei/article/details/6667471/</a></li>
+</ul>
 
         
         </div>
@@ -336,95 +479,95 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/nginx/Nginx-1.html" class="thumbnail">
+                            <a href="/go/compilerOptimizations.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/nginx_logo.png)" alt="Nginx 系列（一）：工作原理" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/go_logo.jpg)" alt="【翻译】golang 编译优化" class="thumbnail-image"></span>
     
 </a>
 
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Nginx/">Nginx</a></p>
-                            <p class="item-title"><a href="/nginx/Nginx-1.html" class="title">Nginx 系列（一）：工作原理</a></p>
-                            <p class="item-date"><time datetime="2018-10-07T10:25:15.000Z" itemprop="datePublished">2018-10-07 18:25:15</time></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/Go/">Go</a></p>
+                            <p class="item-title"><a href="/go/compilerOptimizations.html" class="title">【翻译】golang 编译优化</a></p>
+                            <p class="item-date"><time datetime="2019-01-11T04:19:10.000Z" itemprop="datePublished">2019-01-11 12:19:10</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/mysql/mysql-index-5.html" class="thumbnail">
+                            <a href="/go/fasthttp-1.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（五）：覆盖索引" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/go_logo.jpg)" alt="Fasthttp 高性能分析" class="thumbnail-image"></span>
     
 </a>
 
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/mysql/mysql-index-5.html" class="title">Mysql 索引系列（五）：覆盖索引</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T12:25:15.000Z" itemprop="datePublished">2018-09-28 20:25:15</time></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/Go/">Go</a></p>
+                            <p class="item-title"><a href="/go/fasthttp-1.html" class="title">Fasthttp 高性能分析</a></p>
+                            <p class="item-date"><time datetime="2019-01-10T16:00:00.000Z" itemprop="datePublished">2019-01-11 00:00:00</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/mysql/mysql-index-4.html" class="thumbnail">
+                            <a href="/redis/redis-11.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（四）：前缀索引" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/redis_logo.png)" alt="Redis系列（十一）：Redis 的 ZSet 性能分析" class="thumbnail-image"></span>
     
 </a>
 
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/mysql/mysql-index-4.html" class="title">Mysql 索引系列（四）：前缀索引</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T11:25:15.000Z" itemprop="datePublished">2018-09-28 19:25:15</time></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/Redis/">Redis</a></p>
+                            <p class="item-title"><a href="/redis/redis-11.html" class="title">Redis系列（十一）：Redis 的 ZSet 性能分析</a></p>
+                            <p class="item-date"><time datetime="2019-01-07T04:22:10.000Z" itemprop="datePublished">2019-01-07 12:22:10</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/mysql/mysql-index-3.html" class="thumbnail">
+                            <a href="/redis/redis-10.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（三）：索引的策略" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/redis_logo.png)" alt="Redis系列（十）：Redis 的 Mget 性能分析" class="thumbnail-image"></span>
     
 </a>
 
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/mysql/mysql-index-3.html" class="title">Mysql 索引系列（三）：索引的策略</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/Redis/">Redis</a></p>
+                            <p class="item-title"><a href="/redis/redis-10.html" class="title">Redis系列（十）：Redis 的 Mget 性能分析</a></p>
+                            <p class="item-date"><time datetime="2019-01-06T04:22:10.000Z" itemprop="datePublished">2019-01-06 12:22:10</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/mysql/mysql-index-2.html" class="thumbnail">
+                            <a href="/redis/redis-9.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（二）：了解并使用 EXPLAIN 命令" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/redis_logo.png)" alt="Redis系列（久）：Redis 数据结构之整数集合" class="thumbnail-image"></span>
     
 </a>
 
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/mysql/mysql-index-2.html" class="title">Mysql 索引系列（二）：了解并使用 EXPLAIN 命令</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T02:25:15.000Z" itemprop="datePublished">2018-09-28 10:25:15</time></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/Redis/">Redis</a></p>
+                            <p class="item-title"><a href="/redis/redis-9.html" class="title">Redis系列（久）：Redis 数据结构之整数集合</a></p>
+                            <p class="item-date"><time datetime="2019-01-05T04:22:10.000Z" itemprop="datePublished">2019-01-05 12:22:10</time></p>
                         </div>
                     </li>
                 
@@ -437,7 +580,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Go/">Go</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Html/">Html</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Install/">Install</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Live/">Live</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenSource/">OpenSource</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Sphinx/">Sphinx</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Summary/">Summary</a><span class="category-list-count">11</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Consul/">Consul</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Go/">Go</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Html/">Html</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Install/">Install</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Live/">Live</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenSource/">OpenSource</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Sphinx/">Sphinx</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Summary/">Summary</a><span class="category-list-count">11</span></li></ul>
         </div>
     </div>
 
@@ -446,7 +589,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">9</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">9</span></li></ul>
         </div>
     </div>
 
@@ -455,7 +598,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">标签云</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Apache/" style="font-size: 14.29px;">Apache</a> <a href="/tags/Architecture/" style="font-size: 10px;">Architecture</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CentOS/" style="font-size: 14.29px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.43px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.43px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 15.71px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 17.14px;">Mysql</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 18.57px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.43px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 11.43px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.43px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/dataStructure/" style="font-size: 11.43px;">dataStructure</a> <a href="/tags/go/" style="font-size: 14.29px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a> <a href="/tags/mysql/" style="font-size: 15.71px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/redis/" style="font-size: 15.71px;">redis</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a>
+            <a href="/tags/Apache/" style="font-size: 13.75px;">Apache</a> <a href="/tags/Architecture/" style="font-size: 10px;">Architecture</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CentOS/" style="font-size: 13.75px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.25px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.25px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 16.25px;">Mysql</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 18.75px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.25px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 11.25px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.25px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 12.5px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/consul/" style="font-size: 10px;">consul</a> <a href="/tags/dataStructure/" style="font-size: 11.25px;">dataStructure</a> <a href="/tags/go/" style="font-size: 16.25px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/redis/" style="font-size: 17.5px;">redis</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a>
         </div>
     </div>
 
@@ -492,7 +635,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <footer id="footer">
     <div class="outer">
         <div id="footer-info" class="inner">
-            &copy; 2018 phachon<br>
+            &copy; 2019 phachon<br>
             Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
         </div>
     </div>

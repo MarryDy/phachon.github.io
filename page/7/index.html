@@ -173,11 +173,11 @@ var _hmt = _hmt || [];
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                63
+                72
                 <span>文章</span>
             </div>
             <div class="article-info-block">
-                44
+                45
                 <span>标签</span>
             </div>
         </div>
@@ -202,6 +202,1253 @@ var _hmt = _hmt || [];
 
             
             <section id="main">
+    <article id="post-install/lamp-yum-install" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/install/lamp-yum-install.html">Lump yum 安装与搭建</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/install/lamp-yum-install.html">
+            <time datetime="2016-07-24T16:00:00.000Z" itemprop="datePublished">2016-07-25 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Install/">Install</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Apache/">Apache</a>, <a class="tag-link" href="/tags/CentOS-6-4/">CentOS 6.4</a>, <a class="tag-link" href="/tags/Mysql/">Mysql</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><hr>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="配置防火墙，开启-80，3306-端口"><a href="#配置防火墙，开启-80，3306-端口" class="headerlink" title="配置防火墙，开启 80，3306 端口"></a>配置防火墙，开启 80，3306 端口</h3><p>打开iptables</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysconfig/iptables</span><br></pre></td></tr></table></figure>
+<p>允许80端口通过防火墙</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT</span><br></pre></td></tr></table></figure>
+<p>允许3306端口通过防火墙</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-A INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT</span><br></pre></td></tr></table></figure>
+<p>允许21端口通过防火墙<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-A INPUT -m state --state NEW -m tcp -p tcp --dport 21 -j ACCEPT</span><br></pre></td></tr></table></figure></p></p>
+            <p class="article-more-link">
+                <a href="/install/lamp-yum-install.html#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-install/centos-install-php-mcrypt" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/install/centos-install-php-mcrypt.html">CentOS下php安装 mcrypt 扩展</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/install/centos-install-php-mcrypt.html">
+            <time datetime="2016-07-24T16:00:00.000Z" itemprop="datePublished">2016-07-25 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Install/">Install</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CentOS/">CentOS</a>, <a class="tag-link" href="/tags/PHP/">PHP</a>, <a class="tag-link" href="/tags/mcrypt/">mcrypt</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><hr>
+<h2 id="源码编译安装"><a href="#源码编译安装" class="headerlink" title="源码编译安装"></a>源码编译安装</h2><p>需要下载Libmcrypt,mhash,mcrypt安装包</p>
+<p>下载地址：<a href="http://www.sourceforge.net" target="_blank" rel="noopener">http://www.sourceforge.net</a></p>
+<ul>
+<li>libmcrypt(libmcrypt-2.5.8.tar.gz );</li>
+<li>mcrypt(mcrypt-2.6.8.tar.gz );</li>
+<li>mhash(mhash-0.9.9.9.tar.gz );</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget &quot;http://downloads.sourceforge.net/mcrypt/libmcrypt-2.5.8.tar.gz&quot;</span><br><span class="line">wget &quot;http://downloads.sourceforge.net/mcrypt/mcrypt-2.6.8.tar.gz&quot;</span><br><span class="line">wget &quot;http://downloads.sourceforge.net/mhash/mhash-0.9.9.9.tar.gz&quot;</span><br></pre></td></tr></table></figure></p>
+            <p class="article-more-link">
+                <a href="/install/centos-install-php-mcrypt.html#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-linux/linux-network-config" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/linux/linux-network-config.html">Linux网络配置</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/linux/linux-network-config.html">
+            <time datetime="2016-07-23T16:00:00.000Z" itemprop="datePublished">2016-07-24 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Linux/">Linux</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/CentOS/">CentOS</a>, <a class="tag-link" href="/tags/Linux/">Linux</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><hr>
+<h2 id="配置网络信息"><a href="#配置网络信息" class="headerlink" title="配置网络信息"></a>配置网络信息</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-eth0</span><br></pre></td></tr></table></figure>
+<p>打开ifcfg-eth0这个文件</p>
+<p><img src="http://img.blog.csdn.net/20160724180749720" alt="这里写图片描述"></p>
+<p>在这个文件中，保存了第一块网卡的配置信息</p>
+<ul>
+<li>DEVICE    ：设备名</li>
+<li>ONBOOT    ：当系统启动后是否自动启动网卡设备   </li>
+<li>BOOTPROTO    ：获取IP方式   static：静态获取</li>
+<li>IPADDR    ：ip地址</li>
+<li>NETMASK    ：子网掩码</li>
+<li>GATEWAY    ：网关</li>
+</ul></p>
+            <p class="article-more-link">
+                <a href="/linux/linux-network-config.html#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-summary/my_summary_8_go" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/summary/my_summary_8_go.html">知识点总结系列之：（八）GO</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/summary/my_summary_8_go.html">
+            <time datetime="2015-07-20T16:00:00.000Z" itemprop="datePublished">2015-07-21 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Summary/">Summary</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/go/">go</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p>go 相关的知识点总结</p>
+<ul>
+<li>Go基本数据类型及占用的字节？</li>
+<li>Go 值类型有哪些？</li>
+<li>Go 引用类型有哪些？</li>
+<li>常量的声明？</li>
+<li>错误处理？（error, panic, recover）</li>
+<li>基本命令（build,get,run,test）</li>
+<li>除了 mutex 以外还有那些方式安全读写共享变量？</li>
+<li>JSON 标准库对 nil slice 和 空 slice 的处理是一致的吗？</li>
+<li>1.9/1.10中，time.Now()返回的是什么时间？这样做的决定因素是什么?</li>
+<li>golang的sync.atomic和C++11的atomic最显著的在golang doc里提到的差别在哪里，如何解决或者说规避？</li>
+<li>1.10为止，sync.RWMutex最主要的性能问题最容易在什么常见场景下暴露。有哪些解决或者规避方法？</li>
+<li>如何做一个逻辑正确但golang调度器(1.10)无法正确应对，进而导致无法产生预期结果的程序。调度器如何改进可以解决此问题？</li>
+<li>列出下面操作延迟数量级(1ms, 10us或100ns等)，cgo调用c代码，c调用go代码，channel在单线程单case的select中被选中，high contention下对未满的buffered channel的写延迟。</li>
+<li>如何设计实现一个简单的goroutine leak检测库，可用于在测试运行结束后打印出所测试程序泄露的goroutine的stacktrace以及goroutine被创建的文件名和行号。</li>
+<li>选择三个常见golang组件（channel, goroutine, [], map, sync.Map等），列举它们常见的严重伤害性能的anti-pattern。</li>
+<li>一个C/C++程序需要调用一个go库，某一export了的go函数需高频率调用，且调用间隔需要调用根据go函数的返回调用其它C/C++函数处理，无法改变调用次序、相互依赖关系的前提下，如何最小化这样高频调用的性能损耗？</li>
+<li>不考虑调度器修改本身，仅考虑runtime库的API扩展，如果要给调度器添加NUMA awareness且需要支持不同拓扑，runtime库需要添加哪些函数，哪些函数接口必须改动。</li>
+<li>stw的pause绝大多数情况下在100us量级，但有时跳增一个数量级。描述几种可能引起这一现象的触发因素和他们的解决方法。</li>
+<li>已经对GC做了较充分优化的程序，在无法减小内存使用量的情况下，如何继续显著减低stw pause长度。</li>
+<li>有一个常见说法是“我能用channel简单封装出一个类似sync.Pool功能的实现”。在多线程、high contention、管理不同资源的前提下，两者各方面性能上有哪些显著不同</li>
+<li>无缓冲 chan 的发送和接收是否同步？</li>
+<li>Data Race问题怎么解决？能不能不加锁解决这个问题？</li>
+<li>使用goroutine以及channel设计TCP链接的消息收发，以及消息处理？</li>
+<li>使用go语言，编写并行计算的快速排序算法？</li>
+<li><a href="https://segmentfault.com/a/1190000013739000" target="_blank" rel="noopener">golang新手可能会踩的50大坑</a></li>
+<li>uint不能直接相减，结果是负数会变成一个很大的uint，这点对动态语言出身的会可能坑</li>
+<li>channel一定记得close</li>
+<li>goroutine记得return或者中断，不然容易造成goroutine占用大量CPU</li>
+<li>从slice创建slice的时候，注意原slice的操作可能导致底层数组变化</li>
+<li>如果你要创建一个很长的slice，尽量创建成一个slice里存引用，这样可以分批释放，避免gc在低配机器上stop the world</li>
+<li>面试的时候尽量了解协程，线程，进程的区别。</li>
+<li>什么是channel，为什么它可以做到线程安全？</li>
+<li>channel 的实现机制？（通过注册相关goroutine id实现消息通知的）</li>
+<li>如何用channel实现一个令牌桶？</li>
+<li>如何调试一个go程序？</li>
+<li>如何写单元测试和基准测试？</li>
+<li>slice 底层数据结构的实现？</li>
+<li>抢占式goroutine调用？</li>
+<li>了解读写锁吗，原理是什么样的，为什么可以做到？</li>
+<li>golang的内存模型，知道多小才是小对象，为什么小对象多了会造成gc压力？</li>
+<li>Devops 用过吗？</li>
+<li>golang 采用什么并发模型？体现在哪里？</li>
+<li>goroutine 的调度是怎样的？</li>
+<li>golang 的内存回收是如何做到的？</li>
+<li>cap和len分别获取的是什么？</li>
+<li>netgo，cgo有什么区别？</li>
+<li>什么是interface？</li>
+<li>在 Vendor 特性之前包管理工具是怎么实现的？</li>
+</ul>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-summary/my_summary_7_php" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/summary/my_summary_7_php.html">知识点总结系列之：（七）PHP</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/summary/my_summary_7_php.html">
+            <time datetime="2015-07-19T16:00:00.000Z" itemprop="datePublished">2015-07-20 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Summary/">Summary</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/PHP/">PHP</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p>php  相关的知识点总结</p>
+<ul>
+<li>简述 private、 protected、 public修饰符的访问权限。  </li>
+<li>使用过的魔术方法有哪些，及如何使用？</li>
+<li>__call() 方法的使用场景？</li>
+<li>__callStatic() 方法的使用场景？</li>
+<li><strong>get() 和 </strong>set()  方法的使用场景？</li>
+<li>__autoload() 什么时候使用？</li>
+<li>合并两个数组怎么合并？区别？</li>
+<li>有哪些全局变量？并说明这些全局变量的意义？</li>
+<li>数组排序的函数有哪些？区别是什么？</li>
+<li>魔术常量有使用过么？有哪些，并介绍是什么意思？</li>
+<li>php 文件处理？</li>
+<li>echo print print_r的区别？</li>
+<li>mysql_fetch_array() 与mysql_fetch_row()区别？</li>
+<li>PHP面向对象中 _set() 与 _construct的作用？</li>
+<li>PHP中session与cookie的区别？</li>
+<li>PHP中session与cookie的区别？</li>
+<li>什么是PHP的MVC,MVC的作用及原理？</li>
+<li>PHP中 include, include_once, require,, require_once 的区别？</li>
+<li>php 中字符串使用单引号和双引号的区别？</li>
+<li>字符串常用函数有哪些？</li>
+<li>PHP处理数组的常用函数？</li>
+<li>PHP处理时间的常用函数？</li>
+<li>如何定义常量？区别是什么？</li>
+<li>定义变量区分大小写吗？定义函数区分大小写吗？</li>
+<li>php中函数传递参数的方式有哪些？两者有什么区别？</li>
+<li>堆和栈的区别？ </li>
+<li>PHP 多态的实现？</li>
+<li>抽象类和接口的概念以及区别？</li>
+<li>什么是构造函数，什么是析构函数，作用是什么？ </li>
+<li>如何重载父类的方法，举例说明？</li>
+<li>$this和self、parent这三个关键词分别代表什么？在哪些场合下使用？</li>
+<li>final关键字能定义类中的成员属性吗？</li>
+<li>final关键字定义的类能够被继承吗？</li>
+<li>什么是抽象方法？</li>
+<li>如果一个类是抽象类，而类中的方法都是非抽象的方法，会报错吗？</li>
+<li>如果一个类既要继承一个父类，又要实现多个接口，该如何写？</li>
+<li>什么是 SQL 注入？如何防止 sql 注入？</li>
+<li>分页原理是什么？</li>
+<li>php session 共享怎么做？怎么修改？session 相关的函数有哪些？</li>
+<li>正则表达式？</li>
+<li>HEREDOC 是什么？</li>
+<li>一些编译php时的configure 参数？</li>
+<li>向php传入参数的三种方法？</li>
+<li>error_reporting 等调试函数使用？</li>
+<li>Safe_mode 打开后哪些地方受限？</li>
+<li>不用新变量直接交换现有两个变量的值？</li>
+<li>PHP 如何获取客户端的IP地址？</li>
+<li>写一个函数，可以遍历文件夹下的所有文件和文件夹。</li>
+<li>strlen()与mb_strlen的作用与区别？</li>
+<li>写一个函数，尽可能高效的从一个标准url中取出扩展名？</li>
+<li>Isset() 、empty()与is_null的区别？</li>
+<li>sessionId 如何保证唯一？</li>
+<li>什么是CSRF攻击？XSS攻击？如何防范？</li>
+<li><p>请写出自少两个支持回调处理的PHP函数，并自己实现一个支持回调的PHP函数？</p>
+</li>
+<li><p>PHP 的基本架构</p>
+</li>
+<li>PHP 执行过程</li>
+<li>PHP SAPI生命周期</li>
+<li>Apache 加载 PHP 模块</li>
+<li>Apache 运行过程</li>
+<li>PHP 的几种运行方式</li>
+<li>PHP 程序的执行过程（内核）</li>
+<li>PHP5 变量存储结构</li>
+<li>PHP7 变量存储优化</li>
+<li>PHP5 HashTable 实现</li>
+<li>PHP7 HashTable 优化</li>
+<li>PHP5 内存管理架构</li>
+<li>PHP 垃圾回收机制(refcount__gc, is_ref__gc)</li>
+<li>PHP-FPM 的优化</li>
+</ul>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-summary/my_summary_6_network" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/summary/my_summary_6_network.html">知识点总结系列之：（六）网络</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/summary/my_summary_6_network.html">
+            <time datetime="2015-07-18T16:00:00.000Z" itemprop="datePublished">2015-07-19 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Summary/">Summary</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Network/">Network</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p>网络相关知识点总结</p>
+<ul>
+<li>OSI七层模型是什么？哪七层？</li>
+<li>TCP/IP 4 层协议栈是哪 4 层？每一层具体的工作是什么，每一层有哪些协议？</li>
+<li>TCP 和 UDP 的区别？</li>
+<li>TCP 包头的组成？</li>
+<li>TCP 网络状态查看？</li>
+<li>TCP 的三次握手过程？并描述客户端和服务端状态的变化</li>
+<li>为什么要三次握手？如果不是三次有什么问题？</li>
+<li>DDOS 攻击了解吗？如何预防 DDOS 攻击？</li>
+<li>TCP 四次挥手的过程？</li>
+<li>为什么要四次挥手？否则的话有什么问题？</li>
+<li>Time_Wait状态是什么,为什么会有time_wait状态？哪一方会有time_wait状态，如何避免？</li>
+<li>time_wait状态占用资源（尽可能的详细）?</li>
+<li>TCP 包为什么需要 Seq</li>
+<li>数据包为什么会乱序？</li>
+<li>TCP 如何实现的可靠传输？</li>
+<li>TCP 的拥塞控制是怎样的？</li>
+<li>TCP 几种拥塞机制的重传机制？</li>
+<li>什么是滑动窗口？</li>
+<li>TCP 中客户端发送 SYN 后客户端和服务器分别处在什么状态？</li>
+<li>服务器调用 send 后返回发送数据大小，是否可以认为客户端已收到？如何确保客户端收到数据？</li>
+<li>TCP 对网络拥堵的判断？</li>
+<li>TCP 和 UDP 分别的使用场景有哪些？</li>
+<li>UDP 包头的格式是什么？</li>
+<li><p>UDP 协议的优点和缺点是什么？</p>
+</li>
+<li><p>说说 HTTP 协议？</p>
+</li>
+<li>什么是分块传输编码？</li>
+<li>HTTP 和 TCP 有什么关系？</li>
+<li>HTTP 1.0 和 HTTP 1.1 的差别？</li>
+<li>HTTP pipeline 流水线机制？</li>
+<li>理解 HTTP 2.0 协议吗？</li>
+<li>如何使用 HTTP2.0 协议？</li>
+<li>HTTP 头部常见字段有哪些？</li>
+<li>为什么 HTTP 是无连接的？</li>
+<li>GET 和 POST 区别？</li>
+<li>GET请求中URL编码的意义？</li>
+<li>有没有保持长连接的 HTTP ？</li>
+<li>HTTP 常见状态码及原因短语？</li>
+<li>304 状态码的意义？在 HTTP 协议中的实现？</li>
+<li>如何判断服务器文件是否已修改？知道浏览器缓存的文件与服务器文件不一致？在 HTTP 中哪个字段？</li>
+<li>Session 和 Cookie 机制？产生原因？对比一下？</li>
+<li>用过 HTTPS 吗？HTTPS 和 HTTP 的区别是什么？</li>
+<li>对称加密与非对称加密区别？</li>
+<li>TLS/SSL 协议的握手过程？</li>
+<li>CA 证书的签发原理？</li>
+<li>SSL 握手需要几个随机数？</li>
+<li><p>HTTPS 性能如何优化？</p>
+</li>
+<li><p>IP 有几类地址，A 类地址和 B 类地址的区别是什么？</p>
+</li>
+<li>局域网没有 IP 时如何通信？如何得知 mac 地址？</li>
+<li>什么是网络虚拟化？</li>
+<li>简单描述一下 VPN 工作原理？</li>
+<li>简单描述一下 DNS 工作原理？</li>
+<li>了解代理服务吗？什么是代码服务？</li>
+<li>代理请求的过程？</li>
+<li>代理协议有哪些？</li>
+<li>代理的功能有哪些？</li>
+<li>什么是反向代理？</li>
+<li>反向代理的作用？</li>
+<li>如何抓包？</li>
+<li>netstat、tcpdump、ipcs、ipcrm 命令使用过吗？</li>
+<li>大规模连接上来，并发模型怎么设计怎么选择？（并发服务器实现）</li>
+<li>select, poll 和 epoll 的区别？</li>
+</ul>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-summary/my_summary_5_jiagou" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/summary/my_summary_5_jiagou.html">知识点总结系列之：（五）架构</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/summary/my_summary_5_jiagou.html">
+            <time datetime="2015-07-17T16:00:00.000Z" itemprop="datePublished">2015-07-18 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Summary/">Summary</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Architecture/">Architecture</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p>架构相关知识点总结</p>
+<ul>
+<li>Nginx 的工作原理？</li>
+<li>Nginx 的进程模型？</li>
+<li>Master 进程工作方式？</li>
+<li>Worker 进程的工作方式？</li>
+<li>Nginx + Fastcgi 运行原理？</li>
+<li>Nginx + PHP-fpm 配置？</li>
+<li>Nginx采用多进程模型好处？</li>
+<li>Nginx支持的事件模型如下？</li>
+<li>Nginx.conf 的优化？</li>
+<li><p>Nginx 为什么高性能？</p>
+</li>
+<li><p>Apache 的工作原理</p>
+</li>
+<li><p>Apache 和 Nginx 网络模型比较</p>
+</li>
+<li><p>什么是Memcache？</p>
+</li>
+<li>Memcache 使用场景？</li>
+<li>Memcache 工作原理？</li>
+<li>Memcache 内存管理</li>
+<li>Memcache 分布式</li>
+<li>Memcache 线程管理</li>
+<li>Memcached 特性与限制</li>
+<li><p>Redis 和 Memcache 对比方案</p>
+</li>
+<li><p>单点登录</p>
+</li>
+<li>OAuth2.0 认证</li>
+<li>常见设计模式，应用场景</li>
+<li>MVC</li>
+<li>IOC</li>
+<li>AOP</li>
+<li>微服务思想</li>
+</ul>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-summary/my_summary_4_redis" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/summary/my_summary_4_redis.html">知识点总结系列之：（四）Redis</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/summary/my_summary_4_redis.html">
+            <time datetime="2015-07-16T16:00:00.000Z" itemprop="datePublished">2015-07-17 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Summary/">Summary</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Redis/">Redis</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p>Redis 相关知识点总结</p>
+<ul>
+<li>为什么使用redis？</li>
+<li>使用redis有什么缺点？</li>
+<li>单线程的redis为什么这么快？</li>
+<li>redis的数据类型，以及每种数据类型的使用场景？</li>
+<li>redis的过期策略以及内存淘汰机制？</li>
+<li>redis和数据库双写一致性问题？</li>
+<li>如何应对缓存穿透问题？</li>
+<li>如何应对缓存雪崩问题？</li>
+<li>如何解决 redis 的并发竞争问题？</li>
+<li>redis 底层的数据结构有哪些？各自有什么用？</li>
+<li>redis 的主从复制原理？</li>
+<li>redis 存储的实现方法？</li>
+<li>redis 相对 memcached 有哪些优势？</li>
+<li>如何实现 redis 集群？</li>
+<li>redis_cluster 的实现机制？</li>
+<li>redis 集群的最大结点个数？</li>
+<li>怎么用 redis 实现分布式锁？</li>
+<li>假如Redis里面有1亿个key，其中有10w个key是以某个固定的已知的前缀开头的，如果将它们全部找出来？</li>
+<li>使用过Redis做异步队列么，你是怎么用的？</li>
+<li>redis 能不能生产一次消费多次呢？</li>
+<li>pub/sub有什么缺点？</li>
+<li>redis如何实现延时队列？</li>
+<li>有大量的key需要设置同一时间过期，一般需要注意什么？</li>
+<li>Pipeline 有什么好处，为什么要用pipeline？</li>
+<li>为什么redis小等于39字节的字符串是embstr编码，大于39是raw编码？</li>
+<li>redis 中 zset 数据结构的实现？</li>
+<li>为什么 zset 用跳表而不用平衡树？</li>
+<li>redis 常用配置？</li>
+<li>redis 主从复制的实现原理？</li>
+<li>redis 内存管理和优化？</li>
+<li>redis 持久化方案？</li>
+</ul>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-summary/my_summary_3_mysql" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/summary/my_summary_3_mysql.html">知识点总结系列之：（三）Mysql</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/summary/my_summary_3_mysql.html">
+            <time datetime="2015-07-15T16:00:00.000Z" itemprop="datePublished">2015-07-16 00:00:00</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/Summary/">Summary</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Mysql/">Mysql</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <hr>
+<p>MySQL 常见知识点总结</p>
+<ul>
+<li>Mysql的技术特点是什么？</li>
+<li>MySQL 逻辑架构？每一部门的具体作用？</li>
+<li>MySQL 的查询过程？</li>
+<li>MySQL 常用的存储引擎有哪些？</li>
+<li>Heap 表是什么？</li>
+<li>Heap 表的大小可通过称为max_heap_table_size的Mysql配置变量来控制？</li>
+<li>InnoDB 存储引擎的特点？</li>
+<li>MyISAM 存储引擎的特点？</li>
+<li>一张表，里面有ID自增主键，当insert了17 条记录之后，删除了第15,16,17条记录，再把Mysql重启，再insert一条记录，这条记录的ID是18还是15？</li>
+<li>使用过哪些 Mysql 的索引？</li>
+<li>覆盖索引的使用？</li>
+<li>唯一索引的使用？</li>
+<li>Mysql 有哪些锁？</li>
+<li>什么时候会发生表锁？</li>
+<li>什么时候用行锁？</li>
+<li>FLOAT 和 DOUBLE 的区别？</li>
+<li>CHAR 和 VARCHAR 的区别？</li>
+<li>区分CHAR_LENGTH和LENGTH？</li>
+<li>在 Mysql 中ENUM的用法是什么？</li>
+<li>请简洁描述 Mysql 中InnoDB支持的四种事务隔离级别名称，以及逐级之间的区别？</li>
+<li>如何定义REGEXP？</li>
+<li>列的字符串类型有哪些？</li>
+<li>如何获取当前的 Mysql 版本？</li>
+<li>TIMESTAMP在UPDATE CURRENT_TIMESTAMP数据类型上做什么？</li>
+<li>主键和候选键有什么区别？</li>
+<li>MyISAMchk是用来做什么的？</li>
+<li>MYSQL数据库服务器性能分析的方法命令有哪些？</li>
+<li>federated 表是什么？</li>
+<li>如果一个表有一列定义为TIMESTAMP，将发生什么？</li>
+<li>列设置为AUTO INCREMENT时，如果在表中达到最大值，会发生什么情况？</li>
+<li>怎样才能找出最后一次插入时分配了哪个自动增量？</li>
+<li>你怎么看到为表格定义的所有索引？</li>
+<li>LIKE声明中的％和_是什么意思？</li>
+<li>如何在Unix和Mysql时间戳之间进行转换？</li>
+<li>LIKE和REGEXP操作有什么区别？</li>
+<li>BLOB和TEXT有什么区别？</li>
+<li>Mysql如何优化DISTINCT？</li>
+<li>可以使用多少列创建索引？</li>
+<li>解释访问控制列表？</li>
+<li>MYSQL支持事务吗？</li>
+<li>Mysql里记录货币用什么字段类型好？</li>
+<li>MYSQL数据表在什么情况下容易损坏？</li>
+<li>Mysql中有哪几种锁？如何使用？什么时候发生？</li>
+<li>索引实现机制？</li>
+<li>数据库查询过慢的优化？</li>
+<li>建立 A 列和 B 列的索引需要考虑什么？</li>
+<li>高并发访问 MYSQL 时，如何保持数据一致性？</li>
+<li>什么时候 MySQL 会对表上锁？对一行上锁？</li>
+<li>怎么保证主从服务器中数据库的同步？</li>
+<li>怎么保证数据库同时操作几个表的一致性？</li>
+<li>数据库之间如何同步？</li>
+<li>数据库三大范式？</li>
+<li>字符编码选择？</li>
+<li>熟悉基本 SQL 操作</li>
+<li>db 的各种性能指标？</li>
+<li>怎么进行数据库优化？</li>
+<li>Mysql 主从复制的原理是什么？</li>
+<li>主从复制中断了怎么办？</li>
+<li>主从复制出现延迟怎么处理？</li>
+<li>主库崩溃了怎么办？</li>
+<li>聚集索引和非聚集索引区别？</li>
+</ul>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
     <article id="post-summary/my_summary_2_linux" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -432,286 +1679,8 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
 
 
-    <article id="post-summary/my_summary_1_data" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/summary/my_summary_1_data.html">知识点总结系列之：（一）数据结构算法</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/summary/my_summary_1_data.html">
-            <time datetime="2015-07-13T16:00:00.000Z" itemprop="datePublished">2015-07-14 00:00:00</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Summary/">Summary</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/dataStructure/">dataStructure</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            
-            <hr>
-<p>一些常见的数据结构和算法总结</p>
-<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><ul>
-<li>数组和链表的区别？</li>
-<li>链表的一些操作（反转，链表环路判断，双向链表，循环链表）？</li>
-<li>队列的应用？</li>
-<li>栈的应用？</li>
-<li>二叉树的遍历（三种遍历的递归和非递归的实现）？</li>
-<li>二叉树的层序遍历？</li>
-<li>AVL 树是什么？</li>
-<li>AVL 树的旋转？</li>
-<li>红黑树是什么？</li>
-<li>有哪些地方应用到红黑树？</li>
-<li>红黑树和 AVL 树的比较？</li>
-<li>B 树、B+ 树的原理？</li>
-</ul>
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><ul>
-<li>请简单解释算法是什么？</li>
-<li>知道哪些排序算法？</li>
-<li>解释什么是快速排序算法？</li>
-<li>解释算法的时间复杂度？</li>
-<li>有没有 O(n) 的排序算法？</li>
-<li>说明什么是Skip list？</li>
-<li>解释什么是“哈希算法”，它们用于什么？</li>
-<li>列出一些常用的加密算法？</li>
-<li>输出所有和为 S 的连续正数序列。序列内按照从小至大的顺序，序列间按照开始数字从小到大的顺序</li>
-<li>字符序列 S=”abcXYZdef”,要求输出循环左移3位后的结果，即“XYZdefabc”</li>
-<li>输入一棵二叉树，判断该二叉树是否是平衡二叉树</li>
-<li>给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回</li>
-<li>判断二叉树是否对称</li>
-<li>查找字符串中第一个不重复的字符</li>
-<li>统计一个数字在排序数组中出现的次数</li>
-<li>实现非递归先序、中序、后序遍历二叉树</li>
-<li>输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径</li>
-<li>输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示</li>
-<li>用两个栈来实现一个队列，完成队列的 Push 和 Pop 操作</li>
-<li>定义栈的数据结构，请在该类型中实现一个能够得到栈最小元素的 main 函数</li>
-<li>在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数</li>
-<li>请实现一个函数，将一个字符串中的空格替换成“%20”</li>
-<li>输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则</li>
-<li>输入一个链表，输出该链表中倒数第k个结点</li>
-<li>输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序</li>
-<li>从上往下打印出二叉树的每个节点，同层节点从左至右打印</li>
-<li>输入一棵二叉树，求该树的深度</li>
-<li>给定的二叉树，将其变换为源二叉树的镜像</li>
-<li>输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字</li>
-<li>输入两棵二叉树 A，B，判断 B 是不是 A 的子结构。（我们约定空树不是任意一个树的子结构） </li>
-<li>输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树</li>
-<li>输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变</li>
-<li>给定一个 double 类型的浮点数 base 和 int 类型的整数 exponent。求 base 的 exponent 次方</li>
-<li>数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字</li>
-<li>TopK 问题：输入n个整数，找出其中最小的K个数</li>
-<li>在一个字符串(1&lt;=字符串长度&lt;=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置</li>
-<li>从上到下按层打印二叉树，同一层结点从左至右输出</li>
-<li>请实现一个函数按照之字形打印二叉树（第一行按照从左到右打印，第二层按照从右至左打印，第三行按照从左到右打印）</li>
-<li>一个链表中包含环，请找出该链表的环的入口结点</li>
-<li>输入一个链表，反转链表后，输出链表的所有元素</li>
-<li>输入一个链表，从尾到头打印链表每个节点的值</li>
-<li>大家都知道斐波那契数列，现在要求输入一个整数n，请你输出斐波那契数列的第n项</li>
-<li><p>一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法</p>
-</li>
-<li><p>假设淘宝一天有5亿条成交数据，求出销量最高的100个商品并给出算法的时间复杂度</p>
-</li>
-<li>有10亿个杂乱无章的数，怎样最快地求出其中前1000大的数</li>
-<li>给一列无序数组，求出中位数并给出算法的时间复杂度</li>
-<li>输入一个整型数组，求出子数组和的最大值，并给出算法的时间复杂度</li>
-<li>给出10W条人和人之间的朋友关系，求出这些朋友关系中有多少个朋友圈（如A-B、B-C、D-E、E-F，这4对关系中存在两个朋友圈），并给出算法的时间复杂度</li>
-<li>如图所示的数字三角形，从顶部出发，在每一结点可以选择向左走或得向右走，一直走到底层，要求找出一条路径，使路径上的值的和最大</li>
-<li>有一个很长二进制串，求出除以3的余数是多少</li>
-</ul>
-<p>答案待补充.</p>
-
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
-<script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
-</div>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-summary/my_summary" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/summary/my_summary.html">知识点总结系列</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fas fa-calendar-alt"></i>
-        <a href="/summary/my_summary.html">
-            <time datetime="2015-07-13T16:00:00.000Z" itemprop="datePublished">2015-07-14 00:00:00</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fas fa-folder"></i>
-        <a class="article-category-link" href="/categories/Summary/">Summary</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fas fa-tag"></i>
-        <a class="tag-link" href="/tags/dataStructure/">dataStructure</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            
-            <hr>
-<ol>
-<li><a href="https://phachon.com/2015/07/14/my_summary_1_data/" target="_blank" rel="noopener">数据结构与算法</a></li>
-<li><a href="https://phachon.com/2015/07/15/my_summary_2_linux/" target="_blank" rel="noopener">Linux 与操作系统</a></li>
-<li><a href="https://phachon.com/2015/07/16/my_summary_3_mysql/" target="_blank" rel="noopener">Mysql</a></li>
-<li><a href="https://phachon.com/2015/07/17/my_summary_4_redis/" target="_blank" rel="noopener">Redis</a></li>
-<li><a href="https://phachon.com/2015/07/18/my_summary_5_jiagou/" target="_blank" rel="noopener">架构</a></li>
-<li><a href="https://phachon.com/2015/07/19/my_summary_6_network/" target="_blank" rel="noopener">网络</a></li>
-<li><a href="https://phachon.com/2015/07/20/my_summary_7_php/" target="_blank" rel="noopener">PHP</a></li>
-<li><a href="https://phachon.com/2015/07/21/my_summary_8_go/" target="_blank" rel="noopener">Go</a></li>
-</ol>
-
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
-<script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
-</div>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
     <nav id="page-nav">
-        <a class="extend prev" rel="prev" href="/page/6/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span>
+        <a class="extend prev" rel="prev" href="/page/6/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/8/">下一页 &raquo;</a>
     </nav>
 </section>
             
@@ -727,95 +1696,95 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/nginx/Nginx-1.html" class="thumbnail">
+                            <a href="/go/compilerOptimizations.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/nginx_logo.png)" alt="Nginx 系列（一）：工作原理" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/go_logo.jpg)" alt="【翻译】golang 编译优化" class="thumbnail-image"></span>
     
 </a>
 
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Nginx/">Nginx</a></p>
-                            <p class="item-title"><a href="/nginx/Nginx-1.html" class="title">Nginx 系列（一）：工作原理</a></p>
-                            <p class="item-date"><time datetime="2018-10-07T10:25:15.000Z" itemprop="datePublished">2018-10-07 18:25:15</time></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/Go/">Go</a></p>
+                            <p class="item-title"><a href="/go/compilerOptimizations.html" class="title">【翻译】golang 编译优化</a></p>
+                            <p class="item-date"><time datetime="2019-01-11T04:19:10.000Z" itemprop="datePublished">2019-01-11 12:19:10</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/mysql/mysql-index-5.html" class="thumbnail">
+                            <a href="/go/fasthttp-1.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（五）：覆盖索引" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/go_logo.jpg)" alt="Fasthttp 高性能分析" class="thumbnail-image"></span>
     
 </a>
 
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/mysql/mysql-index-5.html" class="title">Mysql 索引系列（五）：覆盖索引</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T12:25:15.000Z" itemprop="datePublished">2018-09-28 20:25:15</time></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/Go/">Go</a></p>
+                            <p class="item-title"><a href="/go/fasthttp-1.html" class="title">Fasthttp 高性能分析</a></p>
+                            <p class="item-date"><time datetime="2019-01-10T16:00:00.000Z" itemprop="datePublished">2019-01-11 00:00:00</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/mysql/mysql-index-4.html" class="thumbnail">
+                            <a href="/redis/redis-11.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（四）：前缀索引" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/redis_logo.png)" alt="Redis系列（十一）：Redis 的 ZSet 性能分析" class="thumbnail-image"></span>
     
 </a>
 
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/mysql/mysql-index-4.html" class="title">Mysql 索引系列（四）：前缀索引</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T11:25:15.000Z" itemprop="datePublished">2018-09-28 19:25:15</time></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/Redis/">Redis</a></p>
+                            <p class="item-title"><a href="/redis/redis-11.html" class="title">Redis系列（十一）：Redis 的 ZSet 性能分析</a></p>
+                            <p class="item-date"><time datetime="2019-01-07T04:22:10.000Z" itemprop="datePublished">2019-01-07 12:22:10</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/mysql/mysql-index-3.html" class="thumbnail">
+                            <a href="/redis/redis-10.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（三）：索引的策略" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/redis_logo.png)" alt="Redis系列（十）：Redis 的 Mget 性能分析" class="thumbnail-image"></span>
     
 </a>
 
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/mysql/mysql-index-3.html" class="title">Mysql 索引系列（三）：索引的策略</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T10:25:15.000Z" itemprop="datePublished">2018-09-28 18:25:15</time></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/Redis/">Redis</a></p>
+                            <p class="item-title"><a href="/redis/redis-10.html" class="title">Redis系列（十）：Redis 的 Mget 性能分析</a></p>
+                            <p class="item-date"><time datetime="2019-01-06T04:22:10.000Z" itemprop="datePublished">2019-01-06 12:22:10</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/mysql/mysql-index-2.html" class="thumbnail">
+                            <a href="/redis/redis-9.html" class="thumbnail">
     
     
-        <span style="background-image:url(/images/mysql_logo.png)" alt="Mysql 索引系列（二）：了解并使用 EXPLAIN 命令" class="thumbnail-image"></span>
+        <span style="background-image:url(/images/redis_logo.png)" alt="Redis系列（久）：Redis 数据结构之整数集合" class="thumbnail-image"></span>
     
 </a>
 
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/Mysql/">Mysql</a></p>
-                            <p class="item-title"><a href="/mysql/mysql-index-2.html" class="title">Mysql 索引系列（二）：了解并使用 EXPLAIN 命令</a></p>
-                            <p class="item-date"><time datetime="2018-09-28T02:25:15.000Z" itemprop="datePublished">2018-09-28 10:25:15</time></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/Redis/">Redis</a></p>
+                            <p class="item-title"><a href="/redis/redis-9.html" class="title">Redis系列（久）：Redis 数据结构之整数集合</a></p>
+                            <p class="item-date"><time datetime="2019-01-05T04:22:10.000Z" itemprop="datePublished">2019-01-05 12:22:10</time></p>
                         </div>
                     </li>
                 
@@ -828,7 +1797,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Go/">Go</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Html/">Html</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Install/">Install</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Live/">Live</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenSource/">OpenSource</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Sphinx/">Sphinx</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Summary/">Summary</a><span class="category-list-count">11</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Consul/">Consul</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ELK/">ELK</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Go/">Go</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Html/">Html</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Install/">Install</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Live/">Live</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Network/">Network</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenSource/">OpenSource</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Sphinx/">Sphinx</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Summary/">Summary</a><span class="category-list-count">11</span></li></ul>
         </div>
     </div>
 
@@ -837,7 +1806,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">9</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">9</span></li></ul>
         </div>
     </div>
 
@@ -846,7 +1815,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     <div class="widget-wrap">
         <h3 class="widget-title">标签云</h3>
         <div class="widget tagcloud">
-            <a href="/tags/Apache/" style="font-size: 14.29px;">Apache</a> <a href="/tags/Architecture/" style="font-size: 10px;">Architecture</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CentOS/" style="font-size: 14.29px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.43px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.43px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 15.71px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 17.14px;">Mysql</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 18.57px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.43px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 11.43px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.43px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 12.86px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/dataStructure/" style="font-size: 11.43px;">dataStructure</a> <a href="/tags/go/" style="font-size: 14.29px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a> <a href="/tags/mysql/" style="font-size: 15.71px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/redis/" style="font-size: 15.71px;">redis</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a>
+            <a href="/tags/Apache/" style="font-size: 13.75px;">Apache</a> <a href="/tags/Architecture/" style="font-size: 10px;">Architecture</a> <a href="/tags/Bootstrap/" style="font-size: 10px;">Bootstrap</a> <a href="/tags/CentOS/" style="font-size: 13.75px;">CentOS</a> <a href="/tags/CentOS-6-4/" style="font-size: 10px;">CentOS 6.4</a> <a href="/tags/CronTab/" style="font-size: 10px;">CronTab</a> <a href="/tags/ELK/" style="font-size: 10px;">ELK</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/Express/" style="font-size: 10px;">Express</a> <a href="/tags/FAST-CGI/" style="font-size: 10px;">FAST-CGI</a> <a href="/tags/FireFox/" style="font-size: 10px;">FireFox</a> <a href="/tags/Go/" style="font-size: 11.25px;">Go</a> <a href="/tags/HLS/" style="font-size: 10px;">HLS</a> <a href="/tags/Html/" style="font-size: 11.25px;">Html</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/Log/" style="font-size: 10px;">Log</a> <a href="/tags/LogStash/" style="font-size: 10px;">LogStash</a> <a href="/tags/M3U8/" style="font-size: 10px;">M3U8</a> <a href="/tags/Marvel/" style="font-size: 10px;">Marvel</a> <a href="/tags/Memcache/" style="font-size: 10px;">Memcache</a> <a href="/tags/Mysql/" style="font-size: 16.25px;">Mysql</a> <a href="/tags/Network/" style="font-size: 10px;">Network</a> <a href="/tags/Node/" style="font-size: 10px;">Node</a> <a href="/tags/PHP/" style="font-size: 18.75px;">PHP</a> <a href="/tags/PHP-FPM/" style="font-size: 10px;">PHP-FPM</a> <a href="/tags/PHPUnit/" style="font-size: 11.25px;">PHPUnit</a> <a href="/tags/Python3/" style="font-size: 10px;">Python3</a> <a href="/tags/Redis/" style="font-size: 11.25px;">Redis</a> <a href="/tags/Sphinx/" style="font-size: 11.25px;">Sphinx</a> <a href="/tags/TS/" style="font-size: 10px;">TS</a> <a href="/tags/WebSocket/" style="font-size: 10px;">WebSocket</a> <a href="/tags/Windows/" style="font-size: 12.5px;">Windows</a> <a href="/tags/You-get/" style="font-size: 10px;">You-get</a> <a href="/tags/consul/" style="font-size: 10px;">consul</a> <a href="/tags/dataStructure/" style="font-size: 11.25px;">dataStructure</a> <a href="/tags/go/" style="font-size: 16.25px;">go</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mcrypt/" style="font-size: 10px;">mcrypt</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/php/" style="font-size: 10px;">php</a> <a href="/tags/redis/" style="font-size: 17.5px;">redis</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a>
         </div>
     </div>
 
@@ -883,7 +1852,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         <footer id="footer">
     <div class="outer">
         <div id="footer-info" class="inner">
-            &copy; 2018 phachon<br>
+            &copy; 2019 phachon<br>
             Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
         </div>
     </div>
